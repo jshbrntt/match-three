@@ -1,0 +1,337 @@
+{
+	"tile_blue": {
+		"allowMovement": true,
+		"allowRotation": true,
+		"isBullet": false,
+		"type": 0,
+		"size": {
+			"width": 48.000,
+			"height": 46.000
+		},
+		"shapes": {
+			"polygon": {
+				"hull": [
+					{
+						"x": -15.000,
+						"y": 23.000
+					},
+					{
+						"x": 15.000,
+						"y": 23.000
+					},
+					{
+						"x": 24.000,
+						"y": -5.000
+					},
+					{
+						"x": 0.000,
+						"y": -23.000
+					},
+					{
+						"x": -24.000,
+						"y": -5.000
+					}
+				],
+				"convex": [
+					[
+						{
+							"x": 0.000,
+							"y": -23.000
+						},
+						{
+							"x": -24.000,
+							"y": -5.000
+						},
+						{
+							"x": -15.000,
+							"y": 23.000
+						},
+						{
+							"x": 15.000,
+							"y": 23.000
+						},
+						{
+							"x": 24.000,
+							"y": -5.000
+						}
+					]
+				],
+				"material": {
+					"density": 1.00,
+					"dynamicFriction":  1.00,
+					"elasticity":  0.00,
+					"rollingFriction": 0.01,
+					"staticFriction": 2.00
+				}
+			}
+		}
+	},
+	"tile_green": {
+		"allowMovement": true,
+		"allowRotation": true,
+		"isBullet": false,
+		"type": 0,
+		"size": {
+			"width": 48.000,
+			"height": 46.000
+		},
+		"shapes": {
+			"polygon": {
+				"hull": [
+					{
+						"x": -15.000,
+						"y": 23.000
+					},
+					{
+						"x": 15.000,
+						"y": 23.000
+					},
+					{
+						"x": 24.000,
+						"y": -5.000
+					},
+					{
+						"x": 0.000,
+						"y": -23.000
+					},
+					{
+						"x": -24.000,
+						"y": -5.000
+					}
+				],
+				"convex": [
+					[
+						{
+							"x": 0.000,
+							"y": -23.000
+						},
+						{
+							"x": -24.000,
+							"y": -5.000
+						},
+						{
+							"x": -15.000,
+							"y": 23.000
+						},
+						{
+							"x": 15.000,
+							"y": 23.000
+						},
+						{
+							"x": 24.000,
+							"y": -5.000
+						}
+					]
+				],
+				"material": {
+					"density": 1.00,
+					"dynamicFriction":  1.00,
+					"elasticity":  0.00,
+					"rollingFriction": 0.01,
+					"staticFriction": 2.00
+				}
+			}
+		}
+	},
+	"tile_purple": {
+		"allowMovement": true,
+		"allowRotation": true,
+		"isBullet": false,
+		"type": 0,
+		"size": {
+			"width": 48.000,
+			"height": 46.000
+		},
+		"shapes": {
+			"polygon": {
+				"hull": [
+					{
+						"x": -15.000,
+						"y": 23.000
+					},
+					{
+						"x": 15.000,
+						"y": 23.000
+					},
+					{
+						"x": 24.000,
+						"y": -5.000
+					},
+					{
+						"x": 0.000,
+						"y": -23.000
+					},
+					{
+						"x": -24.000,
+						"y": -5.000
+					}
+				],
+				"convex": [
+					[
+						{
+							"x": 0.000,
+							"y": -23.000
+						},
+						{
+							"x": -24.000,
+							"y": -5.000
+						},
+						{
+							"x": -15.000,
+							"y": 23.000
+						},
+						{
+							"x": 15.000,
+							"y": 23.000
+						},
+						{
+							"x": 24.000,
+							"y": -5.000
+						}
+					]
+				],
+				"material": {
+					"density": 1.00,
+					"dynamicFriction":  1.00,
+					"elasticity":  0.00,
+					"rollingFriction": 0.01,
+					"staticFriction": 2.00
+				}
+			}
+		}
+	},
+	"tile_red": {
+		"allowMovement": true,
+		"allowRotation": true,
+		"isBullet": false,
+		"type": 0,
+		"size": {
+			"width": 48.000,
+			"height": 46.000
+		},
+		"shapes": {
+			"polygon": {
+				"hull": [
+					{
+						"x": -15.000,
+						"y": 23.000
+					},
+					{
+						"x": 15.000,
+						"y": 23.000
+					},
+					{
+						"x": 24.000,
+						"y": -5.000
+					},
+					{
+						"x": 0.000,
+						"y": -23.000
+					},
+					{
+						"x": -24.000,
+						"y": -5.000
+					}
+				],
+				"convex": [
+					[
+						{
+							"x": 0.000,
+							"y": -23.000
+						},
+						{
+							"x": -24.000,
+							"y": -5.000
+						},
+						{
+							"x": -15.000,
+							"y": 23.000
+						},
+						{
+							"x": 15.000,
+							"y": 23.000
+						},
+						{
+							"x": 24.000,
+							"y": -5.000
+						}
+					]
+				],
+				"material": {
+					"density": 1.00,
+					"dynamicFriction":  1.00,
+					"elasticity":  0.00,
+					"rollingFriction": 0.01,
+					"staticFriction": 2.00
+				}
+			}
+		}
+	},
+	"tile_yellow": {
+		"allowMovement": true,
+		"allowRotation": true,
+		"isBullet": false,
+		"type": 0,
+		"size": {
+			"width": 48.000,
+			"height": 46.000
+		},
+		"shapes": {
+			"polygon": {
+				"hull": [
+					{
+						"x": -15.000,
+						"y": 23.000
+					},
+					{
+						"x": 15.000,
+						"y": 23.000
+					},
+					{
+						"x": 24.000,
+						"y": -5.000
+					},
+					{
+						"x": 0.000,
+						"y": -23.000
+					},
+					{
+						"x": -24.000,
+						"y": -5.000
+					}
+				],
+				"convex": [
+					[
+						{
+							"x": 0.000,
+							"y": -23.000
+						},
+						{
+							"x": -24.000,
+							"y": -5.000
+						},
+						{
+							"x": -15.000,
+							"y": 23.000
+						},
+						{
+							"x": 15.000,
+							"y": 23.000
+						},
+						{
+							"x": 24.000,
+							"y": -5.000
+						}
+					]
+				],
+				"material": {
+					"density": 1.00,
+					"dynamicFriction":  1.00,
+					"elasticity":  0.00,
+					"rollingFriction": 0.01,
+					"staticFriction": 2.00
+				}
+			}
+		}
+	}
+}
