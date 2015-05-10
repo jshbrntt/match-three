@@ -1,2 +1,37 @@
-!function e(n,o,r){function f(t,u){if(!o[t]){if(!n[t]){var d="function"==typeof require&&require;if(!u&&d)return d(t,!0);if(i)return i(t,!0);var l=new Error("Cannot find module '"+t+"'");throw l.code="MODULE_NOT_FOUND",l}var w=o[t]={exports:{}};n[t][0].call(w.exports,function(e){var o=n[t][1][e];return f(o?o:e)},w,w.exports,e,n,o,r)}return o[t].exports}for(var i="function"==typeof require&&require,t=0;t<r.length;t++)f(r[t]);return f}({1:[function(){(function(e){var n="undefined"!=typeof window?window.$:"undefined"!=typeof e?e.$:null,o="undefined"!=typeof window?window.Phaser:"undefined"!=typeof e?e.Phaser:null;n(function(){console.log(n),console.log(o)})}).call(this,"undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{})},{}]},{},[1]);
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function (global){
+var Phaser = (typeof window !== "undefined" ? window.Phaser : typeof global !== "undefined" ? global.Phaser : null);
+
+// Initialize Phaser, and creates a 400x490px game
+var game = new Phaser.Game(400, 490, Phaser.AUTO, 'game_div');
+var game_state = {};
+
+// Creates a new 'main' state that wil contain the game
+game_state.main = function() { };  
+game_state.main.prototype = {
+
+    preload: function() { 
+		// Function called first to load all the assets
+        game.load.image('hello', 'hello.png');
+    },
+
+    create: function() { 
+    	// Fuction called after 'preload' to setup the game
+        this.hello_sprite = game.add.sprite(250, 300, 'hello');
+    },
+    
+    update: function() {
+		// Function called 60 times per second
+        this.hello_sprite.angle += 1;
+    },
+};
+
+// Add and start the 'main' state to start the game
+game.state.add('main', game_state.main);  
+game.state.start('main'); 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
+},{}]},{},[1])
+
+
 //# sourceMappingURL=bundle.js.map

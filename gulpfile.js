@@ -1,109 +1,45 @@
-var gulp = require('gulp');
-var fs = require('fs');
-var concat = require('gulp-concat-sourcemap');
+var watchify = require('watchify');
 var browserify = require('browserify');
+var gulp = require('gulp');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
-var uglify = require('gulp-uglify');
+var gutil = require('gulp-util');
 var sourcemaps = require('gulp-sourcemaps');
-var changed = require('gulp-changed');
-var del = require('del');
-var wiredep = require('wiredep').stream;
+var assign = require('lodash.assign');
+var browserSync = require('browser-sync');
 
-/*
-Configuration
-*/
-
-var config = {
-    src: './src',
-    build: './build',
-    dist: './dist'
+// add custom browserify options here
+var customOpts = {
+  entries: ['./src/scripts/app.js'],
+  debug: true
 };
+var opts = assign({}, watchify.args, customOpts);
+var b = watchify(browserify(opts)); 
 
-//Variables
-var bower_rc = JSON.parse(fs.readFileSync('.bowerrc', 'utf8'));
-//var bower_js = bower({
-//    'cwd': bower_rc.cwd
-//}).js;
+// add transformations here
+// i.e. b.transform(coffeeify);
 
-var getBundleName = function () {
-    var version = require('./package.json').version;
-    var name = require('./package.json').name;
-    return version + '.' + name + '.' + 'min';
-};
-
-//Utility Tasks
-gulp.task('clean', function (cb) {
-    return del([config.dist], cb);
-});
-
-//Build Tasks
-//gulp.task('build-bower', ['clean'], function () {
-//    return gulp.src(config.src + '/markup/index.html')
-//        .pipe(bower_js)
-//        .pipe(gulp.dest(config.dist));
-//});
-
-gulp.task('copydep', function () {
-    return gulp.src('./src/bower_components/**/*')
-        .pipe(changed('./dist/bower_components'))
-        .pipe(gulp.dest('./dist/bower_components'));
-});
-
-gulp.task('wiredep', ['copydep'], function () {
-    return gulp.src('./src/markup/index.html')
-        .pipe(wiredep({
-            'cwd': bower_rc.cwd,
-            'ignorePath': '../'
-        }))
-        .pipe(gulp.dest('./dist'));
-});
-
-gulp.task('build-markup', function () {
-    return gulp.src(config.src + '/markup/**/*.html')
-        .pipe(gulp.dest(config.dist));
-});
-
-gulp.task('build-styles', function () {
-    return gulp.src(config.src + '/styles/**/*.css')
-        .pipe(gulp.dest(config.dist));
-});
-
-gulp.task('build-scripts', function () {
-
-    var bundler = browserify({
-        entries: ['./src/scripts/app.js'],
-        debug: true
+gulp.task('serve', function () {
+    browserSync({
+        server: "./dist"
     });
-
-    var bundle = function () {
-        return bundler
-            .bundle()
-            .pipe(source('bundle.js'))
-            .pipe(buffer())
-            .pipe(sourcemaps.init({
-                loadMaps: true
-            }))
-            // Add transformation tasks to the pipeline here.
-            .pipe(uglify())
-            .pipe(sourcemaps.write('./'))
-            .pipe(gulp.dest(config.dist));
-    };
-
-    return bundle();
 });
 
-gulp.task('build', [
-    'wiredep',
-    'build-markup',
-    'build-styles',
-    'build-scripts'
-]);
+gulp.task('js', ['serve'], bundle); // so you can run `gulp js` to build the file
+b.on('update', bundle); // on any dep update, runs the bundler
+b.on('log', gutil.log); // output build logs to terminal
 
-gulp.task('serve', ['build'], function () {
-    
-});
-
-/*
-Default Task
-*/
+function bundle() {
+  return b.bundle()
+    // log errors if they happen
+    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+    .pipe(source('bundle.js'))
+    // optional, remove if you don't need to buffer file contents
+    .pipe(buffer())
+    // optional, remove if you dont want sourcemaps
+    .pipe(sourcemaps.init({loadMaps: true})) // loads map from browserify file
+       // Add transformation tasks to the pipeline here.
+    .pipe(sourcemaps.write('./')) // writes .map file
+    .pipe(gulp.dest('./dist'))
+    .pipe(browserSync.reload({stream: true}));
+}
