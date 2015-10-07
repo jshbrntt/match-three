@@ -18,7 +18,7 @@ export class Game {
       map: map
     });
     let sprite = new THREE.Sprite(material);
-    sprite.scale.set(64, 64, 1);
+    sprite.scale.set(256 * this._pixelRatio, 256 * this._pixelRatio, 1);
     sprite.position.set(0, 0, 1);
 
     this._sceneOrtho.add(sprite);
@@ -33,6 +33,8 @@ export class Game {
     window.addEventListener('resize', this._resize.bind(this), false);
 
     this._animate();
+
+    this._count = 0;
 
   }
   _resize() {
@@ -49,14 +51,24 @@ export class Game {
   }
   _animate() {
     window.requestAnimationFrame(this._animate.bind(this));
+    this._update();
     this._render();
+  }
+  _update() {
+    for (var i = 0; i < this._sceneOrtho.children.length; i++) {
+      var child = this._sceneOrtho.children[i];
+      if (child instanceof THREE.Sprite) {
+        child.material.rotation = ((Math.PI * 2) / 180) * this._count;
+      }
+    }
+    this._count++;
+    if (this._count > 360) {
+      this._count = 0;
+    }
   }
   _render() {
     this._renderer.clear();
     this._renderer.clearDepth();
     this._renderer.render(this._sceneOrtho, this._cameraOrtho);
-  }
-  _update() {
-    // TODO
   }
 }
