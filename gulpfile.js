@@ -3,9 +3,10 @@
 var _           = require('lodash');
 var babelify    = require('babelify');
 var browserify  = require('browserify');
-var browserSync = require('browser-sync');
+var bs          = require('browser-sync').create();
 var buffer      = require('vinyl-buffer');
 var del         = require('del');
+var fs          = require('fs');
 var gulp        = require('gulp');
 var gutil       = require('gulp-util');
 var minify      = require('gulp-minify-css');
@@ -20,7 +21,8 @@ var path        = require('path');
  * Tools
  */
  gulp.task('browser-sync', ['build'], function () {
-  browserSync({
+  bs.init({
+    open: false,
     server: {
       baseDir: './dist'
     }
@@ -32,16 +34,16 @@ var path        = require('path');
  */
 var assets = {
   build: function () {
-    gutil.log(gutil.colors.yellow('[?] Building Assets...'));
+    gutil.log('🕒 ', gutil.colors.yellow('Building Assets...'));
     return gulp.src('./src/assets/**/*')
       .pipe(gulp.dest('./dist/assets'))
       .on('end', function () {
-        gutil.log(gutil.colors.green('[✔] Finished Assets'));
+        gutil.log('✅ ', gutil.colors.green('Finished Assets'));
       });
   },
   reload: function () {
     return assets.build()
-      .pipe(browserSync.stream());
+      .pipe(bs.stream());
   },
   watch: function () {
     return gulp.watch('src/assets/**/*', ['reload-assets'])
@@ -63,19 +65,19 @@ gulp.task('reload-assets', assets.reload);
  */
 var pages = {
   build: function () {
-    gutil.log(gutil.colors.yellow('[?] Building Pages...'));
+    gutil.log('🕒 ', gutil.colors.yellow('Building Pages...'));
     return gulp.src('./src/**/*.html')
       .pipe(wiredep({
         ignorePath: './dist'
       }))
       .pipe(gulp.dest('./dist'))
       .on('end', function () {
-        gutil.log(gutil.colors.green('[✔] Finished Pages'));
+        gutil.log('✅ ', gutil.colors.green('Finished Pages'));
       });
   },
   reload: function () {
     return pages.build()
-      .pipe(browserSync.stream());
+      .pipe(bs.stream());
   },
   watch: function () {
     return gulp.watch('src/**/*.html', ['reload-pages']);
@@ -91,19 +93,19 @@ gulp.task('reload-pages', pages.reload);
  */
 var styles = {
   build: function () {
-    gutil.log(gutil.colors.yellow('[?] Building Styles...'));
+    gutil.log('🕒 ', gutil.colors.yellow('Building Styles...'));
     return gulp.src('./src/index.css')
       .pipe(sourcemaps.init())
       .pipe(minify())
       .pipe(sourcemaps.write())
       .pipe(gulp.dest('./dist'))
       .on('end', function () {
-        gutil.log(gutil.colors.green('[✔] Finished Styles'));
+        gutil.log('✅ ', gutil.colors.green('Finished Styles'));
       });
   },
   reload: function () {
     return styles.build()
-      .pipe(browserSync.stream());
+      .pipe(bs.stream());
   },
   watch: function () {
     return gulp.watch('src/**/*.css', ['reload-styles']);
@@ -118,35 +120,27 @@ gulp.task('reload-styles', styles.reload);
  * Scripts
  */
 var scripts = {
-  b: browserify({
-      entries: ['./src/index.js'],
-      cache: {},
-      packageCache: {}
-    }),
+  b: browserify('./src/index.js', {
+    debug: true
+  }),
   build: function () {
-    gutil.log(gutil.colors.yellow('[?] Building Scripts...'));
+    gutil.log('🕒 ', gutil.colors.yellow('Building Scripts...'));
     return scripts.b
       .transform(babelify)
       .bundle()
-      .on('error', function (err) {
-        gutil.log(gutil.colors.red('[✘] '+err));
-      })
+      .on('error', gutil.log.bind(gutil, '❌ ', gutil.colors.red('Error:')))
       .pipe(source('bundle.js'))
-      .pipe(buffer())
-      .pipe(sourcemaps.init())
-      .pipe(uglify())
-      .pipe(sourcemaps.write())
-      .pipe(gulp.dest('./dist'));
+      .pipe(gulp.dest("./dist"));
   },
   reload: function () {
     return scripts.build()
-      .pipe(browserSync.stream());
+      .pipe(bs.stream());
   },
   watch: function () {
     watchify(scripts.b)
       .on('update', scripts.reload)
       .on('time', function (time) {
-        gutil.log(gutil.colors.green('[✔] Finished Scripts in:'), gutil.colors.cyan(time + 'ms'));
+        gutil.log('✅ ', gutil.colors.green('Built Scripts in'), gutil.colors.cyan(time + 'ms'));
       });
     return scripts.reload();
   }
