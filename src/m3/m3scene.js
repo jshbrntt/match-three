@@ -1,4 +1,6 @@
 import {Scene} from './../core/scene';
+import {Model} from './../core/mvc/model';
+import {GridModel} from './models/grid-model';
 
 export class M3Scene extends Scene {
   constructor(game) {
@@ -14,5 +16,13 @@ export class M3Scene extends Scene {
     sprite.scale.set(256, 256, 1);
     sprite.position.set(500, 500, 1);
     this.add(sprite);
+
+    this.setupModels();
+  }
+  setupModels() {
+    this._gridModel = new GridModel(8, 9);
+    this._gridModel.randomize();
+    console.log(this._gridModel.toString());
+    // var model = new Model();
   }
 }
