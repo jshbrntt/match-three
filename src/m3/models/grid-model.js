@@ -182,7 +182,7 @@ export class GridModel extends Model {
 
   setTileModel(p, v) {
     var i = this.convert2D1D(p);
-    if (i < 0) {
+    if (!(i in this._vector)) {
       return false;
     }
     this._vector[i] = v;
@@ -191,7 +191,7 @@ export class GridModel extends Model {
 
   getTileModel(p) {
     var i = this.convert2D1D(p);
-    if (i < 0) {
+    if (!(i in this._vector)) {
       return null;
     }
     return this._vector[i];
@@ -323,5 +323,17 @@ export class GridModel extends Model {
       }
     }
     return string;
+  }
+
+  set onRandomized(value) {
+    this._onRandomized = value;
+  }
+
+  get onRandomized() {
+    return this._onRandomized;
+  }
+
+  get size() {
+    return this._vector.length;
   }
 }
