@@ -3,11 +3,12 @@ import {CellModel} from './cell-model';
 import {TileModel} from './tile-model';
 
 export class GridModel extends Model {
-  constructor(width, height) {
+  constructor(width, height, seed) {
     super();
 
     this._width = width;
     this._height = height;
+    this._seed = seed;
     this._vector = [];
     this._vector.length = this._width * this._height;
 
@@ -65,7 +66,7 @@ export class GridModel extends Model {
     var movedTile = false;
     for (var i = this._vector.length - this._width; i < this._vector.length; i++) {
       var drop = 0;
-      var cell = this.convert1D2D(i);
+      var cell = this.transformIndexToCellModel(i);
       while (cell.y >= 0) {
         if (!this.getTileModel(cell)) {
           drop++;
@@ -97,7 +98,7 @@ export class GridModel extends Model {
     console.log("fill");
     var filled = false;
     for (var i = this._width; i <= (this._width * 2); i++) {
-      var cell = this.convert1D2D(i);
+      var cell = this.transformIndexToCellModel(i);
       if (!this.getTileModel(cell)) {
         this.addTile(this.createRandomTileModel(new CellModel(cell.x, cell.y - 1)));
         filled = true;
@@ -181,7 +182,7 @@ export class GridModel extends Model {
   }
 
   setTileModel(p, v) {
-    var i = this.convert2D1D(p);
+    var i = this.transformCellModelToIndex(p);
     if (!(i in this._vector)) {
       return false;
     }
@@ -190,20 +191,20 @@ export class GridModel extends Model {
   }
 
   getTileModel(p) {
-    var i = this.convert2D1D(p);
+    var i = this.transformCellModelToIndex(p);
     if (!(i in this._vector)) {
       return null;
     }
     return this._vector[i];
   }
 
-  randomize() {
-    for (var i = this._width; i < this._vector.length; ++i) {
+  randomize(seed) {
+    for (var i = 0; i < this._vector.length - this._width; i++) {
       var currentCell;
       do {
-        currentCell = this.convert1D2D(i);
+        currentCell = this.transformIndexToCellModel(i);
         this._vector[i] = this.createRandomTileModel(currentCell);
-      } while (this.matchedHeight(currentCell).length > 2 || this.matchedWidth(currentCell).length > 2);
+      } while (this.getVerticalMatches(currentCell).length > 2 || this.getHorizontalMatches(currentCell).length > 2);
     }
     if (this._onRandomized) {
       this._onRandomized();
@@ -211,25 +212,25 @@ export class GridModel extends Model {
   }
 
   createRandomTileModel(cell) {
-    return (new TileModel(this.randomTileValue(0, 4), cell));
+    return new TileModel(this.randomTileValue(0, 4), cell);
   }
 
   randomTileValue(min, max) {
-    return (Math.floor(Math.random() * (1 + max - min)) + min);
+    return Math.floor(this.random() * (1 + max - min)) + min;
   }
 
-  convert1D2D(i) {
+  transformIndexToCellModel(i) {
     if (i < 0 || i > (this._vector.length - 1)) {
       return null;
     }
-    return (new CellModel(i % this._width, Math.floor(i / this._width)));
+    return new CellModel(i % this._width, Math.floor(i / this._width));
   }
 
-  convert2D1D(tile) {
+  transformCellModelToIndex(tile) {
     if (!tile || tile.x < 0 || tile.x > (this._width - 1) || tile.y < 0 || tile.y > (this._height - 1)) {
       return -1;
     }
-    return (tile.x + tile.y * this._width);
+    return tile.x + tile.y * this._width;
   }
 
   unique(cells ) {
@@ -247,79 +248,85 @@ export class GridModel extends Model {
   getMatches() {
     var matches = [];
     for (var i = 0; i < _vector.length; ++i) {
-      var p = this.convert1D2D(i);
-      var horizontalMatch = this.matchedWidth(p);
-      if (horizontalMatch.length > 2) {
-        matches = matches.concat(horizontalMatch);
+      var cursorCellModel = this.transformIndexToCellModel(i);
+      var horizontalMatches = this.getHorizontalMatches(cursorCellModel);
+      if (horizontalMatches.length > 2) {
+        matches = matches.concat(horizontalMatches);
       }
-      var verticalMatch = this.matchedHeight(p);
-      if (verticalMatch.length > 2) {
-        matches = matches.concat(verticalMatch);
+      var verticalMatches = this.getVerticalMatches(cursorCellModel);
+      if (verticalMatches.length > 2) {
+        matches = matches.concat(verticalMatches);
       }
     }
     return unique(matches);
   }
 
-  matchedHeight(p) {
+  getVerticalMatches(originCellModel) {
     var matches = [];
-    var tileModel = this.getTileModel(p);
-    if (!tileModel) {
+    var originTileModel = this.getTileModel(originCellModel);
+    if (!originTileModel) {
       return matches;
     }
-    matches.push(p);
-    var cursor = new CellModel(p.x, p.y - 1);
-    while (this.valueMatches(tileModel, cursor)) {
-      matches.push(new CellModel(cursor.x, cursor.y));
-      cursor.y--;
+    matches.push(originCellModel);
+    var cursorCellModel = originCellModel.copy();
+    cursorCellModel.y--;
+    while(this.constructor.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
+      matches.push(new CellModel(cursorCellModel.y, cursorCellModel.y));
+      cursorCellModel.y--;
     }
-    cursor.y = p.y + 1;
-    while (this.valueMatches(tileModel, cursor)) {
-      matches.push(new CellModel(cursor.x, cursor.y));
-      cursor.y++;
+    cursorCellModel.y = originCellModel.y + 1;
+    while (this.constructor.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
+      matches.push(new CellModel(cursorCellModel.y, cursorCellModel.y));
+      cursorCellModel.y++;
     }
     return matches;
   }
 
-  matchedWidth(p) {
+  getHorizontalMatches(originCellModel) {
     var matches = [];
-    var tileModel = this.getTileModel(p);
-    if (!tileModel) {
+    var originTileModel = this.getTileModel(originCellModel);
+    if (!originTileModel) {
       return matches;
     }
-    matches.push(p);
-    var cursor = new CellModel(p.x - 1, p.y);
-    while (this.valueMatches(tileModel, cursor)) {
-      matches.push(new CellModel(cursor.x, cursor.y));
-      cursor.x--;
+    matches.push(originCellModel);
+    var cursorCellModel = originCellModel.copy();
+    cursorCellModel.x--;
+    while(this.constructor.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
+      matches.push(new CellModel(cursorCellModel.x, cursorCellModel.y));
+      cursorCellModel.x--;
     }
-    cursor.x = p.x + 1;
-    while (this.valueMatches(tileModel, cursor)) {
-      matches.push(new CellModel(cursor.x, cursor.y));
-      cursor.x++;
+    cursorCellModel.x = originCellModel.x + 1;
+    while (this.constructor.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
+      matches.push(new CellModel(cursorCellModel.x, cursorCellModel.y));
+      cursorCellModel.x++;
     }
     return matches;
   }
 
-  valueMatches(tileModel, p) {
-    if (!tileModel || this.getTileModel(p)) {
+  random() {
+    var max = 1;
+    var min = 0;
+    this._seed = (this._seed * 9301 + 49297) % 233280;
+    var rnd = this._seed / 233280;
+    return min + rnd * (max - min);
+  }
+
+  static tilesMatch(tileModel1, tileModel2) {
+    if (!tileModel1 || !tileModel2) {
       return false;
     }
-    var otherTileModel = this.getTileModel(p);
-    if (otherTileModel) {
-      return tileModel.value === otherTileModel.value;
-    }
-    else {
-      return false;
-    }
+    return tileModel1.value === tileModel2.value;
   }
 
   toString() {
     var string = "";
-    for (var i = 0; i < this._vector.length; ++i) {
-      var tileModel = this.getTileModel(this.convert1D2D(i));
-      string += !tileModel ? "X" : tileModel.value.toString();
-      if ((i + 1) % this._width === 0) {
-        string += "\n";
+    for (var y = this._height - 1; y >= 0; y--) {
+      for (var x = 0; x < this._width; x++) {
+        var tileModel = this.getTileModel(new CellModel(x, y));
+        string += tileModel ? tileModel.value : 'X';
+        if (x === this._width - 1) {
+          string += "\n";
+        }
       }
     }
     return string;

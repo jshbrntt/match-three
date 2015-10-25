@@ -35,7 +35,7 @@ export class GridView extends View {
     this._tilesView.children.length = 0;
     this._tileViews = [];
     for (var i = 0; i < this._model.size; i++) {
-      var tileCell = this._model.convert1D2D(i);
+      var tileCell = this._model.transformIndexToCellModel(i);
       var tileModel = this._model.getTileModel(tileCell);
       if (!tileModel) {
         this._tileViews.push(null);
@@ -54,5 +54,8 @@ export class GridView extends View {
   }
   get group() {
     return this._group;
+  }
+  get textures() {
+    return this._textures;
   }
 }
