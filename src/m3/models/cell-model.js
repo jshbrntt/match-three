@@ -20,6 +20,14 @@ export class CellModel extends Model {
     return (new CellModel(this._x - cell.x, this._y - cell.y));
   }
 
+  copy() {
+    return (new CellModel(this._x, this._y));
+  }
+
+  toString() {
+    return '('+this._x+','+this._y+')';
+  }
+
   get x() {
     return this._x;
   }
