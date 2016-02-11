@@ -11,10 +11,22 @@ export class GridView extends View {
   loadTextures(onLoad) {
     this._textures = [];
     var filenames = ['blue', 'green', 'purple', 'red', 'yellow'];
+
+    function onTextureLoaded(texture) {
+      map.minFilter = THREE.NearestFilter;
+      var material = new THREE.SpriteMaterial({
+        map: map
+      });
+      this._textures.push(material);
+      if(this._textures.length === filenames.length) {
+        onLoad();
+      }
+    }
     for (var i = 0; i < filenames.length; i++) {
       var filename = 'assets/textures/tile_' + filenames[i] + '.png';
       console.log(filename);
-      THREE.ImageUtils.loadTexture(filename, undefined, (map) => {
+      var loader = new THREE.TextureLoader();
+      loader.load(filename, (map) => {
         map.minFilter = THREE.NearestFilter;
         var material = new THREE.SpriteMaterial({
           map: map
