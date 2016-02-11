@@ -211,6 +211,14 @@ export class GridModel extends Model {
     }
   }
 
+  random() {
+    var max = 1;
+    var min = 0;
+    this._seed = (this._seed * 9301 + 49297) % 233280;
+    var rnd = this._seed / 233280;
+    return min + rnd * (max - min);
+  }
+
   createRandomTileModel(cell) {
     return new TileModel(this.randomTileValue(0, 4), cell);
   }
@@ -301,14 +309,6 @@ export class GridModel extends Model {
       cursorCellModel.x++;
     }
     return matches;
-  }
-
-  random() {
-    var max = 1;
-    var min = 0;
-    this._seed = (this._seed * 9301 + 49297) % 233280;
-    var rnd = this._seed / 233280;
-    return min + rnd * (max - min);
   }
 
   static tilesMatch(tileModel1, tileModel2) {
