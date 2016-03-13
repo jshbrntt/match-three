@@ -16,9 +16,10 @@ export default class Engine {
   start() {
     if (!this._game) {
       document.body.appendChild(this._renderer.domElement);
-      this._game = new this._gameClass(this._renderer);
-      window.addEventListener('resize', this._resize.bind(this));
-      this._resize();
+      this._game = new this._gameClass(this, this._width, this._height);
+      window.addEventListener('resize', this.resize.bind(this));
+      this.resize();
+      this._game.start();
     }
     this.isStarted = true;
   }

@@ -2,10 +2,12 @@ import THREE from 'three';
 import Stats from 'stats';
 import ServiceLocator from './service-locator';
 
-  constructor(renderer) {
 export default class Game {
+  constructor(engine, width, height, color = 0x0099ff) {
 
-    this._renderer = renderer;
+    this._engine            = engine;
+    this._width             = width;
+    this._height            = height;
 
     this._camera = new THREE.OrthographicCamera(0, this._width, this._height, 0, 1, 10);
     this._camera.position.z = 10;
@@ -14,6 +16,7 @@ export default class Game {
     this._stats.domElement.style.left     = '0px';
     this._stats.domElement.style.top      = '0px';
 
+    this._engine.renderer.setClearColor(color);
     this._stats.setMode(0);
 
     document.body.appendChild( this._stats.domElement );
