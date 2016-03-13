@@ -2,10 +2,37 @@ import THREE from 'three';
 
 export default class View extends THREE.Object3D {
   constructor(model) {
+    if (!model) {
+      throw new ReferenceError('View requires a model to be passed.');
+    }
+    super();
     this._model = model;
     this._model.onUpdated = this.onUpdated;
   }
+  resize(width, height) {
+    for (let child of this.children) {
+      if ('resize' in child) {
+        child.resize(width, height);
+      }
+    }
+  }
+  update() {
+    for (let child of this.children) {
+      if ('update' in child) {
+        child.update();
+      }
+    }
+  }
   onUpdated() {
     // Abstract
+  }
+  get size() {
+    return new THREE.Box3().setFromObject(this).size();
+  }
+  get screen() {
+    // return {
+    //   position:
+    //   size:
+    // };
   }
 }

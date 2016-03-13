@@ -4,11 +4,17 @@ import ServiceLocator from './service-locator';
 export default class Engine {
   constructor(gameClass) {
     this._gameClass = gameClass;
-    this._renderer = new THREE.WebGLRenderer();
-    this.isStarted = false;
+    this._renderer  = new THREE.WebGLRenderer();
+    this.isStarted  = false;
+    this._width     = window.innerWidth;
+    this._height    = window.innerHeight;
+    ServiceLocator.provide(this);
   }
-  _resize() {
-    this._width = window.innerWidth;
+  get renderer() {
+    return this._renderer;
+  }
+  resize() {
+    this._width  = window.innerWidth;
     this._height = window.innerHeight;
     this._renderer.setSize(this._width, this._height);
     this._game.resize(this._width, this._height);

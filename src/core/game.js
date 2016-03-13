@@ -8,9 +8,9 @@ export default class Game {
     this._engine            = engine;
     this._width             = width;
     this._height            = height;
+    this._camera            = new THREE.PerspectiveCamera(75, this._width / this._height, 1, 1000);
+    this._camera.position.z = 500;
 
-    this._camera = new THREE.OrthographicCamera(0, this._width, this._height, 0, 1, 10);
-    this._camera.position.z = 10;
     this._stats                           = new Stats();
     this._stats.domElement.style.position = 'absolute';
     this._stats.domElement.style.left     = '0px';
@@ -20,7 +20,12 @@ export default class Game {
     this._stats.setMode(0);
 
     document.body.appendChild( this._stats.domElement );
+
     this._animate();
+    ServiceLocator.provide(this);
+
+  }
+  start() {
 
   }
   set scene(value) {
@@ -29,15 +34,25 @@ export default class Game {
   get scene() {
     return this._scene;
   }
+  get camera() {
+    return this._camera;
+  }
+  get engine() {
+    return this._engine;
+  }
   resize(width, height) {
-    this._camera.left   = 0;
-    this._camera.right  = width;
-    this._camera.top    = height;
-    this._camera.bottom = 0;
+    this._width  = width;
+    this._height = height;
+    this._camera.aspect = this._width / this._height;
     this._camera.updateProjectionMatrix();
+    if (this._scene) {
+      this._scene.resize(width, height);
+    }
   }
   _animate() {
+    this._stats.begin();
     this._update();
+    this._stats.end();
     window.requestAnimationFrame(this._animate.bind(this));
   }
   _update() {
@@ -47,8 +62,8 @@ export default class Game {
     }
   }
   _render() {
-    this._renderer.clear();
-    this._renderer.clearDepth();
-    this._renderer.render(this._scene, this._camera);
+    this._engine.renderer.clear();
+    this._engine.renderer.clearDepth();
+    this._engine.renderer.render(this._scene, this._camera);
   }
 }
