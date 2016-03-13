@@ -21,6 +21,7 @@
   ],
   "dependencies": {
     "threejs": "*",
-    "tweenjs": "*"
+    "tweenjs": "*",
+    "stats.js": "*"
   }
 }

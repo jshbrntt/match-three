@@ -18,7 +18,8 @@
   },
   "browserify-shim": {
     "three": "global:THREE",
-    "tween": "global:TWEEN"
+    "tween": "global:TWEEN",
+    "stats": "global:Stats"
   },
   "browserify": {
     "transform": [ "browserify-shim" ]
