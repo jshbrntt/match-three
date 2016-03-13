@@ -1,4 +1,4 @@
-export class Model {
+export default class Model {
   constructor() {
     this._onUpdated = null;
   }

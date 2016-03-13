@@ -1,6 +1,6 @@
-import {Model} from './../../core/mvc/model';
+import Model from './../../core/mvc/model';
 
-export class TileModel extends Model {
+export default class TileModel extends Model {
   constructor(value, cell) {
     super();
 

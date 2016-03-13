@@ -1,8 +1,8 @@
-import {Model} from './../../core/mvc/model';
-import {CellModel} from './cell-model';
-import {TileModel} from './tile-model';
+import Model from './../../core/mvc/model';
+import CellModel from './cell-model';
+import TileModel from './tile-model';
 
-export class GridModel extends Model {
+export default class GridModel extends Model {
   constructor(width, height, seed) {
     super();
 

@@ -1,8 +1,9 @@
 import THREE from 'three';
-import {View} from './../../core/mvc/view';
-import {TileView} from './tile-view';
+import View from './../../core/mvc/view';
+import TileView from './tile-view';
+import ServiceLocator from './../../core/service-locator';
 
-export class GridView extends View {
+export default class GridView extends View {
   constructor(model) {
     super(model);
     this._group = new THREE.Object3D();

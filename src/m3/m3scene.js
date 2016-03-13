@@ -1,12 +1,14 @@
-import {Scene} from './../core/scene';
-import {Model} from './../core/mvc/model';
-import {GridModel} from './models/grid-model';
-import {TileModel} from './models/tile-model';
-import {CellModel} from './models/cell-model';
-import {TileView} from './views/tile-view';
-import {GridView} from './views/grid-view';
+import Scene from './../core/scene';
+import Model from './../core/mvc/model';
+import GridModel from './models/grid-model';
+import TileModel from './models/tile-model';
+import CellModel from './models/cell-model';
+import TileView from './views/tile-view';
+import GridView from './views/grid-view';
+import GridController from './controllers/grid-controller';
+import ServiceLocator from './../core/service-locator';
 
-export class M3Scene extends Scene {
+export default class M3Scene extends Scene {
   constructor(game) {
     super(game);
     this.setupModels();

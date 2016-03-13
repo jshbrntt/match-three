@@ -1,6 +1,7 @@
-var THREE = require('three');
+import THREE from 'three';
+import ServiceLocator from './service-locator';
 
-export class Engine {
+export default class Engine {
   constructor(gameClass) {
     this._gameClass = gameClass;
     this._renderer = new THREE.WebGLRenderer();

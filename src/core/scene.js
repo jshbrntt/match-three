@@ -1,6 +1,6 @@
-var THREE = require('three');
+import THREE from 'three';
 
-export class Scene extends THREE.Scene {
+export default class Scene extends THREE.Scene {
   constructor(game) {
     super();
     this._game = game;

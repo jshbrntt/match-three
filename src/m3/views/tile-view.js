@@ -1,7 +1,7 @@
-import {TWEEN} from 'tween';
-import {View} from './../../core/mvc/view';
+import TWEEN from 'tween';
+import View from './../../core/mvc/view';
 
-export class TileView extends View {
+export default class TileView extends View {
   constructor(model, textures) {
     super(model);
     if (!textures || !textures.length) {

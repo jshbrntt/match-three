@@ -1,7 +1,9 @@
-var THREE = require('three');
+import THREE from 'three';
+import Stats from 'stats';
+import ServiceLocator from './service-locator';
 
-export class Game {
   constructor(renderer) {
+export default class Game {
 
     this._renderer = renderer;
 

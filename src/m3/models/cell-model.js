@@ -1,6 +1,6 @@
-import {Model} from './../../core/mvc/model';
+import Model from './../../core/mvc/model';
 
-export class CellModel extends Model {
+export default class CellModel extends Model {
   constructor(x, y) {
     super();
     this._x = x;
