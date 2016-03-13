@@ -9,7 +9,14 @@ export default class Game {
 
     this._camera = new THREE.OrthographicCamera(0, this._width, this._height, 0, 1, 10);
     this._camera.position.z = 10;
+    this._stats                           = new Stats();
+    this._stats.domElement.style.position = 'absolute';
+    this._stats.domElement.style.left     = '0px';
+    this._stats.domElement.style.top      = '0px';
 
+    this._stats.setMode(0);
+
+    document.body.appendChild( this._stats.domElement );
     this._animate();
 
   }
