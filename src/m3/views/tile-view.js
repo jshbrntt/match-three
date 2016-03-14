@@ -63,8 +63,8 @@ export default class TileView extends View {
   }
   update() {
     // this._plane.rotation.x += Math.random() * .05;
-    // this._plane.rotation.y += .05;
-    // this._plane.rotation.z += .05;
+    let time = new Date(Date.now()).getMilliseconds() / 1000;
+    this._plane.rotation.y = (Math.PI * 2) * time + ((this.model.cell.x + 1) / 9) * (Math.PI * 1.5);
   }
   onRemoved() {
     this._sprite.parent.remove(this._sprite);

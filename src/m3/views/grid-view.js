@@ -2,28 +2,56 @@ import THREE from 'three';
 import View from './../../core/mvc/view';
 import TileView from './tile-view';
 import ServiceLocator from './../../core/service-locator';
+import MouseEvent from './../../core/mouse-event';
 
 export default class GridView extends View {
   constructor(model) {
     super(model);
     this._model.onRandomized = this.onRandomized.bind(this);
+    this._raycaster = new THREE.Raycaster();
+    this._camera = ServiceLocator.get('M3Game').camera;
+    this._mouse = ServiceLocator.get('Mouse');
+    this._mouse.addEventListener(MouseEvent.DOWN, this.onMouseDown.bind(this));
+    this._mouse.addEventListener(MouseEvent.UP, this.onMouseUp.bind(this));
+    this._selectedTileView = null;
+    this._dimensions = new THREE.Vector2();
+  }
+  getWorldDimensions(width, height) {
+    let dimensions = new THREE.Vector2();
+    let vFOV = this._camera.fov * Math.PI / 180;
+    dimensions.y = 2 * Math.tan(vFOV / 2) * this._camera.position.z;
+    let aspect = width / height;
+    dimensions.x = dimensions.y * aspect;
+    return dimensions;
+  }
+  onMouseDown(event) {
+    this._raycaster.setFromCamera(this._mouse.position, this._camera);
+    let intersects = this._raycaster.intersectObjects(this.children, true);
+    for (let intersect of intersects) {
+      this._selectedTileView = intersect.object.parent;
+    }
+  }
+  onMouseUp(event) {
+    this._selectedTileView = null;
+  }
+  update() {
+    super.update();
+    if (this._selectedTileView) {
+      let x = (this._mouse.position.x + 1) / 2 * this._dimensions.x;
+      let y = ((this._mouse.position.y - 1) / -2) * this._dimensions.y;
+      this._selectedTileView.position.x = (x + this.position.x) / this.scale.x;
+      this._selectedTileView.position.y = (y + this.position.y) / -this.scale.y
+    }
   }
   resize(width, height) {
-    let camera = ServiceLocator.get('M3Game').camera;
-
+    this._dimensions = this.getWorldDimensions(width, height);
     let size = this.size;
-
-    let vFOV   = camera.fov * Math.PI / 180;
-    let projectedHeight = 2 * Math.tan( vFOV / 2 ) * camera.position.z;
-    let aspect = width / height;
-    let projectedWidth  = projectedHeight * aspect;
     let scale = 1;
 
     if (height < width) {
-      scale = projectedHeight / size.y;
-    }
-    else {
-      scale = projectedWidth / size.x;
+      scale = this._dimensions.y / size.y;
+    } else {
+      scale = this._dimensions.x / size.x;
     }
 
     this.scale.x *= scale;
@@ -45,7 +73,7 @@ export default class GridView extends View {
       var loader = new THREE.TextureLoader();
       loader.load(filename, (texture) => {
         this._textures.push(texture);
-        if(this._textures.length === filenames.length) {
+        if (this._textures.length === filenames.length) {
           onLoad();
         }
       });

@@ -48,7 +48,7 @@ export default class M3Scene extends Scene {
     // let domElement = ServiceLocator.get('M3Game').renderer.domElement;
 
     // this.add(new TileView(new TileModel(1, new CellModel(1, 1))));
-    this._gridModel = new GridModel(8, 9, 1);
+    this._gridModel = new GridModel(9, 10, 1);
     this._gridView = new GridView(this._gridModel);
     this._gridController = new GridController(this._gridModel, this._gridView);
     this._gridModel.randomize();
