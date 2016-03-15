@@ -72,23 +72,6 @@ export default class GridView extends View {
 
     var vector = new THREE.Vector3();
   }
-  loadTextures(onLoad) {
-    return new Promise((resolve, reject) => {
-      this._textures = [];
-      var filenames = ['blue', 'green', 'purple', 'red', 'yellow'];
-      for (var i = 0; i < filenames.length; i++) {
-        var filename = 'assets/textures/tile_' + filenames[i] + '.png';
-        console.log(filename);
-        var loader = new THREE.TextureLoader();
-        loader.load(filename, (texture) => {
-          this._textures.push(texture);
-          if (this._textures.length === filenames.length) {
-            resolve();
-          }
-        });
-      }
-    });
-  }
   createTileViews() {
     this.children.length = 0;
     this._tileViews = [];
@@ -100,7 +83,7 @@ export default class GridView extends View {
         continue;
       }
 
-      var tileView = new TileView(tileModel, this._textures);
+      var tileView = new TileView(tileModel);
       tileView.position.x = tileCell.x * tileView.size.x;
       tileView.position.y = tileCell.y * tileView.size.y;
       this.add(tileView);
@@ -109,8 +92,5 @@ export default class GridView extends View {
   }
   onRandomized() {
     // this.loadTextures(this.createTileViews.bind(this));
-  }
-  get textures() {
-    return this._textures;
   }
 }

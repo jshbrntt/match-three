@@ -1,28 +1,19 @@
+import THREE from 'three';
 import TWEEN from 'tween';
 import View from './../../core/mvc/view';
 
 export default class TileView extends View {
-  constructor(model, textures) {
+  constructor(model) {
     super(model);
-    if (!textures || !textures.length) {
-      throw new Error("Empty or null textures vector.");
+    if (!TileView.MATERIALS.length) {
+      throw new Error('Missing materials please create them with `TileView.createMaterials(textures)`.');
     }
-    if (model.value > textures.length - 1) {
-      throw new Error("No texture exists for this tile's value");
+    if (model.value > TileView.MATERIALS.length - 1) {
+      throw new Error(`No material exists for tile value \`${model.value}\`.`);
     }
-
-    this._texture  = textures[this._model.value];
-    this._geometry = new THREE.PlaneGeometry(this._texture.image.width, this._texture.image.height);
-    this._material = new THREE.MeshBasicMaterial({
-      map: this._texture,
-      side: THREE.DoubleSide,
-      transparent: true,
-      depthWrite: false,
-      depthTest: false
-    });
-    this._plane            = new THREE.Mesh(this._geometry, this._material);
-    this._plane.position.x = this._geometry.parameters.width / 2;
-    this._plane.position.y = this._geometry.parameters.height / 2;
+    this._plane            = new THREE.Mesh(TileView.GEOMETRY, TileView.MATERIALS[this._model.value]);
+    this._plane.position.x = TileView.GEOMETRY.parameters.width / 2;
+    this._plane.position.y = TileView.GEOMETRY.parameters.height / 2;
 
     this._tweenQueue       = [];
     this._callbackQueue    = [];
@@ -43,7 +34,34 @@ export default class TileView extends View {
     //   this._model.cell.y * this._sprite.scale.y,
     //   1
     // );
-
+  }
+  static loadTextures() {
+    let loader = new THREE.TextureLoader();
+    let textures = [];
+    let colors = ['blue', 'green', 'purple', 'red', 'yellow'];
+    return new Promise((resolve, reject) => {
+      for (let color of colors) {
+        let filename = 'assets/textures/tile_' + color + '.png';
+        console.log(filename);
+        loader.load(filename, (texture) => {
+          textures.push(texture);
+          if (textures.length === colors.length) {
+            resolve(textures);
+          }
+        }, null, reject);
+      }
+    });
+  }
+  static createMaterials(textures) {
+    for (let texture of textures) {
+      TileView.MATERIALS.push(new THREE.MeshBasicMaterial({
+        map: texture,
+        side: THREE.DoubleSide,
+        transparent: true,
+        depthWrite: false,
+        depthTest: false
+      }));
+    }
   }
   onMoved(cell, time, onFinished) {
     // TODO: Port this code to use Tween.js
@@ -100,3 +118,5 @@ export default class TileView extends View {
     return this._sprite;
   }
 }
+TileView.GEOMETRY = new THREE.PlaneGeometry(48, 46);
+TileView.MATERIALS = [];

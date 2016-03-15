@@ -48,15 +48,18 @@ export default class M3Scene extends Scene {
     // let domElement = ServiceLocator.get('M3Game').renderer.domElement;
 
     // this.add(new TileView(new TileModel(1, new CellModel(1, 1))));
-    this._gridModel = new GridModel(20, 20, 1);
-    this._gridView = new GridView(this._gridModel);
-    this._gridController = new GridController(this._gridModel, this._gridView);
-    this._gridModel.randomize();
-    this._gridView.loadTextures().then(() => {
-      this._gridView.createTileViews();
-      this._game._engine.resize();
-    });
-    this.add(this._gridView);
+    let gridModel = new GridModel(20, 20, 1);
+    let gridView = new GridView(gridModel);
+    let gridController = new GridController(gridModel, gridView);
+    gridModel.randomize();
+    TileView
+      .loadTextures()
+      .then(((textures) => {
+        TileView.createMaterials(textures);
+        gridView.createTileViews();
+        this._game._engine.resize();
+      }).bind(this));
+    this.add(gridView);
     // console.log(this._gridModel.toString());
     // var material = new THREE.LineBasicMaterial({
     //   color: 0xff0000
