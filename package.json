@@ -5,7 +5,8 @@
   "main": "gulpfile.js",
   "scripts": {
     "start": "gulp watch",
-    "build": "gulp build"
+    "build": "gulp build",
+    "deploy": "gulp deploy"
   },
   "repository": {
     "type": "git",
@@ -49,6 +50,7 @@
     "wiredep": "2.2.2"
   },
   "dependencies": {
-    "babel-polyfill": "^6.7.2"
+    "babel-polyfill": "^6.7.2",
+    "gulp-gh-pages": "^0.5.4"
   }
 }

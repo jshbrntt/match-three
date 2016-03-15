@@ -1,21 +1,21 @@
 /* global require */
-
-var _           = require('lodash');
-var babelify    = require('babelify');
-var browserify  = require('browserify');
-var bs          = require('browser-sync').create();
-var buffer      = require('vinyl-buffer');
-var del         = require('del');
-var fs          = require('fs');
-var gulp        = require('gulp');
-var gutil       = require('gulp-util');
-var minify      = require('gulp-minify-css');
-var source      = require('vinyl-source-stream');
-var sourcemaps  = require('gulp-sourcemaps');
-var uglify      = require('gulp-uglify');
-var watchify    = require('watchify');
-var wiredep     = require('wiredep').stream;
-var path        = require('path');
+var _          = require('lodash');
+var babelify   = require('babelify');
+var browserify = require('browserify');
+var bs         = require('browser-sync').create();
+var buffer     = require('vinyl-buffer');
+var del        = require('del');
+var fs         = require('fs');
+var ghPages    = require('gulp-gh-pages');
+var gulp       = require('gulp');
+var gutil      = require('gulp-util');
+var minify     = require('gulp-minify-css');
+var path       = require('path');
+var source     = require('vinyl-source-stream');
+var sourcemaps = require('gulp-sourcemaps');
+var uglify     = require('gulp-uglify');
+var watchify   = require('watchify');
+var wiredep    = require('wiredep').stream;
 
 /**
  * Tools
@@ -173,3 +173,8 @@ gulp.task('watch', [
   'watch-styles',
   'watch-scripts'
 ]);
+
+gulp.task('deploy', ['build'], () => {
+  return gulp.src('./dist/**/*')
+    .pipe(ghPages());
+});
