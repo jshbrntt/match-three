@@ -1,17 +1,18 @@
 import Model from './../../core/mvc/model';
 
 export default class TileModel extends Model {
-  constructor(value, cell) {
+  constructor(value, cell, gridModel) {
     super();
 
-    this._value = value;
-    this._cell = cell;
+    this._value         = value;
+    this._cell          = cell;
+    this._gridModel     = gridModel;
 
-    this._highlight = false;
-    this._onMoved = null;
-    this._onRemoved = null;
-    this._onSwapped = null;
-    this._swapTile = null;
+    this._highlight     = false;
+    this._onMoved       = null;
+    this._onRemoved     = null;
+    this._onSwapped     = null;
+    this._swapTile      = null;
     this._swapMovements = 0;
   }
 
@@ -62,6 +63,10 @@ export default class TileModel extends Model {
 
   get highlight() {
     return this._highlight;
+  }
+
+  get gridModel() {
+    return this._gridModel;
   }
 
   set highlight(value) {

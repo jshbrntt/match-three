@@ -44,12 +44,12 @@ export default class GridView extends View {
   }
   update() {
     super.update();
-    if (this._selectedTileView) {
-      let x = (this._mouse.position.x + 1) / 2 * this._dimensions.x;
-      let y = ((this._mouse.position.y - 1) / -2) * this._dimensions.y;
-      this._selectedTileView.position.x = (x + this.position.x) / this.scale.x;
-      this._selectedTileView.position.y = (y + this.position.y) / -this.scale.y
-    }
+    // if (this._selectedTileView) {
+    //   let x = (this._mouse.position.x + 1) / 2 * this._dimensions.x;
+    //   let y = ((this._mouse.position.y - 1) / -2) * this._dimensions.y;
+    //   this._selectedTileView.position.x = (x + this.position.x) / this.scale.x;
+    //   this._selectedTileView.position.y = (y + this.position.y) / -this.scale.y
+    // }
   }
   resize(width, height) {
     this._dimensions = this.getWorldDimensions(width, height);

@@ -26,6 +26,9 @@ export default class View extends THREE.Object3D {
   onUpdated() {
     // Abstract
   }
+  get model() {
+    return this._model;
+  }
   get size() {
     return new THREE.Box3().setFromObject(this).size();
   }

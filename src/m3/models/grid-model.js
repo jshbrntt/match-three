@@ -6,26 +6,26 @@ export default class GridModel extends Model {
   constructor(width, height, seed) {
     super();
 
-    this._width = width;
-    this._height = height;
-    this._seed = seed;
-    this._vector = [];
+    this._width         = width;
+    this._height        = height;
+    this._seed          = seed;
+    this._vector        = [];
     this._vector.length = this._width * this._height;
 
-    this._simulating = false;
-    this._tilesFalling = 0;
+    this._simulating    = false;
+    this._tilesFalling  = 0;
 
-    this._swappedCell1 = null;
-    this._swappedCell2 = null;
+    this._swappedCell1  = null;
+    this._swappedCell2  = null;
 
-    this._onTileMoved = null;
-    this._onTileAdded = null;
+    this._onTileMoved   = null;
+    this._onTileAdded   = null;
     this._onTileRemoved = null;
 
-    this._onRandomized = null;
-    this._onChecked = null;
-    this._onSwapped = null;
-    this._onSimulated = null;
+    this._onRandomized  = null;
+    this._onChecked     = null;
+    this._onSwapped     = null;
+    this._onSimulated   = null;
   }
 
   beginSimulation() {
@@ -220,7 +220,7 @@ export default class GridModel extends Model {
   }
 
   createRandomTileModel(cell) {
-    return new TileModel(this.randomTileValue(0, 4), cell);
+    return new TileModel(this.randomTileValue(0, 4), cell, this);
   }
 
   randomTileValue(min, max) {
@@ -342,5 +342,13 @@ export default class GridModel extends Model {
 
   get size() {
     return this._vector.length;
+  }
+
+  get width() {
+    return this._width;
+  }
+
+  get height() {
+    return this._height;
   }
 }
