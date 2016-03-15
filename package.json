@@ -22,7 +22,9 @@
     "stats": "global:Stats"
   },
   "browserify": {
-    "transform": [ "browserify-shim" ]
+    "transform": [
+      "browserify-shim"
+    ]
   },
   "homepage": "https://github.com/synthecypher/match-three#readme",
   "devDependencies": {
@@ -45,5 +47,8 @@
     "vinyl-source-stream": "1.1.0",
     "watchify": "3.4.0",
     "wiredep": "2.2.2"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.7.2"
   }
 }

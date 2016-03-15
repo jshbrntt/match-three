@@ -52,6 +52,10 @@ export default class M3Scene extends Scene {
     this._gridView = new GridView(this._gridModel);
     this._gridController = new GridController(this._gridModel, this._gridView);
     this._gridModel.randomize();
+    this._gridView.loadTextures().then(() => {
+      this._gridView.createTileViews();
+      this._game._engine.resize();
+    });
     this.add(this._gridView);
     // console.log(this._gridModel.toString());
     // var material = new THREE.LineBasicMaterial({

@@ -20,8 +20,8 @@
     "tests"
   ],
   "dependencies": {
+    "stats.js": "*",
     "threejs": "*",
-    "tweenjs": "*",
-    "stats.js": "*"
+    "tweenjs": "*"
   }
 }
