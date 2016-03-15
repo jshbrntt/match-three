@@ -2,7 +2,14 @@
 
 A simple match three game with particle effects
 
-![Screentshot][screenshot]
+## Build &amp; Run
+
+```bash
+git clone https://github.com/synthecypher/match-three
+cd match-three
+npm install
+bower install
+npm start```
 
 ## Demos
 
