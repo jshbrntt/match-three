@@ -7,22 +7,8 @@ import MouseEvent from './../../core/mouse-event';
 export default class GridView extends View {
   constructor(model) {
     super(model);
-    this._model.onRandomized = this.onRandomized.bind(this);
-    this._raycaster = new THREE.Raycaster();
     this._camera = ServiceLocator.get('M3Game').camera;
-    this._mouse = ServiceLocator.get('Mouse');
-    // this._mouse.addEventListener(MouseEvent.DOWN, this.onMouseDown.bind(this));
-    // this._mouse.addEventListener(MouseEvent.UP, this.onMouseUp.bind(this));
-    // this._mouse.addEventListener(MouseEvent.MOVE, this.onMouseMove.bind(this));
-    this._selectedTileView = null;
     this._dimensions = new THREE.Vector2();
-  }
-  onMouseMove(event) {
-    this._raycaster.setFromCamera(this._mouse.position, this._camera);
-    let intersects = this._raycaster.intersectObjects(this.children, true);
-    for (let intersect of intersects) {
-      this._selectedTileView = intersect.object.parent;
-    }
   }
   getWorldDimensions(width, height) {
     let dimensions = new THREE.Vector2();
@@ -32,24 +18,8 @@ export default class GridView extends View {
     dimensions.x = dimensions.y * aspect;
     return dimensions;
   }
-  onMouseDown(event) {
-    this._raycaster.setFromCamera(this._mouse.position, this._camera);
-    let intersects = this._raycaster.intersectObjects(this.children, true);
-    for (let intersect of intersects) {
-      this._selectedTileView = intersect.object.parent;
-    }
-  }
-  onMouseUp(event) {
-    this._selectedTileView = null;
-  }
   update() {
     super.update();
-    // if (this._selectedTileView) {
-    //   let x = (this._mouse.position.x + 1) / 2 * this._dimensions.x;
-    //   let y = ((this._mouse.position.y - 1) / -2) * this._dimensions.y;
-    //   this._selectedTileView.position.x = (x + this.position.x) / this.scale.x;
-    //   this._selectedTileView.position.y = (y + this.position.y) / -this.scale.y
-    // }
   }
   resize(width, height) {
     this._dimensions = this.getWorldDimensions(width, height);
@@ -89,8 +59,5 @@ export default class GridView extends View {
       this.add(tileView);
       this._tileViews.push(tileView);
     }
-  }
-  onRandomized() {
-    // this.loadTextures(this.createTileViews.bind(this));
   }
 }

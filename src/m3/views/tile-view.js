@@ -40,15 +40,16 @@ export default class TileView extends View {
     let textures = [];
     let colors = ['blue', 'green', 'purple', 'red', 'yellow'];
     return new Promise((resolve, reject) => {
+      function onLoad(texture) {
+        textures.push(texture);
+        if (textures.length === colors.length) {
+          resolve(textures);
+        }
+      }
       for (let color of colors) {
         let filename = 'assets/textures/tile_' + color + '.png';
         console.log(filename);
-        loader.load(filename, (texture) => {
-          textures.push(texture);
-          if (textures.length === colors.length) {
-            resolve(textures);
-          }
-        }, null, reject);
+        loader.load(filename, onLoad, null, reject);
       }
     });
   }
@@ -81,11 +82,11 @@ export default class TileView extends View {
   }
   update() {
     // this._plane.rotation.x += Math.random() * .05;
-    let time    = new Date(Date.now()).getMilliseconds() / 1000;
-    let circle  = Math.PI * 2 * time;
-    let offsetX = this.model.cell.x / this.model.gridModel.width * Math.PI * 1;
-    let offsetY = this.model.cell.y / this.model.gridModel.height * Math.PI * 1;
-    this._plane.rotation.y = circle + offsetX + offsetY;
+    // let time    = new Date(Date.now()).getMilliseconds() / 1000;
+    // let circle  = Math.PI * 2 * time;
+    // let offsetX = this.model.cell.x / this.model.gridModel.width * Math.PI * 1;
+    // let offsetY = this.model.cell.y / this.model.gridModel.height * Math.PI * 1;
+    // this._plane.rotation.y = circle + offsetX + offsetY;
   }
   onRemoved() {
     this._sprite.parent.remove(this._sprite);
@@ -106,7 +107,7 @@ export default class TileView extends View {
     return this._material.wireframe;
   }
   set wireframe(value) {
-    return this._material.wireframe = value;
+    this._material.wireframe = value;
   }
   get moving() {
     return this._tweenQueue.length > 0;
