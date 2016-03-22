@@ -9,7 +9,8 @@ git clone https://github.com/synthecypher/match-three
 cd match-three
 npm install
 bower install
-npm start```
+npm start
+```
 
 ## Demos
 
