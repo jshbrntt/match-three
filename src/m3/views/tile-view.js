@@ -68,7 +68,7 @@ export default class TileView extends View {
     // TODO: Port this code to use Tween.js
     let size = this.size;
     let tween = new TWEEN.Tween(this.position).to({ x: cell.x * this.width, y: cell.y * this.height }, time);
-    tween.onComplete = this.onTweened.bind(this);
+    tween.onComplete(this.onTweened.bind(this));
     tween.easing(TWEEN.Easing.Quadratic.InOut);
 
     if (this._tweenQueue.length > 0) {
@@ -94,7 +94,7 @@ export default class TileView extends View {
   }
   onTweened() {
     this._tweenQueue.splice(0, 1);
-    var onFinished = this._callbackQueue[0];
+    let onFinished = this._callbackQueue[0];
     if (onFinished) {
       onFinished();
     }

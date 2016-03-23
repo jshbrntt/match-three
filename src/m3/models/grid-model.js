@@ -34,7 +34,7 @@ export default class GridModel extends Model {
       return;
     }
     this._simulating = true;
-    this.this.check();
+    this.check();
   }
 
   check() {
@@ -72,7 +72,7 @@ export default class GridModel extends Model {
           drop++;
         } else if (drop) {
           this._tilesFalling++;
-          this.moveTile(cell, new CellModel(cell.x, cell.y + drop), this.onTileFallen);
+          this.moveTile(cell, new CellModel(cell.x, cell.y + drop), this.onTileFallen.bind(this));
           movedTile = true;
         }
         cell.y--;
@@ -97,7 +97,7 @@ export default class GridModel extends Model {
   fill() {
     console.log("fill");
     var filled = false;
-    for (var i = this._width; i <= (this._width * 2); i++) {
+    for (var i = this._width * this._height - this._width - 1; i > 0; i--) {
       var cell = this.transformIndexToCellModel(i);
       if (!this.getTileModel(cell)) {
         this.addTile(this.createRandomTileModel(new CellModel(cell.x, cell.y - 1)));
@@ -112,7 +112,9 @@ export default class GridModel extends Model {
 
   endSimulation() {
     console.log("simulated");
-    this._onSimulated();
+    if (this._onSimulated) {
+      this._onSimulated();
+    }
     this._simulating = false;
   }
 
@@ -133,24 +135,28 @@ export default class GridModel extends Model {
   }
 
   swapTiles(tile1, tile2) {
-    tile1.swap(tile2, this.onSwapped);
+    tile1.swap(tile2, this.onSwapped.bind(this));
     this.setTileModel(tile1.cell, tile1);
     this.setTileModel(tile2.cell, tile2);
   }
 
   onSwapped(tile1, tile2) {
     if (!tile1.cell.equals(this._swappedCell1) && !tile2.cell.equals(this._swappedCell2)) {
-      this._onChecked = (matches) => {
+      this._onChecked = ((matches) => {
         if (!matches) {
           this.swapTiles(tile1, tile2);
         } else {
-          _swapped.dispatch();
+          if (this._onSwapped) {
+            this._onSwapped();
+          }
         }
         this._onChecked = null;
-      };
+      }).bind(this);
       this.beginSimulation();
     } else {
-      this._onSwapped();
+      if (this._onSwapped) {
+        this._onSwapped();
+      }
     }
   }
 
@@ -161,14 +167,18 @@ export default class GridModel extends Model {
       this.setTileModel(toCell, movingTile);
       movingTile.move(toCell, onMoved);
       this.setTileModel(fromCell, null);
-      this.onTileMoved(fromCell, toCell);
+      if (this._onTileMoved) {
+        this._onTileMoved(fromCell, toCell);
+      }
     }
   }
 
   addTile(tileModel) {
     if (tileModel) {
       this.setTileModel(tileModel.cell, tileModel);
-      this.onTileAdded(tileModel);
+      if (this._onTileAdded) {
+        this._onTileAdded(tileModel);
+      }
     }
   }
 
@@ -177,7 +187,9 @@ export default class GridModel extends Model {
     if (removedModel) {
       removedModel.onRemoved();
       this.setTileModel(fromCell, null);
-      this._onTileRemoved(removedModel);
+      if (this._onTileRemoved) {
+        this._onTileRemoved(removedModel);
+      }
     }
   }
 
@@ -255,7 +267,7 @@ export default class GridModel extends Model {
 
   getMatches() {
     var matches = [];
-    for (var i = 0; i < _vector.length; ++i) {
+    for (var i = 0; i < this._vector.length; ++i) {
       var cursorCellModel = this.transformIndexToCellModel(i);
       var horizontalMatches = this.getHorizontalMatches(cursorCellModel);
       if (horizontalMatches.length > 2) {
@@ -266,7 +278,7 @@ export default class GridModel extends Model {
         matches = matches.concat(verticalMatches);
       }
     }
-    return unique(matches);
+    return this.unique(matches);
   }
 
   getVerticalMatches(originCellModel) {
@@ -319,11 +331,12 @@ export default class GridModel extends Model {
   }
 
   toString() {
-    var string = "";
-    for (var y = this._height - 1; y >= 0; y--) {
-      for (var x = 0; x < this._width; x++) {
-        var tileModel = this.getTileModel(new CellModel(x, y));
-        string += tileModel ? tileModel.value : 'X';
+    let string = "";
+    for (let y = this._height - 1; y >= 0; y--) {
+      for (let x = 0; x < this._width; x++) {
+        let cellModel = new CellModel(x, y);
+        let tileModel = this.getTileModel(cellModel);
+        string += (tileModel ? tileModel.value : 'X') + cellModel.toString() + '[' + this._vector.indexOf(tileModel) + ']';
         if (x === this._width - 1) {
           string += "\n";
         }

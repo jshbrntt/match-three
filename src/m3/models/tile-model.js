@@ -22,8 +22,8 @@ export default class TileModel extends Model {
     }
     this._swapTile = tile;
     var cell = this._cell;
-    this.move(this._swapTile.cell, this.onSwapMovement);
-    this._swapTile.move(cell, this.onSwapMovement);
+    this.move(this._swapTile.cell, this.onSwapMovement.bind(this));
+    this._swapTile.move(cell, this.onSwapMovement.bind(this));
   }
 
   onSwapMovement() {
