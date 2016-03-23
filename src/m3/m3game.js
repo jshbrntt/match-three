@@ -1,6 +1,7 @@
 import Game from './../core/game';
 import Mouse from './../core/mouse';
 import M3Scene from './m3scene';
+import TWEEN from 'tween';
 import ServiceLocator from './../core/service-locator';
 
 export default class M3Game extends Game {
@@ -14,5 +15,6 @@ export default class M3Game extends Game {
   }
   _update() {
     super._update();
+    TWEEN.update();
   }
 }

@@ -22,7 +22,7 @@ export default class TileModel extends Model {
     }
     this._swapTile = tile;
     var cell = this._cell;
-    move(this._swapTile.cell, this.onSwapMovement);
+    this.move(this._swapTile.cell, this.onSwapMovement);
     this._swapTile.move(cell, this.onSwapMovement);
   }
 
@@ -38,10 +38,10 @@ export default class TileModel extends Model {
   }
 
   move(cell, onMovedCallback) {
-    var time = Math.sqrt((2 * this._cell.distance(cell)) / 64);
+    var time = Math.sqrt((2 * this._cell.distance(cell)) / 64) * 1000;
     this._cell = cell;
     if (this._onMoved) {
-      this._onMoved(_cell, time, onMovedCallback);
+      this._onMoved(this._cell, time, onMovedCallback);
     }
   }
 

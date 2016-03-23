@@ -18,8 +18,8 @@ export default class TileView extends View {
     this._tweenQueue       = [];
     this._callbackQueue    = [];
 
-    this._model._onMoved   = this.onMoved;
-    this._model._onRemoved = this.onRemoved;
+    this._model._onMoved   = this.onMoved.bind(this);
+    this._model._onRemoved = this.onRemoved.bind(this);
 
     this.add(this._plane);
 
@@ -66,19 +66,20 @@ export default class TileView extends View {
   }
   onMoved(cell, time, onFinished) {
     // TODO: Port this code to use Tween.js
-    // var tween = new TWEEN.Tween(this, time, Transitions.EASE_IN);
-    // tween.onComplete = this.onTweened;
-    // tween.moveTo(cell.x * this._sprite.scale.x, cell.y * this._sprite.scale.y);
-    //
-    // if (this._tweenQueue.length > 0) {
-    //   this._tweenQueue[this._tweenQueue.length - 1].nextTween = tween;
-    // }
-    // else {
-    //   tween.start();
-    // }
-    //
-    // this._tweenQueue.push(tween);
-    // this._callbackQueue.push(onFinished);
+    let size = this.size;
+    let tween = new TWEEN.Tween(this.position).to({ x: cell.x * this.width, y: cell.y * this.height }, time);
+    tween.onComplete = this.onTweened.bind(this);
+    tween.easing(TWEEN.Easing.Quadratic.InOut);
+
+    if (this._tweenQueue.length > 0) {
+      this._tweenQueue[this._tweenQueue.length - 1].nextTween = tween;
+    }
+    else {
+      tween.start();
+    }
+
+    this._tweenQueue.push(tween);
+    this._callbackQueue.push(onFinished);
   }
   update() {
     // this._plane.rotation.x += Math.random() * .05;
@@ -117,6 +118,12 @@ export default class TileView extends View {
   }
   get sprite() {
     return this._sprite;
+  }
+  get width() {
+    return this._plane.geometry.parameters.width;
+  }
+  get height() {
+    return this._plane.geometry.parameters.height;
   }
 }
 TileView.GEOMETRY = new THREE.PlaneGeometry(48, 46);

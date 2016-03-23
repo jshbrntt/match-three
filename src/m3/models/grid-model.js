@@ -241,7 +241,7 @@ export default class GridModel extends Model {
     return tile.x + tile.y * this._width;
   }
 
-  unique(cells ) {
+  unique(cells) {
     var unique = cells.concat();
     for (var i = 0; i < unique.length; ++i) {
       for (var j = i + 1; j < unique.length; ++j) {
