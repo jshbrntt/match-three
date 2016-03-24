@@ -58,7 +58,7 @@ export default class GridModel extends Model {
       var match = matches[i];
       this.removeTile(match);
     }
-    // this.gravity();
+    this.gravity();
   }
 
   gravity() {
@@ -96,11 +96,11 @@ export default class GridModel extends Model {
 
   fill() {
     console.log("fill");
-    var filled = false;
-    for (var i = this._width * this._height - this._width - 1; i > 0; i--) {
-      var cell = this.transformIndexToCellModel(i);
+    let filled = false;
+    for (var i = this._width * this._height - this._width * 2; i < this._width * this._height - this._width; i++) {
+      let cell = this.transformIndexToCellModel(i);
       if (!this.getTileModel(cell)) {
-        this.addTile(this.createRandomTileModel(new CellModel(cell.x, cell.y - 1)));
+        this.addTile(this.createRandomTileModel(new CellModel(cell.x, cell.y + 1)));
         filled = true;
       }
     }
@@ -195,7 +195,7 @@ export default class GridModel extends Model {
 
   setTileModel(p, v) {
     var i = this.transformCellModelToIndex(p);
-    if (!(i in this._vector)) {
+    if (i < 0 && i > this._vector.length - 1) {
       return false;
     }
     this._vector[i] = v;
@@ -336,7 +336,7 @@ export default class GridModel extends Model {
       for (let x = 0; x < this._width; x++) {
         let cellModel = new CellModel(x, y);
         let tileModel = this.getTileModel(cellModel);
-        string += (tileModel ? tileModel.value : 'X') + cellModel.toString() + '[' + this._vector.indexOf(tileModel) + ']';
+        string += (tileModel ? tileModel.value : 'X'); //+ cellModel.toString() + '[' + this._vector.indexOf(tileModel) + ']';
         if (x === this._width - 1) {
           string += "\n";
         }
@@ -363,5 +363,13 @@ export default class GridModel extends Model {
 
   get height() {
     return this._height;
+  }
+
+  get onTileAdded() {
+    return this._onTileAdded;
+  }
+
+  set onTileAdded(value) {
+    return this._onTileAdded = value;
   }
 }

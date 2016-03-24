@@ -9,6 +9,11 @@ export default class GridView extends View {
     super(model);
     this._camera = ServiceLocator.get('M3Game').camera;
     this._dimensions = new THREE.Vector2();
+
+    this._model.onTileAdded = this.onTileAdded.bind(this);
+  }
+  onTileAdded(tileModel) {
+    this.createTileView(tileModel);
   }
   getWorldDimensions(width, height) {
     let dimensions = new THREE.Vector2();
@@ -42,22 +47,24 @@ export default class GridView extends View {
 
     var vector = new THREE.Vector3();
   }
+  createTileView(tileModel) {
+    let tileView = new TileView(tileModel);
+    tileView.position.x = tileModel.cell.x * tileView.width;
+    tileView.position.y = tileModel.cell.y * tileView.width;
+    this.add(tileView);
+    this._tileViews.push(tileView);
+  }
   createTileViews() {
     this.children.length = 0;
     this._tileViews = [];
-    for (var i = 0; i < this._model.size; i++) {
-      var tileCell = this._model.transformIndexToCellModel(i);
-      var tileModel = this._model.getTileModel(tileCell);
+    for (let i = 0; i < this._model.size; i++) {
+      let tileCell = this._model.transformIndexToCellModel(i);
+      let tileModel = this._model.getTileModel(tileCell);
       if (!tileModel) {
         this._tileViews.push(null);
         continue;
       }
-
-      var tileView = new TileView(tileModel);
-      tileView.position.x = tileCell.x * tileView.size.x;
-      tileView.position.y = tileCell.y * tileView.size.y;
-      this.add(tileView);
-      this._tileViews.push(tileView);
+      this.createTileView(tileModel);
     }
   }
 }

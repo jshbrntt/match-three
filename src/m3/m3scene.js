@@ -26,6 +26,9 @@ export default class M3Scene extends Scene {
         this._game._engine.resize();
       }).bind(this));
     this.add(gridView);
+    document.addEventListener('keydown', (event) => {
+      console.log(gridModel.toString());
+    });
   }
   update() {
     super.update();
