@@ -90,7 +90,7 @@ export default class TileView extends View {
     // this._plane.rotation.y = circle + offsetX + offsetY;
   }
   onRemoved() {
-    this._sprite.parent.remove(this._sprite);
+    this.parent.remove(this);
   }
   onTweened() {
     this._tweenQueue.splice(0, 1);
