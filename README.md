@@ -2,13 +2,15 @@
 
 A simple match three game with particle effects
 
+## Requirements
+- [Node.js - Latest Stable][node]
+
 ## Build &amp; Run
 
 ```bash
 git clone https://github.com/synthecypher/match-three
 cd match-three
 npm install
-bower install
 npm start
 ```
 
@@ -29,6 +31,7 @@ Since then I have begun porting it to [ECMAScript 6][es6] transpiled with [Babel
 
 The source code for both versions are available on their respective branches.
 
+[node]:       https://nodejs.org/en/
 [screenshot]: http://www.caffeinatednightmare.com/blog/wp-content/uploads/2014/12/screenshot.png
 [demo-flash]: http://www.caffeinatednightmare.com/games/match-three/
 [demo-html5]: http://synthecypher.github.io/match-three/

@@ -4,6 +4,7 @@
   "description": "A simple match three game with particle effects.",
   "main": "gulpfile.js",
   "scripts": {
+    "postinstall": "bower install",
     "start": "gulp watch",
     "build": "gulp build",
     "deploy": "gulp deploy"
