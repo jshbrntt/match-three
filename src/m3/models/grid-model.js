@@ -290,13 +290,13 @@ export default class GridModel extends Model {
     matches.push(originCellModel);
     var cursorCellModel = originCellModel.copy();
     cursorCellModel.y--;
-    while(this.constructor.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
-      matches.push(new CellModel(cursorCellModel.y, cursorCellModel.y));
+    while(GridModel.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
+      matches.push(new CellModel(cursorCellModel.x, cursorCellModel.y));
       cursorCellModel.y--;
     }
     cursorCellModel.y = originCellModel.y + 1;
-    while (this.constructor.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
-      matches.push(new CellModel(cursorCellModel.y, cursorCellModel.y));
+    while (GridModel.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
+      matches.push(new CellModel(cursorCellModel.x, cursorCellModel.y));
       cursorCellModel.y++;
     }
     return matches;
@@ -311,12 +311,12 @@ export default class GridModel extends Model {
     matches.push(originCellModel);
     var cursorCellModel = originCellModel.copy();
     cursorCellModel.x--;
-    while(this.constructor.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
+    while(GridModel.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
       matches.push(new CellModel(cursorCellModel.x, cursorCellModel.y));
       cursorCellModel.x--;
     }
     cursorCellModel.x = originCellModel.x + 1;
-    while (this.constructor.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
+    while (GridModel.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
       matches.push(new CellModel(cursorCellModel.x, cursorCellModel.y));
       cursorCellModel.x++;
     }
