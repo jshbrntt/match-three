@@ -50,7 +50,7 @@ export default class GridView extends View {
   createTileView(tileModel) {
     let tileView = new TileView(tileModel);
     tileView.position.x = tileModel.cell.x * tileView.width;
-    tileView.position.y = tileModel.cell.y * tileView.width;
+    tileView.position.y = tileModel.cell.y * tileView.height;
     this.add(tileView);
     this._tileViews.push(tileView);
   }

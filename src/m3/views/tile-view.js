@@ -65,7 +65,6 @@ export default class TileView extends View {
     }
   }
   onMoved(cell, time, onFinished) {
-    // TODO: Port this code to use Tween.js
     let size = this.size;
     let tween = new TWEEN.Tween(this.position).to({ x: cell.x * this.width, y: cell.y * this.height }, time);
     tween.onComplete(this.onTweened.bind(this));
