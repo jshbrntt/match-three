@@ -58,24 +58,24 @@ export default class GridModel extends Model {
       var match = matches[i];
       this.removeTile(match);
     }
-    this.gravity();
+    // this.gravity();
   }
 
   gravity() {
     console.log("gravity");
     var movedTile = false;
-    for (var i = this._vector.length - this._width; i < this._vector.length; i++) {
+    for (var i = 0; i < this._width; i++) {
       var drop = 0;
       var cell = this.transformIndexToCellModel(i);
-      while (cell.y >= 0) {
+      while (cell.y <= this._height - 1) {
         if (!this.getTileModel(cell)) {
           drop++;
         } else if (drop) {
           this._tilesFalling++;
-          this.moveTile(cell, new CellModel(cell.x, cell.y + drop), this.onTileFallen.bind(this));
+          this.moveTile(cell, new CellModel(cell.x, cell.y - drop), this.onTileFallen.bind(this));
           movedTile = true;
         }
-        cell.y--;
+        cell.y++;
       }
     }
     if (!movedTile) {
