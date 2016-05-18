@@ -22,6 +22,12 @@
   "dependencies": {
     "stats.js": "*",
     "threejs": "*",
-    "tweenjs": "*"
+    "tweenjs": "*",
+    "feature.js": "^1.0.1"
+  },
+  "overrides": {
+    "feature.js": {
+      "main": "./feature.min.js"
+    }
   }
 }
