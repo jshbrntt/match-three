@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:5d5d19cf779dff2c16bc26cf1be8835b:1/1$ -->
+<TextureAtlas imagePath="sheet.png">
+    <SubTexture name="background" x="2" y="2" width="800" height="480"/>
+    <SubTexture name="border" x="942" y="74" width="70" height="70"/>
+    <SubTexture name="btn_large" x="804" y="2" width="196" height="70"/>
+    <SubTexture name="btn_small" x="804" y="74" width="136" height="80"/>
+    <SubTexture name="panel" x="2" y="484" width="264" height="264"/>
+    <SubTexture name="tile_blue" x="954" y="194" width="48" height="46"/>
+    <SubTexture name="tile_green" x="904" y="194" width="48" height="46"/>
+    <SubTexture name="tile_purple" x="854" y="156" width="48" height="46"/>
+    <SubTexture name="tile_red" x="804" y="156" width="48" height="46"/>
+    <SubTexture name="tile_yellow" x="942" y="146" width="48" height="46"/>
+</TextureAtlas>
