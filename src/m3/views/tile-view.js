@@ -21,6 +21,15 @@ export default class TileView extends View {
     this._model._onMoved   = this.onMoved.bind(this);
     this._model._onRemoved = this.onRemoved.bind(this);
 
+    this._highlight        = false;
+
+    this._outlineMaterial    = new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.FrontSide});
+    this._outline            = new THREE.Mesh(TileView.GEOMETRY, this._outlineMaterial);
+    this._outline.position.x = TileView.GEOMETRY.parameters.width / 2;
+    this._outline.position.y = TileView.GEOMETRY.parameters.height / 2;
+    this._outline.visible    = false;
+
+    this.add(this._outline);
     this.add(this._plane);
 
     // this._sprite.scale.set(
@@ -52,6 +61,12 @@ export default class TileView extends View {
         loader.load(filename, onLoad, null, reject);
       }
     });
+  }
+  static createOutline() {
+    let outlineMaterial = new THREE.MeshBasicMaterial({color: 0xffffff, side: THREE.BackSide});
+    let outlineMesh = new THREE.Mesh(TileView.GEOMETRY, outlineMaterial);
+    outlineMesh.scale.multiplyScale(1.05);
+    this.add(outlineMesh);
   }
   static createMaterials(textures) {
     for (let texture of textures) {
@@ -103,6 +118,12 @@ export default class TileView extends View {
     super.onUpdated();
     // TODO: Highlight here relative to this._model.highlight
   }
+  set highlight(value) {
+    this._outline.visible = value;
+  }
+  get highlight() {
+    return this._outline.visible;
+  }
   get wireframe() {
     return this._material.wireframe;
   }
@@ -125,5 +146,5 @@ export default class TileView extends View {
     return this._plane.geometry.parameters.height;
   }
 }
-TileView.GEOMETRY = new THREE.PlaneGeometry(48, 46);
+TileView.GEOMETRY  = new THREE.PlaneGeometry(48, 46);
 TileView.MATERIALS = [];
