@@ -32,6 +32,12 @@ export default class GridController extends Controller {
   }
   selectTileView(view) {
     if (view instanceof TileView) {
+      if (this._selected.length) {
+        let last = this._selected[0];
+        if (last.model.cell.distance(view.model.cell) !== 1) {
+          return;
+        }
+      }
       this._selected.push(view);
       view.highlight = true;
     }

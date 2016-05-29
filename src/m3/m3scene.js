@@ -14,7 +14,7 @@ export default class M3Scene extends Scene {
     this.setupModels();
   }
   setupModels() {
-    let gridModel = new GridModel(10, 10, 1);
+    let gridModel = new GridModel(5, 6, 1);
     let gridView = new GridView(gridModel);
     let gridController = new GridController(gridModel, gridView);
     gridModel.randomize();
