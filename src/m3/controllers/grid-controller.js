@@ -35,6 +35,8 @@ export default class GridController extends Controller {
       if (this._selected.length) {
         let last = this._selected[0];
         if (last.model.cell.distance(view.model.cell) !== 1) {
+          this._selected[this._selected.length-1].highlight = false;
+          this._selected = [];
           return;
         }
       }
