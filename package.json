@@ -23,14 +23,15 @@
     "feature.js": "^1.0.0",
     "stats.js": "^0.16.0",
     "three": "^0.79.0",
-    "tween.js": "^16.3.4",
-    "wiredep": "2.2.2"
+    "tween.js": "^16.3.4"
   },
   "devDependencies": {
     "babel-core": "^6.10.4",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
-    "webpack-dev-server": "^1.14.1",
-    "webpack": "^1.13.1"
+    "gulp-gh-pages": "^0.5.4",
+    "gulp-util": "^3.0.7",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
   }
 }

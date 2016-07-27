@@ -4,11 +4,15 @@ let WebpackDevServer = require('webpack-dev-server');
 let webpack          = require('webpack');
 let ghPages          = require('gulp-gh-pages');
 
-gulp.task('build', () => {
+gulp.task('build', (callback) => {
   let config = require('./webpack.config.js');
-  return gulp.src(config.entry)
-    .pipe(new webpack(config))
-    .pipe(gulp.dest(config.output.path));
+  webpack(config, (err, stats) => {
+    if (err) throw new gutil.PluginError("webpack", err);
+    stats.toString(config.devServer.stats).split('\n').map((line) => {
+      gutil.log(gutil.colors.blue("[webpack]"), line);
+    });
+    callback();
+  });
 });
 
 gulp.task('deploy', ['build'], () => {
@@ -16,7 +20,7 @@ gulp.task('deploy', ['build'], () => {
     .pipe(ghPages());
 });
 
-gulp.task('default', (done) => {
+gulp.task('default', (callback) => {
   let config = require('./webpack.config.js');
   config.entry.app.unshift("webpack-dev-server/client?http://localhost:8080/");
   new WebpackDevServer(new webpack(config), config.devServer)
