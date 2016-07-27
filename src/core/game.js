@@ -1,5 +1,5 @@
 import THREE from 'three';
-import Stats from 'stats';
+import Stats from 'stats.js';
 import ServiceLocator from './service-locator';
 
 export default class Game {

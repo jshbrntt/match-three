@@ -2,7 +2,7 @@ import Game from './../core/game';
 import Mouse from './../core/mouse';
 import Touch from './../core/touch';
 import M3Scene from './m3scene';
-import TWEEN from 'tween';
+import TWEEN from 'tween.js';
 import ServiceLocator from './../core/service-locator';
 
 export default class M3Game extends Game {

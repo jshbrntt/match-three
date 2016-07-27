@@ -1,5 +1,5 @@
 import THREE from 'three';
-import feature from 'feature';
+import feature from 'feature.js';
 import Controller from './../../core/mvc/controller';
 import ServiceLocator from './../../core/service-locator';
 import TouchEvent from './../../core/touch-event';

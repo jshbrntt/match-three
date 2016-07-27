@@ -1,5 +1,5 @@
 import THREE from 'three';
-import TWEEN from 'tween';
+import TWEEN from 'tween.js';
 import View from './../../core/mvc/view';
 
 export default class TileView extends View {
@@ -55,10 +55,12 @@ export default class TileView extends View {
           resolve(textures);
         }
       }
+      function onProgress(event) {
+        console.debug(`${((event.loaded/event.total)*100).toFixed()}% ${event.currentTarget.responseURL}`);
+      }
       for (let color of colors) {
-        let filename = 'assets/textures/tile_' + color + '.png';
-        console.log(filename);
-        loader.load(filename, onLoad, null, reject);
+        let filename = './assets/textures/tile_' + color + '.png';
+        loader.load(filename, onLoad, onProgress, reject);
       }
     });
   }
