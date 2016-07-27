@@ -146,17 +146,14 @@ THREE.CombinedCamera.prototype.updateProjectionMatrix = function() {
 
 /*
 * Uses Focal Length (in mm) to estimate and set FOV
-* 35mm (full frame) camera is used if frame size is not specified;
+* 35mm (fullframe) camera is used if frame size is not specified;
 * Formula based on http://www.bobatkins.com/photography/technical/field_of_view.html
 */
-THREE.CombinedCamera.prototype.setLens = function ( focalLength, filmGauge ) {
+THREE.CombinedCamera.prototype.setLens = function ( focalLength, frameHeight ) {
 
-	if ( filmGauge === undefined ) filmGauge = 35;
+	if ( frameHeight === undefined ) frameHeight = 24;
 
-	var vExtentSlope = 0.5 * filmGauge /
-			( focalLength * Math.max( this.cameraP.aspect, 1 ) );
-
-	var fov = THREE.Math.RAD2DEG * 2 * Math.atan( vExtentSlope );
+	var fov = 2 * THREE.Math.radToDeg( Math.atan( frameHeight / ( focalLength * 2 ) ) );
 
 	this.setFov( fov );
 

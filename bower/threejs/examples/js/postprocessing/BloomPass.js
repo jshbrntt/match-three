@@ -4,8 +4,6 @@
 
 THREE.BloomPass = function ( strength, kernelSize, sigma, resolution ) {
 
-	THREE.Pass.call( this );
-
 	strength = ( strength !== undefined ) ? strength : 1;
 	kernelSize = ( kernelSize !== undefined ) ? kernelSize : 25;
 	sigma = ( sigma !== undefined ) ? sigma : 4.0;
@@ -63,7 +61,10 @@ THREE.BloomPass = function ( strength, kernelSize, sigma, resolution ) {
 
 	} );
 
+	this.enabled = true;
 	this.needsSwap = false;
+	this.clear = false;
+
 
 	this.camera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
 	this.scene  = new THREE.Scene();
@@ -73,11 +74,7 @@ THREE.BloomPass = function ( strength, kernelSize, sigma, resolution ) {
 
 };
 
-THREE.BloomPass.prototype = Object.create( THREE.Pass.prototype );
-
 THREE.BloomPass.prototype = {
-
-	constructor: THREE.BloomPass,
 
 	render: function ( renderer, writeBuffer, readBuffer, delta, maskActive ) {
 

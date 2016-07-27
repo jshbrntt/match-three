@@ -79,25 +79,13 @@ THREE.ColladaLoader = function () {
 
 							if ( failCallback ) {
 
-								failCallback( { type: 'error', url: url } );
+								failCallback();
 
 							} else {
 
 								console.error( "ColladaLoader: Empty or non-existing file (" + url + ")" );
 
 							}
-
-						}
-
-					}else{
-
-						if( failCallback ){
-
-							failCallback( { type: 'error', url: url } );
-
-						}else{
-
-							console.error( 'ColladaLoader: Couldn\'t load "' + url + '" (' + request.status + ')' );
 
 						}
 
@@ -1182,13 +1170,6 @@ THREE.ColladaLoader = function () {
 				if ( num_materials > 1 ) {
 
 					material = new THREE.MultiMaterial( used_materials_array );
-					
-					for ( j = 0; j < geom.faces.length; j ++ ) {
-
-						var face = geom.faces[ j ];
-						face.materialIndex = used_materials[ face.daeMaterial ]
-
-					}
 
 				}
 

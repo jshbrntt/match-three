@@ -4,8 +4,6 @@
 
 THREE.SavePass = function ( renderTarget ) {
 
-	THREE.Pass.call( this );
-
 	if ( THREE.CopyShader === undefined )
 		console.error( "THREE.SavePass relies on THREE.CopyShader" );
 
@@ -32,7 +30,10 @@ THREE.SavePass = function ( renderTarget ) {
 
 	}
 
+	this.enabled = true;
 	this.needsSwap = false;
+	this.clear = false;
+
 
 	this.camera = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
 	this.scene  = new THREE.Scene();
@@ -42,13 +43,9 @@ THREE.SavePass = function ( renderTarget ) {
 
 };
 
-THREE.SavePass.prototype = Object.create( THREE.Pass.prototype );
-
 THREE.SavePass.prototype = {
 
-	constructor: THREE.SavePass,
-
-	render: function ( renderer, writeBuffer, readBuffer, delta, maskActive ) {
+	render: function ( renderer, writeBuffer, readBuffer, delta ) {
 
 		if ( this.uniforms[ this.textureID ] ) {
 

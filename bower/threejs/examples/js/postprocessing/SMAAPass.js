@@ -4,8 +4,6 @@
 
 THREE.SMAAPass = function ( width, height ) {
 
-	THREE.Pass.call( this );
-
 	// render targets
 
 	this.edgesRT = new THREE.WebGLRenderTarget( width, height, {
@@ -94,7 +92,13 @@ THREE.SMAAPass = function ( width, height ) {
 		fragmentShader: THREE.SMAAShader[2].fragmentShader
 	} );
 
+	//
+
+	this.renderToScreen = false;
+
+	this.enabled = true;
 	this.needsSwap = false;
+	this.clear = false;
 
 	this.camera = new THREE.OrthographicCamera( -1, 1, 1, -1, 0, 1 );
 	this.scene  = new THREE.Scene();
@@ -104,13 +108,9 @@ THREE.SMAAPass = function ( width, height ) {
 
 };
 
-THREE.SMAAPass.prototype = Object.create( THREE.Pass.prototype );
-
 THREE.SMAAPass.prototype = {
 
-	constructor: THREE.SMAAPass,
-
-	render: function ( renderer, writeBuffer, readBuffer, delta, maskActive ) {
+	render: function ( renderer, writeBuffer, readBuffer, delta ) {
 
 		// pass 1
 

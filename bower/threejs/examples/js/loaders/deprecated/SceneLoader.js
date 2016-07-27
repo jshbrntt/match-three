@@ -891,19 +891,19 @@ THREE.SceneLoader.prototype = {
 			if ( Array.isArray( textureJSON.url ) ) {
 
 				var count = textureJSON.url.length;
-				var urls = [];
+				var url_array = [];
 
 				for ( var i = 0; i < count; i ++ ) {
 
-					urls[ i ] = get_url( textureJSON.url[ i ], data.urlBaseType );
+					url_array[ i ] = get_url( textureJSON.url[ i ], data.urlBaseType );
 
 				}
 
-				var loader = THREE.Loader.Handlers.get( urls[ 0 ] );
+				var loader = THREE.Loader.Handlers.get( url_array[ 0 ] );
 
 				if ( loader !== null ) {
 
-					texture = loader.load( urls, generateTextureCallback( count ) );
+					texture = loader.load( url_array, generateTextureCallback( count ) );
 
 					if ( textureJSON.mapping !== undefined )
 						texture.mapping = textureJSON.mapping;

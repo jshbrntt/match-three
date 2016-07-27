@@ -4,19 +4,13 @@
 
 THREE.ClearPass = function () {
 
-	THREE.Pass.call( this );
-
-	this.needsSwap = false;
+	this.enabled = true;
 
 };
 
-THREE.ClearPass.prototype = Object.create( THREE.Pass.prototype );
-
 THREE.ClearPass.prototype = {
 
-	constructor: THREE.ClearPass,
-
-	render: function ( renderer, writeBuffer, readBuffer, delta, maskActive ) {
+	render: function ( renderer, writeBuffer, readBuffer ) {
 
 		renderer.setRenderTarget( readBuffer );
 		renderer.clear();

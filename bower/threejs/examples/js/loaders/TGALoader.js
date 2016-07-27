@@ -1,7 +1,6 @@
 /*
  * @author Daosheng Mu / https://github.com/DaoshengMu/
  * @author mrdoob / http://mrdoob.com/
- * @author takahirox / https://github.com/takahirox/
  */
 
 THREE.TGALoader = function ( manager ) {
@@ -10,34 +9,11 @@ THREE.TGALoader = function ( manager ) {
 
 };
 
-THREE.TGALoader.prototype.load = function ( url, onLoad, onProgress, onError ) {
-
-	var scope = this;
-
-	var texture = new THREE.Texture();
-
-	var loader = new THREE.XHRLoader( this.manager );
-	loader.setResponseType( 'arraybuffer' );
-
-	loader.load( url, function ( buffer ) {
-
-		texture.image = scope.parse( buffer );
-		texture.needsUpdate = true;
-
-		if ( onLoad !== undefined ) {
-
-			onLoad( texture );
-
-		}
-
-	}, onProgress, onError );
-
-	return texture;
-
-};
+// extend THREE.BinaryTextureLoader
+THREE.TGALoader.prototype = Object.create( THREE.BinaryTextureLoader.prototype );
 
 // reference from vthibault, https://github.com/vthibault/roBrowser/blob/master/src/Loaders/Targa.js
-THREE.TGALoader.prototype.parse = function ( buffer ) {
+THREE.TGALoader.prototype._parser = function ( buffer ) {
 
 	// TGA Constants
 	var TGA_TYPE_NO_DATA = 0,
@@ -398,14 +374,15 @@ THREE.TGALoader.prototype.parse = function ( buffer ) {
 
 	}
 
-	function getTgaRGBA( data, width, height, image, palette ) {
+	function getTgaRGBA( width, height, image, palette ) {
 
 		var x_start,
 			y_start,
 			x_step,
 			y_step,
 			x_end,
-			y_end;
+			y_end,
+			data = new Uint8Array( width * height * 4 );
 
 		switch ( ( header.flags & TGA_ORIGIN_MASK ) >> TGA_ORIGIN_SHIFT ) {
 			default:
@@ -494,18 +471,15 @@ THREE.TGALoader.prototype.parse = function ( buffer ) {
 
 	}
 
-	var canvas = document.createElement( 'canvas' );
-	canvas.width = header.width;
-	canvas.height = header.height;
-
-	var context = canvas.getContext( '2d' );
-	var imageData = context.createImageData( header.width, header.height );
-
 	var result = tgaParse( use_rle, use_pal, header, offset, content );
-	var rgbaData = getTgaRGBA( imageData.data, header.width, header.height, result.pixel_data, result.palettes );
+	var rgbaData = getTgaRGBA( header.width, header.height, result.pixel_data, result.palettes );
 
-	context.putImageData( imageData, 0, 0 );
-
-	return canvas;
+	return {
+		width: header.width,
+		height: header.height,
+		data: rgbaData,
+		magFilter: THREE.NearestFilter,
+		minFilter: THREE.NearestFilter
+	};
 
 };

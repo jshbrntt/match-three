@@ -31,26 +31,26 @@ THREE.CinematicCamera.prototype.constructor = THREE.CinematicCamera;
 
 
 // providing fnumber and coc(Circle of Confusion) as extra arguments
-THREE.CinematicCamera.prototype.setLens = function ( focalLength, filmGauge, fNumber, coc ) {
+THREE.CinematicCamera.prototype.setLens = function ( focalLength, frameHeight, fNumber, coc ) {
 
 	// In case of cinematicCamera, having a default lens set is important
 	if ( focalLength === undefined ) focalLength = 35;
-	if ( filmGauge !== undefined ) this.filmGauge = filmGauge;
 
-	this.setFocalLength( focalLength );
+	THREE.PerspectiveCamera.prototype.setLens.call( this, focalLength, frameHeight );
 
 	// if fnumber and coc are not provided, cinematicCamera tries to act as a basic PerspectiveCamera
 	if ( fNumber === undefined ) fNumber = 8;
 	if ( coc === undefined ) coc = 0.019;
 
+	this.focalLength = focalLength;
 	this.fNumber = fNumber;
 	this.coc = coc;
 
 	// fNumber is focalLength by aperture
-	this.aperture = focalLength / this.fNumber;
+	this.aperture = this.focalLength / this.fNumber;
 
 	// hyperFocal is required to calculate depthOfField when a lens tries to focus at a distance with given fNumber and focalLength
-	this.hyperFocal = ( focalLength * focalLength ) / ( this.aperture * this.coc );
+	this.hyperFocal = ( this.focalLength * this.focalLength ) / ( this.aperture * this.coc );
 
 };
 
@@ -80,16 +80,14 @@ THREE.CinematicCamera.prototype.focusAt = function ( focusDistance ) {
 
 	if ( focusDistance === undefined ) focusDistance = 20;
 
-	var focalLength = this.getFocalLength();
-
-	// distance from the camera (normal to frustrum) to focus on
-	this.focus = focusDistance;
+	// distance from the camera (normal to frustrum) to focus on (unused)
+	this.focusDistance = focusDistance;
 
 	// the nearest point from the camera which is in focus (unused)
-	this.nearPoint = ( this.hyperFocal * this.focus ) / ( this.hyperFocal + ( this.focus - focalLength ) );
+	this.nearPoint = ( this.hyperFocal * this.focusDistance ) / ( this.hyperFocal + ( this.focusDistance - this.focalLength ) );
 
 	// the farthest point from the camera which is in focus (unused)
-	this.farPoint = ( this.hyperFocal * this.focus ) / ( this.hyperFocal - ( this.focus - focalLength ) );
+	this.farPoint = ( this.hyperFocal * this.focusDistance ) / ( this.hyperFocal - ( this.focusDistance - this.focalLength ) );
 
 	// the gap or width of the space in which is everything is in focus (unused)
 	this.depthOfField = this.farPoint - this.nearPoint;
@@ -97,7 +95,7 @@ THREE.CinematicCamera.prototype.focusAt = function ( focusDistance ) {
 	// Considering minimum distance of focus for a standard lens (unused)
 	if ( this.depthOfField < 0 ) this.depthOfField = 0;
 
-	this.sdistance = this.smoothstep( this.near, this.far, this.focus );
+	this.sdistance = this.smoothstep( this.near, this.far, this.focusDistance );
 
 	this.ldistance = this.linearize( 1 -	this.sdistance );
 

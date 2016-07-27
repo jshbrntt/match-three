@@ -4,8 +4,6 @@
 
 THREE.RenderPass = function ( scene, camera, overrideMaterial, clearColor, clearAlpha ) {
 
-	THREE.Pass.call( this );
-
 	this.scene = scene;
 	this.camera = camera;
 
@@ -17,18 +15,15 @@ THREE.RenderPass = function ( scene, camera, overrideMaterial, clearColor, clear
 	this.oldClearColor = new THREE.Color();
 	this.oldClearAlpha = 1;
 
+	this.enabled = true;
 	this.clear = true;
 	this.needsSwap = false;
 
 };
 
-THREE.RenderPass.prototype = Object.create( THREE.Pass.prototype );
-
 THREE.RenderPass.prototype = {
 
-	constructor: THREE.RenderPass,
-
-	render: function ( renderer, writeBuffer, readBuffer, delta, maskActive ) {
+	render: function ( renderer, writeBuffer, readBuffer, delta ) {
 
 		this.scene.overrideMaterial = this.overrideMaterial;
 

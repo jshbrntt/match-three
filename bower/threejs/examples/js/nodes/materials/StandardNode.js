@@ -46,6 +46,7 @@ THREE.StandardNode.prototype.build = function( builder ) {
 			"#endif",
 
 			THREE.ShaderChunk[ "common" ],
+			THREE.ShaderChunk[ "lights_phong_pars_vertex" ],
 			THREE.ShaderChunk[ "morphtarget_pars_vertex" ],
 			THREE.ShaderChunk[ "skinning_pars_vertex" ],
 			THREE.ShaderChunk[ "shadowmap_pars_vertex" ],
@@ -87,6 +88,7 @@ THREE.StandardNode.prototype.build = function( builder ) {
 			"	vViewPosition = - mvPosition.xyz;",
 
 				THREE.ShaderChunk[ "worldpos_vertex" ],
+				THREE.ShaderChunk[ "lights_phong_vertex" ],
 				THREE.ShaderChunk[ "shadowmap_vertex" ]
 		);
 

@@ -4,7 +4,7 @@ var startX, startY, division, completed = 0;
 
 var scene, camera, renderer, loader, sceneId;
 
-importScripts( '../../../build/three.js' );
+importScripts( '../../../build/three.min.js' );
 
 
 self.onmessage = function( e ) {

@@ -1,8 +1,8 @@
 {
   "name": "stats.js",
-  "version": "0.16.0",
+  "version": "0.0.14",
   "description": "JavaScript Performance Monitor",
-  "main": "build/stats.min.js",
+  "main": "src/Stats.js",
   "directories": {
     "example": "examples"
   },
@@ -18,7 +18,7 @@
     "fps",
     "stats"
   ],
-  "author": "mrdoob",
+  "author": "Mr.doob <info@mrdoob.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mrdoob/stats.js/issues"

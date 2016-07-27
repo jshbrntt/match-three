@@ -8,25 +8,29 @@ This class provides a simple info box that will help you monitor your code perfo
 * **FPS** Frames rendered in the last second. The higher the number the better.
 * **MS** Milliseconds needed to render a frame. The lower the number the better.
 * **MB** MBytes of allocated memory. (Run Chrome with `--enable-precise-memory-info`)
-* **CUSTOM** User-defined panel support.
 
 
 ### Screenshots ###
 
-![fps.png](https://raw.githubusercontent.com/mrdoob/stats.js/master/files/fps.png)
-![ms.png](https://raw.githubusercontent.com/mrdoob/stats.js/master/files/ms.png)
-![mb.png](https://raw.githubusercontent.com/mrdoob/stats.js/master/files/mb.png)
-![custom.png](https://raw.githubusercontent.com/mrdoob/stats.js/master/files/custom.png)
+![fps.png](https://cdn.rawgit.com/mrdoob/stats.js/master/files/fps.png)
+![ms.png](https://cdn.rawgit.com/mrdoob/stats.js/master/files/ms.png)
+![mb.png](https://cdn.rawgit.com/mrdoob/stats.js/master/files/mb.png)
 
 
 ### Usage ###
 
 ```javascript
 var stats = new Stats();
-stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild( stats.dom );
+stats.setMode( 1 ); // 0: fps, 1: ms, 2: mb
 
-function animate() {
+// align top-left
+stats.domElement.style.position = 'absolute';
+stats.domElement.style.left = '0px';
+stats.domElement.style.top = '0px';
+
+document.body.appendChild( stats.domElement );
+
+var update = function () {
 
 	stats.begin();
 
@@ -34,11 +38,11 @@ function animate() {
 
 	stats.end();
 
-	requestAnimationFrame( animate );
+	requestAnimationFrame( update );
 
-}
+};
 
-requestAnimationFrame( animate );
+requestAnimationFrame( update );
 ```
 
 
@@ -47,5 +51,5 @@ requestAnimationFrame( animate );
 You can add this code to any page using the following bookmarklet:
 
 ```javascript
-javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();document.body.appendChild(stats.dom);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//rawgit.com/mrdoob/stats.js/master/build/stats.min.js';document.head.appendChild(script);})()
+javascript:(function(){var script=document.createElement('script');script.onload=function(){var stats=new Stats();stats.domElement.style.cssText='position:fixed;left:0;top:0;z-index:10000';document.body.appendChild(stats.domElement);requestAnimationFrame(function loop(){stats.update();requestAnimationFrame(loop)});};script.src='//rawgit.com/mrdoob/stats.js/master/build/stats.min.js';document.head.appendChild(script);})()
 ```

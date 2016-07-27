@@ -1039,7 +1039,7 @@ THREE.glTFLoader.prototype.load = function( url, callback ) {
 				
 				if (!(shininess === undefined))
 				{
-					params.shininess = Math.max( shininess, 1e-4 );
+					params.shininess = shininess;
 				}
 				
 				delete params.ambient;

@@ -22,7 +22,6 @@ THREE.ShadowMaterial = function () {
 		].join( '\n' ),
 		fragmentShader: [
 			THREE.ShaderChunk[ "common" ],
-			THREE.ShaderChunk[ "packing" ],
 			THREE.ShaderChunk[ "bsdfs" ],
 			THREE.ShaderChunk[ "lights_pars" ],
 			THREE.ShaderChunk[ "shadowmap_pars_fragment" ],
