@@ -8,8 +8,9 @@
   "license": "WTFPL",
   "homepage": "https://github.com/synthecypher/match-three#readme",
   "scripts": {
-    "start": "gulp",
-    "test": "gulp build",
+    "watch": "gulp watch",
+    "build:dev": "gulp build:dev",
+    "build:production": "gulp build:production",
     "deploy": "gulp deploy"
   },
   "repository": {
@@ -29,8 +30,12 @@
     "babel-core": "^6.10.4",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
+    "clean-webpack-plugin": "^0.1.10",
+    "gulp": "^3.9.1",
     "gulp-gh-pages": "^0.5.4",
     "gulp-util": "^3.0.7",
+    "html-webpack-plugin": "^2.22.0",
+    "image-webpack-loader": "^2.0.0",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
   }
