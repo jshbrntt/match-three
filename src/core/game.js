@@ -22,7 +22,7 @@ export default class Game {
     document.body.appendChild( this._stats.domElement );
 
     this._animate();
-    ServiceLocator.provide(this);
+    ServiceLocator.provide('Game', this);
 
   }
   start() {

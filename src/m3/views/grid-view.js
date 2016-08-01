@@ -7,7 +7,7 @@ import MouseEvent from './../../core/mouse-event';
 export default class GridView extends View {
   constructor(model) {
     super(model);
-    this._camera = ServiceLocator.get('M3Game').camera;
+    this._camera = ServiceLocator.get('Game').camera;
     this._dimensions = new THREE.Vector2();
 
     this._model.onTileAdded = this.onTileAdded.bind(this);

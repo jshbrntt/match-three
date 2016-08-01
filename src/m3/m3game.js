@@ -8,8 +8,8 @@ import ServiceLocator from './../core/service-locator';
 export default class M3Game extends Game {
   constructor(renderer) {
     super(renderer);
-    ServiceLocator.provide(new Mouse());
-    ServiceLocator.provide(new Touch());
+    ServiceLocator.provide('Mouse', new Mouse());
+    ServiceLocator.provide('Touch', new Touch());
   }
   start() {
     super.start();

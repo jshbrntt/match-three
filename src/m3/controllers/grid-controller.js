@@ -9,7 +9,7 @@ import TileView from './../views/tile-view';
 export default class GridController extends Controller {
   constructor(gridModel, gridView) {
     super(gridModel, gridView);
-    this._camera = ServiceLocator.get('M3Game').camera;
+    this._camera = ServiceLocator.get('Game').camera;
 
     if (feature.touch) {
       this._input = ServiceLocator.get('Touch');

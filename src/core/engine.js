@@ -8,7 +8,7 @@ export default class Engine {
     this.isStarted  = false;
     this._width     = window.innerWidth;
     this._height    = window.innerHeight;
-    ServiceLocator.provide(this);
+    ServiceLocator.provide('Engine', this);
   }
   get renderer() {
     return this._renderer;
