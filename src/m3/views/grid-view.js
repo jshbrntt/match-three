@@ -31,7 +31,6 @@ export default class GridView extends View {
     let size = this.size;
     let scale = 1;
 
-    // if (height < width) {
     if (height / width < size.y / size.x) {
       scale = this._dimensions.y / size.y;
     } else {
