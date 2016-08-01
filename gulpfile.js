@@ -1,11 +1,15 @@
 'use strict';
-let gulp             = require('gulp');
-let gutil            = require('gulp-util');
-let WebpackDevServer = require('webpack-dev-server');
-let webpack          = require('webpack');
-let ghPages          = require('gulp-gh-pages');
+const gulp               = require('gulp');
+const gutil              = require('gulp-util');
+const WebpackDevServer   = require('webpack-dev-server');
+const webpack            = require('webpack');
+const ghPages            = require('gulp-gh-pages');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 function build(config, callback) {
+  config.plugins = [...config.plugins,
+    new CleanWebpackPlugin([config.output.path])
+  ];
   webpack(config, (err, stats) => {
     if (err) throw new gutil.PluginError("webpack", err);
     stats.toString(config.devServer.stats).split('\n').map((line) => {
@@ -23,7 +27,6 @@ gulp.task('build:dev', (callback) => {
 gulp.task('build:production', (callback) => {
   let config = require('./webpack.config');
   config.plugins = [...config.plugins,
-    new CleanWebpackPlugin([config.output.path]),
     new webpack.DefinePlugin({
       "process.env": {
         "NODE_ENV": JSON.stringify("production")
