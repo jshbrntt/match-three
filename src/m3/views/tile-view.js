@@ -47,20 +47,19 @@ export default class TileView extends View {
   static loadTextures() {
     let loader = new THREE.TextureLoader();
     let textures = [];
-    let colors = ['blue', 'green', 'purple', 'red', 'yellow'];
     return new Promise((resolve, reject) => {
       function onLoad(texture) {
         textures.push(texture);
-        if (textures.length === colors.length) {
+        if (textures.length === Object.keys(TileView.IMAGES).length) {
           resolve(textures);
         }
       }
       function onProgress(event) {
         console.debug(`${((event.loaded/event.total)*100).toFixed()}% ${event.currentTarget.responseURL}`);
       }
-      for (let color of colors) {
-        let filename = './assets/textures/tile_' + color + '.png';
-        loader.load(filename, onLoad, onProgress, reject);
+      for (let key in TileView.IMAGES) {
+        let url = TileView.IMAGES[key];
+        loader.load(url, onLoad, onProgress, reject);
       }
     });
   }
@@ -150,3 +149,10 @@ export default class TileView extends View {
 }
 TileView.GEOMETRY  = new THREE.PlaneGeometry(48, 46);
 TileView.MATERIALS = [];
+TileView.IMAGES = {
+  tile_blue:   require('assets/textures/tile_blue.png'),
+  tile_green:  require('assets/textures/tile_green.png'),
+  tile_purple: require('assets/textures/tile_purple.png'),
+  tile_red:    require('assets/textures/tile_red.png'),
+  tile_yellow: require('assets/textures/tile_yellow.png')
+};
