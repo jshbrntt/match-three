@@ -54,7 +54,9 @@ export default class GridController extends Controller {
   onMouseDown(event) {
     console.debug('onMouseDown', event);
     let intersects = this.getIntersects();
-    this.selectTileView(intersects[0].object.parent);
+    if (intersects.length) {
+      this.selectTileView(intersects[0].object.parent);
+    }
   }
   onMouseUp(event) {
     console.debug('onMouseUp', event);
