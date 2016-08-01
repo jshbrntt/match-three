@@ -31,21 +31,21 @@ export default class GridView extends View {
     let size = this.size;
     let scale = 1;
 
-    if (height < width) {
+    // if (height < width) {
+    if (height / width < size.y / size.x) {
       scale = this._dimensions.y / size.y;
     } else {
       scale = this._dimensions.x / size.x;
     }
 
+    // Scaling
     this.scale.x *= scale;
     this.scale.y *= scale;
 
+    // Centering
     size = this.size;
-
     this.position.x = -size.x / 2;
     this.position.y = -size.y / 2;
-
-    var vector = new THREE.Vector3();
   }
   createTileView(tileModel) {
     let tileView = new TileView(tileModel);
