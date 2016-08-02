@@ -17,8 +17,6 @@ config.output = {
   sourceMapFilename: 'bundle.js.map'
 };
 
-config.devtool = 'source-map';
-
 config.resolve = {
   alias: {
     assets: path.resolve('./src/assets')

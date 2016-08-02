@@ -21,6 +21,7 @@ function build(config, callback) {
 
 gulp.task('build:dev', (callback) => {
   let config = require('./webpack.config');
+  config.devtool = 'source-map';
   return build(config, callback);
 });
 
@@ -50,6 +51,7 @@ gulp.task('deploy', ['build:production'], () => {
 
 gulp.task('watch', (callback) => {
   let config = require('./webpack.config');
+  config.devtool = 'source-map';
   config.entry.app.unshift("webpack-dev-server/client?http://localhost:8080/");
   new WebpackDevServer(new webpack(config), config.devServer)
     .listen(8080, 'localhost', (err) => {
