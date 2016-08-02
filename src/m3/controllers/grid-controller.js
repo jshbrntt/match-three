@@ -1,5 +1,5 @@
 import THREE from 'three';
-import feature from 'feature.js';
+import Modernizr from 'modernizr';
 import Controller from './../../core/mvc/controller';
 import ServiceLocator from './../../core/service-locator';
 import TouchEvent from './../../core/touch-event';
@@ -11,7 +11,7 @@ export default class GridController extends Controller {
     super(gridModel, gridView);
     this._camera = ServiceLocator.get('Game').camera;
 
-    if (feature.touch) {
+    if (Modernizr.touchevents) {
       this._input = ServiceLocator.get('Touch');
       this._input.addEventListener(TouchEvent.START, this.onMouseDown.bind(this));
       this._input.addEventListener(TouchEvent.END,   this.onMouseUp.bind(this));

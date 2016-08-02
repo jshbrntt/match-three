@@ -19,7 +19,8 @@ config.output = {
 
 config.resolve = {
   alias: {
-    assets: path.resolve('./src/assets')
+    assets: path.resolve('./src/assets'),
+    modernizr$: path.resolve(__dirname, ".modernizrrc")
   }
 };
 
@@ -40,6 +41,9 @@ config.module = {
   }, {
     test: /\.css$/,
     loader: "style-loader!css-loader"
+  }, {
+    test: /\.modernizrrc$/,
+    loader: "modernizr"
   }]
 };
 

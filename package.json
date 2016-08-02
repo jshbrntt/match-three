@@ -21,7 +21,7 @@
     "url": "https://github.com/synthecypher/match-three/issues"
   },
   "dependencies": {
-    "feature.js": "^1.0.0",
+    "modernizr": "^3.3.1",
     "stats.js": "^0.16.0",
     "three": "^0.79.0",
     "tween.js": "^16.3.4"
@@ -37,6 +37,7 @@
     "gulp-util": "^3.0.7",
     "html-webpack-plugin": "^2.22.0",
     "image-webpack-loader": "^2.0.0",
+    "modernizr-loader": "0.0.5",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
