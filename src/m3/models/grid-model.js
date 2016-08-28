@@ -23,7 +23,6 @@ export default class GridModel extends Model {
     this._onTileAdded   = null;
     this._onTileRemoved = null;
 
-    this._onRandomized  = null;
     this._onChecked     = null;
     this._onSwapped     = null;
     this._onSimulated   = null;
@@ -219,9 +218,6 @@ export default class GridModel extends Model {
         this._vector[i] = this.createRandomTileModel(currentCell);
       } while (this.getVerticalMatches(currentCell).length > 2 || this.getHorizontalMatches(currentCell).length > 2);
     }
-    if (this._onRandomized) {
-      this._onRandomized();
-    }
   }
 
   random() {
@@ -344,14 +340,6 @@ export default class GridModel extends Model {
       }
     }
     return string;
-  }
-
-  set onRandomized(value) {
-    this._onRandomized = value;
-  }
-
-  get onRandomized() {
-    return this._onRandomized;
   }
 
   get size() {
