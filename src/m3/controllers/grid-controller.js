@@ -13,13 +13,13 @@ export default class GridController extends Controller {
 
     if (Modernizr.touchevents) {
       this._input = ServiceLocator.get('Touch');
-      this._input.addEventListener(TouchEvent.START, this.onMouseDown.bind(this));
-      this._input.addEventListener(TouchEvent.END,   this.onMouseUp.bind(this));
+      this._input.addEventListener(TouchEvent.START, this.onInputDown.bind(this));
+      this._input.addEventListener(TouchEvent.END,   this.onInputUp.bind(this));
     }
     else {
-      this._input = ServiceLocator.get('Mouse');
-      this._input.addEventListener(MouseEvent.DOWN, this.onMouseDown.bind(this));
-      this._input.addEventListener(MouseEvent.UP,   this.onMouseUp.bind(this));
+    this._input = ServiceLocator.get('Mouse');
+      this._input.addEventListener(MouseEvent.DOWN, this.onInputDown.bind(this));
+      this._input.addEventListener(MouseEvent.UP,   this.onInputUp.bind(this));
     }
 
     this._raycaster = new THREE.Raycaster();
@@ -51,15 +51,15 @@ export default class GridController extends Controller {
       }
       this._selected = [];
   }
-  onMouseDown(event) {
-    console.debug('onMouseDown', event);
+  onInputDown(event) {
+    console.debug('onInputDown', event);
     let intersects = this.getIntersects();
     if (intersects.length) {
       this.selectTileView(intersects[0].object.parent);
     }
   }
-  onMouseUp(event) {
-    console.debug('onMouseUp', event);
+  onInputUp(event) {
+    console.debug('onInputUp', event);
     if (this._selected.length === 2) {
       this.swapSelectedTiles();
     }
