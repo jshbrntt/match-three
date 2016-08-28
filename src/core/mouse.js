@@ -5,6 +5,7 @@ export default class Mouse extends THREE.EventDispatcher {
   constructor(x, y) {
     super();
     this._position = new THREE.Vector2(x, y);
+    this._held     = false;
     window.addEventListener('click'    , this.onClick.bind(this)    , false);
     window.addEventListener('mousedown', this.onMouseDown.bind(this), false);
     window.addEventListener('mousemove', this.onMouseMove.bind(this), false);
@@ -18,17 +19,19 @@ export default class Mouse extends THREE.EventDispatcher {
     this.update(event);
     this.dispatchEvent({ type: MouseEvent.CLICK });
   }
+  onMouseDown(event) {
+    this.update(event);
+    this.dispatchEvent({ type: MouseEvent.DOWN });
+    this._held = true;
+  }
   onMouseMove(event) {
     this.update(event);
     this.dispatchEvent({ type: MouseEvent.MOVE });
   }
-  onMouseDown(event) {
-    this.update(event);
-    this.dispatchEvent({ type: MouseEvent.DOWN });
-  }
   onMouseUp(event) {
     this.update(event);
     this.dispatchEvent({ type: MouseEvent.UP });
+    this._held = false;
   }
   get x() {
     return this._position.x;
@@ -38,5 +41,8 @@ export default class Mouse extends THREE.EventDispatcher {
   }
   get position() {
     return this._position;
+  }
+  get held() {
+    return this._held;
   }
 }

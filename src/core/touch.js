@@ -5,6 +5,7 @@ export default class Touch extends THREE.EventDispatcher {
   constructor(x, y) {
     super();
     this._position = new THREE.Vector2(x, y);
+    this._held     = false;
     window.addEventListener('touchstart',  this.onStart.bind(this),  false);
     window.addEventListener('touchend',    this.onEnd.bind(this),    false);
     window.addEventListener('touchmove',   this.onMove.bind(this),   false);
@@ -21,10 +22,12 @@ export default class Touch extends THREE.EventDispatcher {
   onStart(event) {
     this.update(event);
     this.dispatchEvent({ type: TouchEvent.START });
+    this._held = true;
   }
   onEnd(event) {
     this.update(event);
     this.dispatchEvent({ type: TouchEvent.END });
+    this._held = false;
   }
   onMove(event) {
     this.update(event);
@@ -33,6 +36,7 @@ export default class Touch extends THREE.EventDispatcher {
   onCancel(event) {
     this.update(event);
     this.dispatchEvent({ type: TouchEvent.CANCEL });
+    this._held = false;
   }
   get x() {
     return this._position.x;
@@ -42,5 +46,8 @@ export default class Touch extends THREE.EventDispatcher {
   }
   get position() {
     return this._position;
+  }
+  get held() {
+    return this._held;
   }
 }
