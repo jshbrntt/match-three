@@ -1,3 +1,4 @@
+/* jshint node: true */
 'use strict';
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -49,6 +50,8 @@ config.module = {
 
 config.devServer = {
   contentBase: './dist',
+  host: '0.0.0.0',
+  port: '8080',
   stats: {
     colors: true,
     chunks: false
