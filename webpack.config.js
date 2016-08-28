@@ -45,6 +45,9 @@ config.module = {
   }, {
     test: /\.modernizrrc$/,
     loader: "modernizr"
+  }, {
+    test: /manifest.json$/,
+    loader: 'file-loader?name=manifest.json!web-app-manifest-loader'
   }]
 };
 

@@ -1,0 +1,17 @@
+{
+  "name": "Match Three",
+  "short_name": "Match Three",
+  "start_url": ".",
+  "scope": ".",
+  "lang": "en-US",
+  "display": "fullscreen",
+  "background_color": "#0099ff",
+  "theme_color": "#0077cc",
+  "orientation": "portrait",
+  "description": "A simple match three game.",
+  "icons": [{
+    "src": "assets/icon/icon512.png",
+    "sizes": "48x48 72x72 96x96 144x144 192x192 512x512",
+    "type": "image/png"
+  }]
+}
