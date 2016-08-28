@@ -143,7 +143,7 @@ export default class GridModel extends Model {
   onSwapped(tile1, tile2) {
     if (!tile1.cell.equals(this._swappedCell1) && !tile2.cell.equals(this._swappedCell2)) {
       this._onChecked = ((matches) => {
-        if (!matches) {
+        if (!matches.length) {
           this.swapTiles(tile1, tile2);
         } else {
           if (this._onSwapped) {
