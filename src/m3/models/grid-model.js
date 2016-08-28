@@ -1,6 +1,7 @@
 import Model from './../../core/mvc/model';
 import CellModel from './cell-model';
 import TileModel from './tile-model';
+import TileView from '../views/tile-view';
 
 export default class GridModel extends Model {
   constructor(width, height, seed) {
@@ -232,7 +233,7 @@ export default class GridModel extends Model {
   }
 
   createRandomTileModel(cell) {
-    return new TileModel(this.randomTileValue(0, 4), cell, this);
+    return new TileModel(this.randomTileValue(0, Object.keys(TileView.IMAGES).length - 1), cell, this);
   }
 
   randomTileValue(min, max) {
@@ -370,6 +371,7 @@ export default class GridModel extends Model {
   }
 
   set onTileAdded(value) {
-    return this._onTileAdded = value;
+    this._onTileAdded = value;
+    return this._onTileAdded;
   }
 }
