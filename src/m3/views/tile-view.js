@@ -147,12 +147,11 @@ export default class TileView extends View {
     return this._plane.geometry.parameters.height;
   }
 }
-TileView.GEOMETRY  = new THREE.PlaneGeometry(48, 46);
+TileView.GEOMETRY  = new THREE.PlaneGeometry(48, 48);
 TileView.MATERIALS = [];
 TileView.IMAGES = {
   tile_blue:   require('assets/textures/tile_blue.png'),
   tile_green:  require('assets/textures/tile_green.png'),
-  tile_purple: require('assets/textures/tile_purple.png'),
   tile_red:    require('assets/textures/tile_red.png'),
   tile_yellow: require('assets/textures/tile_yellow.png')
 };
