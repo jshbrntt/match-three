@@ -57,7 +57,8 @@ config.devServer = {
 
 config.plugins = [
   new HtmlWebpackPlugin({
-    title: 'Match Three'
+    title: 'Match Three',
+    template: './index.ejs'
   })
 ];
 
