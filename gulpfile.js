@@ -53,7 +53,7 @@ gulp.task('deploy', ['build:production'], () => {
 gulp.task('watch', (callback) => {
   let config = require('./webpack.config');
   config.devtool = 'source-map';
-  config.entry.app.unshift(`webpack-dev-server/client?${config.devServer.host}:${config.devServer.port}/`);
+  config.entry.app.unshift(`webpack-dev-server/client?http://${config.devServer.host}:${config.devServer.port}/`);
   new WebpackDevServer(new webpack(config), config.devServer)
     .listen(config.devServer.port, config.devServer.host, (err) => {
       if (err) throw new gutil.PluginError('webpack-dev-server', err);
