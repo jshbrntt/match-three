@@ -1,6 +1,7 @@
 import THREE from 'three';
 import TWEEN from 'tween.js';
 import View from './../../core/mvc/view';
+import TextSprite from './../../core/util/text-sprite';
 
 export default class TileView extends View {
   constructor(model) {
@@ -20,6 +21,7 @@ export default class TileView extends View {
 
     this._model._onMoved   = this.onMoved.bind(this);
     this._model._onRemoved = this.onRemoved.bind(this);
+    this._model._onUpdated = this.onUpdated.bind(this);
 
     this._highlight        = false;
 
@@ -43,6 +45,30 @@ export default class TileView extends View {
     //   this._model.cell.y * this._sprite.scale.y,
     //   1
     // );
+    this.renderCell();
+  }
+  renderCell() {
+    if (this._label) {
+      this.remove(this._label);
+    }
+    this._label = new TextSprite(`${this.model.cell.toString()}`, {
+      fontsize: 24,
+      borderColor: {
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 1.0
+      },
+      backgroundColor: {
+        r: 255,
+        g: 255,
+        b: 255,
+        a: 0.8
+      }
+    });
+    this._label.position.x = TileView.GEOMETRY.parameters.width / 2 + this._label.scale.x / 2;
+    this._label.position.y = TileView.GEOMETRY.parameters.height / 2;
+    this.add(this._label);
   }
   static loadTextures() {
     let loader = new THREE.TextureLoader();
@@ -82,7 +108,10 @@ export default class TileView extends View {
   }
   onMoved(cell, time, onFinished) {
     let size = this.size;
-    let tween = new TWEEN.Tween(this.position).to({ x: cell.x * this.width, y: cell.y * this.height }, time);
+    let tween = new TWEEN.Tween(this.position).to({
+      x: cell.x * this.width,
+      y: cell.y * this.height
+    }, time);
     tween.onComplete(this.onTweened.bind(this));
     tween.easing(TWEEN.Easing.Quadratic.InOut);
 
@@ -117,7 +146,8 @@ export default class TileView extends View {
   }
   onUpdated() {
     super.onUpdated();
-    // TODO: Highlight here relative to this._model.highlight
+    this.renderCell();
+    this.highlight = this.model.highlight;
   }
   set highlight(value) {
     this._outline.visible = value;
