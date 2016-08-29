@@ -11,38 +11,35 @@ export default class TileModel extends Model {
     this._highlight     = false;
     this._onMoved       = null;
     this._onRemoved     = null;
-    this._onSwapped     = null;
     this._swapTile      = null;
     this._swapMovements = 0;
   }
 
-  swap(tile, onSwapped) {
-    if (onSwapped) {
-      this._onSwapped = onSwapped;
-    }
-    this._swapTile = tile;
-    var cell = this._cell;
-    this.move(this._swapTile.cell, this.onSwapMovement.bind(this));
-    this._swapTile.move(cell, this.onSwapMovement.bind(this));
+  swap(tile) {
+    return new Promise((resolve, reject) => {
+      this._swapTile = tile;
+      var cell = this._cell;
+      Promise.all([
+        this.move(this._swapTile.cell),
+        this._swapTile.move(cell)
+      ]).then((moves) => {
+        resolve();
+      });
+    });
   }
 
-  onSwapMovement() {
-    this._swapMovements++;
-    if (this._swapMovements == 2)
-    {
-      this._swapMovements = 0;
-      if (this._onSwapped) {
-        this._onSwapped(this, this._swapTile);
+  move(cell) {
+    let promise = new Promise((resolve, reject) => {
+      var time = Math.sqrt((2 * this._cell.distance(cell)) / 64) * 1000;
+      if (this._onMoved) {
+        this._onMoved(cell, time, resolve);
       }
-    }
-  }
-
-  move(cell, onMovedCallback) {
-    var time = Math.sqrt((2 * this._cell.distance(cell)) / 64) * 1000;
-    this._cell = cell;
-    if (this._onMoved) {
-      this._onMoved(this._cell, time, onMovedCallback);
-    }
+    });
+    promise.then(() => {
+      this.cell = cell;
+      this.update();
+    });
+    return promise;
   }
 
   get value() {
@@ -67,6 +64,10 @@ export default class TileModel extends Model {
 
   get gridModel() {
     return this._gridModel;
+  }
+
+  set cell(value) {
+    this._cell = value;
   }
 
   set highlight(value) {

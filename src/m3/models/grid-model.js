@@ -38,64 +38,10 @@ export default class GridModel extends Model {
 
   check() {
     console.log("check");
-    var matches = this.getMatches();
-    if (this._onChecked) {
-      this._onChecked(matches);
-    }
-    if (matches.length > 0) {
-      this.remove(matches);
-    } else {
-      if (!this.fill()) {
-        this.endSimulation();
-      }
-    }
-  }
-
-  remove(matches) {
-    console.log("remove");
-    for (var i = 0; i < matches.length; i++) {
-      var match = matches[i];
-      this.removeTile(match);
-    }
-    this.gravity();
-  }
-
-  gravity() {
-    console.log("gravity");
-    let movements = [];
-    for (let i = 0; i < this._width; i++) {
-      let drop = 0;
-      let cell = this.transformIndexToCellModel(i);
-      while (cell.y <= this._height - 1) {
-        if (!this.getTileModel(cell)) {
-          drop++;
-        } else if (drop) {
-          movements.push(this.moveTile(cell, new CellModel(cell.x, cell.y - drop)));
-        }
-        cell.y++;
-      }
-    }
-    Promise.all(movements).then(() => {
-      if (!this.fill()) {
-        this.check();
-      }
+    return new Promise((resolve) => {
+      let matches = this.getMatches();
+      resolve(matches);
     });
-  }
-
-  fill() {
-    console.log("fill");
-    let filled = false;
-    for (var i = this._width * this._height - this._width * 2; i < this._width * this._height - this._width; i++) {
-      let cell = this.transformIndexToCellModel(i);
-      if (!this.getTileModel(cell)) {
-        this.addTile(this.createRandomTileModel(new CellModel(cell.x, cell.y + 1)));
-        filled = true;
-      }
-    }
-    if (filled) {
-      this.gravity();
-    }
-    return filled;
   }
 
   endSimulation() {
@@ -123,29 +69,120 @@ export default class GridModel extends Model {
   }
 
   swapTiles(tile1, tile2) {
-    tile1.swap(tile2, this.onSwapped.bind(this));
-    this.setTileModel(tile1.cell, tile1);
-    this.setTileModel(tile2.cell, tile2);
+    tile1.swap(tile2)
+      .then(() => {
+        // Updates the positions of the models in the grid.
+        this.setTileModel(tile1.cell, tile1);
+        this.setTileModel(tile2.cell, tile2);
+      })
+      .then(this.simulate.bind(this));
   }
 
-  onSwapped(tile1, tile2) {
-    if (!tile1.cell.equals(this._swappedCell1) && !tile2.cell.equals(this._swappedCell2)) {
-      this._onChecked = ((matches) => {
-        if (!matches.length) {
-          this.swapTiles(tile1, tile2);
-        } else {
-          if (this._onSwapped) {
-            this._onSwapped();
-          }
+  simulate() {
+    return new Promise((resolve, reject) => {
+      let matches = this.getMatches();
+      if (matches.length) {
+        let chain = this.remove(matches);
+        function addFill() {
+          chain.then(this.fill.bind(this))
+            .then(
+              () => {
+                console.debug('fill: success');
+                addGravity.bind(this)();
+              },
+              () => {
+                console.debug('fill: failed');
+                this.simulate.bind(this)();
+              }
+            );
         }
-        this._onChecked = null;
-      }).bind(this);
-      this.beginSimulation();
-    } else {
-      if (this._onSwapped) {
-        this._onSwapped();
+        function addGravity() {
+          chain.then(this.gravity.bind(this))
+            .then(
+              () => {
+                console.debug('gravity: success');
+                addGravity.bind(this)();
+              },
+              () => {
+                console.debug('gravity: failed');
+                addFill.bind(this)();
+              }
+            );
+        }
+        addGravity.bind(this)();
+      } else {
+        resolve();
+      }
+    });
+  }
+
+  remove(matches) {
+    return new Promise((resolve, reject) => {
+      for (var i = 0; i < matches.length; i++) {
+        var match = matches[i];
+        this.removeTile(match);
+      }
+      resolve();
+    });
+  }
+
+  fill() {
+    return new Promise((resolve, reject) => {
+      let filled = false;
+      for (var i = this._width * this._height - this._width * 2; i < this._width * this._height - this._width; i++) {
+        let cell = this.transformIndexToCellModel(i);
+        if (!this.getTileModel(cell)) {
+          this.addTile(this.createRandomTileModel(new CellModel(cell.x, cell.y + 1)));
+          filled = true;
+        }
+      }
+      return filled ? resolve() : reject();
+    });
+  }
+
+  gravity() {
+    let movements = [];
+    for (let i = 0; i < this._width; i++) {
+      let drop = 0;
+      let cell = this.transformIndexToCellModel(i);
+      while (cell.y <= this._height - 1) {
+        if (!this.getTileModel(cell)) {
+          drop++;
+        } else if (drop) {
+          movements.push(this.moveTile(cell, new CellModel(cell.x, cell.y - drop)));
+        }
+        cell.y++;
       }
     }
+    return new Promise((resolve, reject) => {
+      if (movements.length) {
+        return Promise.all(movements).then(() => {
+          resolve();
+        });
+      } else {
+        reject();
+      }
+    });
+  }
+
+  onSwapped(tiles) {
+    // if (!tiles[0].cell.equals(this._swappedCell1) && !tiles[1].cell.equals(this._swappedCell2)) {
+    //   this._onChecked = ((matches) => {
+    //     if (!matches.length) {
+    //       this.swapTiles(tiles[0], tiles[1]);
+    //     } else {
+    //       if (this._onSwapped) {
+    //         this._onSwapped();
+    //       }
+    //     }
+    //     this._onChecked = null;
+    //   }).bind(this);
+    //   this.beginSimulation();
+    // } else {
+    //   if (this._onSwapped) {
+    //     this._onSwapped();
+    //   }
+    // }
   }
 
   moveTile(fromCell, toCell) {
