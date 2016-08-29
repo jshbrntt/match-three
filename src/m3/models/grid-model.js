@@ -14,7 +14,6 @@ export default class GridModel extends Model {
     this._vector.length = this._width * this._height;
 
     this._simulating    = false;
-    this._tilesFalling  = 0;
 
     this._swappedCell1  = null;
     this._swappedCell2  = null;
@@ -63,35 +62,24 @@ export default class GridModel extends Model {
 
   gravity() {
     console.log("gravity");
-    var movedTile = false;
-    for (var i = 0; i < this._width; i++) {
-      var drop = 0;
-      var cell = this.transformIndexToCellModel(i);
+    let movements = [];
+    for (let i = 0; i < this._width; i++) {
+      let drop = 0;
+      let cell = this.transformIndexToCellModel(i);
       while (cell.y <= this._height - 1) {
         if (!this.getTileModel(cell)) {
           drop++;
         } else if (drop) {
-          this._tilesFalling++;
-          this.moveTile(cell, new CellModel(cell.x, cell.y - drop), this.onTileFallen.bind(this));
-          movedTile = true;
+          movements.push(this.moveTile(cell, new CellModel(cell.x, cell.y - drop)));
         }
         cell.y++;
       }
     }
-    if (!movedTile) {
+    Promise.all(movements).then(() => {
       if (!this.fill()) {
         this.check();
       }
-    }
-  }
-
-  onTileFallen() {
-    this._tilesFalling--;
-    if (this._tilesFalling === 0) {
-      if (!this.fill()) {
-        this.check();
-      }
-    }
+    });
   }
 
   fill() {
@@ -160,17 +148,19 @@ export default class GridModel extends Model {
     }
   }
 
-  moveTile(fromCell, toCell, onMoved) {
-    var movingTile = this.getTileModel(fromCell);
-    if (movingTile) {
-      this.removeTile(toCell);
-      this.setTileModel(toCell, movingTile);
-      movingTile.move(toCell, onMoved);
-      this.setTileModel(fromCell, null);
-      if (this._onTileMoved) {
-        this._onTileMoved(fromCell, toCell);
+  moveTile(fromCell, toCell) {
+    return new Promise((resolve, reject) => {
+      var movingTile = this.getTileModel(fromCell);
+      if (movingTile) {
+        this.removeTile(toCell);
+        this.setTileModel(toCell, movingTile);
+        movingTile.move(toCell, resolve);
+        this.setTileModel(fromCell, null);
+        if (this._onTileMoved) {
+          this._onTileMoved(fromCell, toCell);
+        }
       }
-    }
+    });
   }
 
   addTile(tileModel) {
