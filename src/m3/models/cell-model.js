@@ -25,7 +25,7 @@ export default class CellModel extends Model {
   }
 
   toString() {
-    return '('+this._x+','+this._y+')';
+    return `${this._x},${this._y}`;
   }
 
   get x() {
