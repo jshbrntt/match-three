@@ -29,21 +29,21 @@ export default class GridController extends Controller {
     this._selected = [];
   }
   getTileModelAtPosition(position) {
+    // Screen space to world space transform.
     let vector = new THREE.Vector3(position.x, position.y, 0.5);
     vector.unproject(this._camera);
-    let dir = vector.sub(this._camera.position).normalize();
-    let distance = this._camera.position.z / dir.z;
-    let pos = this._camera.position.clone().add(dir.multiplyScalar(distance));
-    let size = this.view.size;
-    console.debug(size.x, size.y);
-    console.debug(this.model.width, this.model.height);
-    console.debug(this.view.position);
-    pos.sub(this.view.position)
-      .sub(size)
-      .divide(new THREE.Vector2(size.x / -this.model.width, size.y / -this.model.height - 1))
-      .ceil()
-    console.debug(pos);
-    // let tileModel = this.model.getTileModel(new CellModel(pos.x - 1, pos.y - 1));
+    let dimensions            = this.view.size;
+    let projectionDirection = vector.sub(this._camera.position).normalize();
+    let projectionDistance  = this._camera.position.z / projectionDirection.z;
+    let projectedPosition   = this._camera.position.clone().add(projectionDirection.multiplyScalar(projectionDistance));
+    // Position relative to the view, then quantized to the grid space.
+    let gridPosition = projectedPosition.clone()
+      .sub(this.view.position)
+      .sub(dimensions)
+      .divide(new THREE.Vector2(-dimensions.x / this.model.width, -dimensions.y / (this.model.height - 1)))
+      .floor()
+    // Getting the tile from that position in the grid.
+    let tileModel = this.model.getTileModel(new CellModel(gridPosition.x, gridPosition.y));
     return tileModel;
   }
   clearSwap() {
