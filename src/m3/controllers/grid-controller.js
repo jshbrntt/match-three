@@ -10,23 +10,28 @@ import CellModel from './../models/cell-model';
 export default class GridController extends Controller {
   constructor(gridModel, gridView) {
     super(gridModel, gridView);
-    this._camera = ServiceLocator.get('Game').camera;
+    this._camera   = ServiceLocator.get('Game').camera;
+    this._selected = [];
+    this.addInputEventListeners();
+  }
+  addInputEventListeners() {
+    this._input = {};
+
+    this._input.Mouse = ServiceLocator.get('Mouse');
+    this._input.Mouse.addEventListener(MouseEvent.DOWN, this.onInputDown.bind(this));
+    this._input.Mouse.addEventListener(MouseEvent.MOVE, this.onInputMove.bind(this));
+    this._input.Mouse.addEventListener(MouseEvent.UP,   this.onInputUp.bind(this));
 
     if (Modernizr.touchevents) {
-      this._input = ServiceLocator.get('Touch');
-      this._input.addEventListener(TouchEvent.START, this.onInputDown.bind(this));
-      this._input.addEventListener(TouchEvent.MOVE,  this.onInputMove.bind(this));
-      this._input.addEventListener(TouchEvent.END,   this.onInputUp.bind(this));
+      this._input.Touch = ServiceLocator.get('Touch');
+      this._input.Touch.addEventListener(TouchEvent.START, this.onInputDown.bind(this));
+      this._input.Touch.addEventListener(TouchEvent.MOVE,  this.onInputMove.bind(this));
+      this._input.Touch.addEventListener(TouchEvent.END,   this.onInputUp.bind(this));
     }
-    else {
-      this._input = ServiceLocator.get('Mouse');
-      this._input.addEventListener(MouseEvent.DOWN, this.onInputDown.bind(this));
-      this._input.addEventListener(MouseEvent.MOVE, this.onInputMove.bind(this));
-      this._input.addEventListener(MouseEvent.UP,   this.onInputUp.bind(this));
-    }
-
-    this._raycaster = new THREE.Raycaster();
-    this._selected = [];
+  }
+  getInput(event) {
+    let match = /\.(.+)Event/g.exec(event.type);
+    return match.length ? this._input[match[1]] : null;
   }
   getTileModelAtPosition(position) {
     // Screen space to world space transform.
@@ -41,7 +46,7 @@ export default class GridController extends Controller {
       .sub(this.view.position)
       .sub(dimensions)
       .divide(new THREE.Vector2(-dimensions.x / this.model.width, -dimensions.y / (this.model.height - 1)))
-      .floor()
+      .floor();
     // Getting the tile from that position in the grid.
     let tileModel = this.model.getTileModel(new CellModel(gridPosition.x, gridPosition.y));
     return tileModel;
@@ -80,15 +85,17 @@ export default class GridController extends Controller {
       this.clearSwap();
   }
   onInputDown(event) {
-    let tileModel = this.getTileModelAtPosition(this._input.position);
+    let input = this.getInput(event);
+    let tileModel = this.getTileModelAtPosition(input.position);
     this.selectTileModel(tileModel);
   }
   onInputMove(event) {
-    let tileModel = this.getTileModelAtPosition(this._input.position);
+    let input = this.getInput(event);
+    let tileModel = this.getTileModelAtPosition(input.position);
     if (tileModel) {
       console.debug(tileModel.cell);
     }
-    if (this._selected.length && this._input.held) {
+    if (this._selected.length && input.held) {
       this.selectTileModel(tileModel);
       if (this._selected.length === 2) {
         this.swapSelectedTiles();
