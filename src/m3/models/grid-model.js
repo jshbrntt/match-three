@@ -1,392 +1,78 @@
 import Model from './../../core/mvc/model';
-import CellModel from './cell-model';
-import TileModel from './tile-model';
-import TileView from '../views/tile-view';
 
 export default class GridModel extends Model {
-  constructor(width, height, seed) {
+  constructor(width, height) {
     super();
-
-    this._width         = width;
-    this._height        = height;
-    this._seed          = seed;
-    this._vector        = [];
+    this._width = width;
+    this._height = height;
+    this._vector = [];
     this._vector.length = this._width * this._height;
-
-    this._simulating    = false;
-
-    this._swappedCell1  = null;
-    this._swappedCell2  = null;
-
-    this._onTileMoved   = null;
-    this._onTileAdded   = null;
-    this._onTileRemoved = null;
-
-    this._onChecked     = null;
-    this._onSwapped     = null;
-    this._onSimulated   = null;
   }
-
-  beginSimulation() {
-    console.log("simulate");
-    if (this._simulating) {
-      return;
-    }
-    this._simulating = true;
-    this.check();
-  }
-
-  check() {
-    console.log("check");
-    return new Promise((resolve) => {
-      let matches = this.getMatches();
-      resolve(matches);
-    });
-  }
-
-  endSimulation() {
-    console.log("simulated");
-    if (this._onSimulated) {
-      this._onSimulated();
-    }
-    this._simulating = false;
-  }
-
-  swapCells(cell1, cell2) {
-
-    var tile1 = this.getTileModel(cell1);
-    var tile2 = this.getTileModel(cell2);
-
-    if (!tile1 || !tile2 || this._simulating) {
-      return false;
-    }
-
-    // After first swap remove matches.
-    this._swappedCell1 = tile1.cell;
-    this._swappedCell2 = tile2.cell;
-    this.swapTiles(tile1, tile2);
-    return true;
-  }
-
-  swapTiles(tile1, tile2) {
-    tile1.swap(tile2)
-      .then(() => {
-        // Updates the positions of the models in the grid.
-        this.setTileModel(tile1.cell, tile1);
-        this.setTileModel(tile2.cell, tile2);
-      })
-      .then(this.simulate.bind(this));
-  }
-
-  simulate() {
-    return new Promise((resolve, reject) => {
-      let matches = this.getMatches();
-      if (matches.length) {
-        let chain = this.remove(matches);
-        function addFill() {
-          chain.then(this.fill.bind(this))
-            .then(
-              () => {
-                console.debug('fill: success');
-                addGravity.bind(this)();
-              },
-              () => {
-                console.debug('fill: failed');
-                this.simulate.bind(this)();
-              }
-            );
-        }
-        function addGravity() {
-          chain.then(this.gravity.bind(this))
-            .then(
-              () => {
-                console.debug('gravity: success');
-                addGravity.bind(this)();
-              },
-              () => {
-                console.debug('gravity: failed');
-                addFill.bind(this)();
-              }
-            );
-        }
-        addGravity.bind(this)();
-      } else {
-        resolve();
-      }
-    });
-  }
-
-  remove(matches) {
-    return new Promise((resolve, reject) => {
-      for (var i = 0; i < matches.length; i++) {
-        var match = matches[i];
-        this.removeTile(match);
-      }
-      resolve();
-    });
-  }
-
-  fill() {
-    return new Promise((resolve, reject) => {
-      let filled = false;
-      for (var i = this._width * this._height - this._width * 2; i < this._width * this._height - this._width; i++) {
-        let cell = this.transformIndexToCellModel(i);
-        if (!this.getTileModel(cell)) {
-          this.addTile(this.createRandomTileModel(new CellModel(cell.x, cell.y + 1)));
-          filled = true;
-        }
-      }
-      return filled ? resolve() : reject();
-    });
-  }
-
-  gravity() {
-    let movements = [];
-    for (let i = 0; i < this._width; i++) {
-      let drop = 0;
-      let cell = this.transformIndexToCellModel(i);
-      while (cell.y <= this._height - 1) {
-        if (!this.getTileModel(cell)) {
-          drop++;
-        } else if (drop) {
-          movements.push(this.moveTile(cell, new CellModel(cell.x, cell.y - drop)));
-        }
-        cell.y++;
-      }
-    }
-    return new Promise((resolve, reject) => {
-      if (movements.length) {
-        return Promise.all(movements).then(() => {
-          resolve();
-        });
-      } else {
-        reject();
-      }
-    });
-  }
-
-  onSwapped(tiles) {
-    // if (!tiles[0].cell.equals(this._swappedCell1) && !tiles[1].cell.equals(this._swappedCell2)) {
-    //   this._onChecked = ((matches) => {
-    //     if (!matches.length) {
-    //       this.swapTiles(tiles[0], tiles[1]);
-    //     } else {
-    //       if (this._onSwapped) {
-    //         this._onSwapped();
-    //       }
-    //     }
-    //     this._onChecked = null;
-    //   }).bind(this);
-    //   this.beginSimulation();
-    // } else {
-    //   if (this._onSwapped) {
-    //     this._onSwapped();
-    //   }
-    // }
-  }
-
-  moveTile(fromCell, toCell) {
-    return new Promise((resolve, reject) => {
-      var movingTile = this.getTileModel(fromCell);
-      if (movingTile) {
-        this.removeTile(toCell);
-        this.setTileModel(toCell, movingTile);
-        movingTile.move(toCell, resolve);
-        this.setTileModel(fromCell, null);
-        if (this._onTileMoved) {
-          this._onTileMoved(fromCell, toCell);
-        }
-      }
-    });
-  }
-
-  addTile(tileModel) {
-    if (tileModel) {
-      this.setTileModel(tileModel.cell, tileModel);
-      if (this._onTileAdded) {
-        this._onTileAdded(tileModel);
-      }
-    }
-  }
-
-  removeTile(fromCell) {
-    var removedModel = this.getTileModel(fromCell);
-    if (removedModel) {
-      removedModel.onRemoved();
-      this.setTileModel(fromCell, null);
-      if (this._onTileRemoved) {
-        this._onTileRemoved(removedModel);
-      }
-    }
-  }
-
-  setTileModel(p, v) {
-    var i = this.transformCellModelToIndex(p);
-    if (i < 0 && i > this._vector.length - 1) {
-      return false;
-    }
-    this._vector[i] = v;
-    return true;
-  }
-
-  getTileModel(p) {
-    var i = this.transformCellModelToIndex(p);
-    if (!(i in this._vector)) {
+  transform2D(x, y) {
+    if (x < 0 || x > (this._width - 1) || y < 0 || y > (this._height - 1)) {
       return null;
     }
-    return this._vector[i];
+    return x + y * this._width;
   }
-
-  randomize(seed) {
-    for (var i = 0; i < this._vector.length - this._width; i++) {
-      var currentCell;
-      do {
-        currentCell = this.transformIndexToCellModel(i);
-        this._vector[i] = this.createRandomTileModel(currentCell);
-      } while (this.getVerticalMatches(currentCell).length > 2 || this.getHorizontalMatches(currentCell).length > 2);
-    }
-  }
-
-  random() {
-    var max = 1;
-    var min = 0;
-    this._seed = (this._seed * 9301 + 49297) % 233280;
-    var rnd = this._seed / 233280;
-    return min + rnd * (max - min);
-  }
-
-  createRandomTileModel(cell) {
-    return new TileModel(this.randomTileValue(0, Object.keys(TileView.IMAGES).length - 1), cell, this);
-  }
-
-  randomTileValue(min, max) {
-    return Math.floor(this.random() * (1 + max - min)) + min;
-  }
-
-  transformIndexToCellModel(i) {
-    if (i < 0 || i > (this._vector.length - 1)) {
+  transform1D(n) {
+    if (n < 0 || n > (this._vector.length - 1)) {
       return null;
     }
-    return new CellModel(i % this._width, Math.floor(i / this._width));
+    return {
+      x: n % this._width,
+      y: Math.floor(n / this._width)
+    };
   }
-
-  transformCellModelToIndex(tile) {
-    if (!tile || tile.x < 0 || tile.x > (this._width - 1) || tile.y < 0 || tile.y > (this._height - 1)) {
-      return -1;
+  handle2D(x, y) {
+    let n = this.transform2D(x, y);
+    if (n === null) {
+      // console.debug(`(${x},${y}) is outside of grid (${this._width},${this._height}).`);
     }
-    return tile.x + tile.y * this._width;
+    return n;
   }
-
-  unique(cells) {
-    var unique = cells.concat();
-    for (var i = 0; i < unique.length; ++i) {
-      for (var j = i + 1; j < unique.length; ++j) {
-        if (unique[i].equals(unique[j])) {
-          unique.splice(j--, 1);
+  set(x, y, value) {
+    let n = this.handle2D(x, y);
+    if (this._vector[n]) {
+      // console.debug(`Overwritting existing value at position (${x},${y}).`);
+    }
+    this._vector[this.handle2D(x, y)] = value;
+  }
+  get(x, y) {
+    return this._vector[this.handle2D(x, y)];
+  }
+  remove(value) {
+    let position = this.positionOf(value);
+    if (position) {
+      this.set(position.x, position.y, null);
+    }
+  }
+  positionOf(value) {
+      let n = this._vector.indexOf(value);
+      if (n === -1) {
+        return null;
+      }
+      return this.transform1D(n);
+    }
+    [Symbol.iterator]() {
+      let i = -1;
+      let vector = this._vector;
+      return {
+        next() {
+          i++;
+          return {
+            done: i === vector.length - 1,
+            value: vector[i]
+          };
         }
-      }
+      };
     }
-    return unique;
-  }
-
-  getMatches() {
-    var matches = [];
-    for (var i = 0; i < this._vector.length; ++i) {
-      var cursorCellModel = this.transformIndexToCellModel(i);
-      var horizontalMatches = this.getHorizontalMatches(cursorCellModel);
-      if (horizontalMatches.length > 2) {
-        matches = matches.concat(horizontalMatches);
-      }
-      var verticalMatches = this.getVerticalMatches(cursorCellModel);
-      if (verticalMatches.length > 2) {
-        matches = matches.concat(verticalMatches);
-      }
-    }
-    return this.unique(matches);
-  }
-
-  getVerticalMatches(originCellModel) {
-    var matches = [];
-    var originTileModel = this.getTileModel(originCellModel);
-    if (!originTileModel) {
-      return matches;
-    }
-    matches.push(originCellModel);
-    var cursorCellModel = originCellModel.copy();
-    cursorCellModel.y--;
-    while(GridModel.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
-      matches.push(new CellModel(cursorCellModel.x, cursorCellModel.y));
-      cursorCellModel.y--;
-    }
-    cursorCellModel.y = originCellModel.y + 1;
-    while (GridModel.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
-      matches.push(new CellModel(cursorCellModel.x, cursorCellModel.y));
-      cursorCellModel.y++;
-    }
-    return matches;
-  }
-
-  getHorizontalMatches(originCellModel) {
-    var matches = [];
-    var originTileModel = this.getTileModel(originCellModel);
-    if (!originTileModel) {
-      return matches;
-    }
-    matches.push(originCellModel);
-    var cursorCellModel = originCellModel.copy();
-    cursorCellModel.x--;
-    while(GridModel.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
-      matches.push(new CellModel(cursorCellModel.x, cursorCellModel.y));
-      cursorCellModel.x--;
-    }
-    cursorCellModel.x = originCellModel.x + 1;
-    while (GridModel.tilesMatch(originTileModel, this.getTileModel(cursorCellModel))) {
-      matches.push(new CellModel(cursorCellModel.x, cursorCellModel.y));
-      cursorCellModel.x++;
-    }
-    return matches;
-  }
-
-  static tilesMatch(tileModel1, tileModel2) {
-    if (!tileModel1 || !tileModel2) {
-      return false;
-    }
-    return tileModel1.value === tileModel2.value;
-  }
-
-  toString() {
-    let string = "";
-    for (let y = this._height - 1; y >= 0; y--) {
-      for (let x = 0; x < this._width; x++) {
-        let cellModel = new CellModel(x, y);
-        let tileModel = this.getTileModel(cellModel);
-        string += (tileModel ? tileModel.value : 'X'); //+ cellModel.toString() + '[' + this._vector.indexOf(tileModel) + ']';
-        if (x === this._width - 1) {
-          string += "\n";
-        }
-      }
-    }
-    return string;
-  }
-
-  get size() {
-    return this._vector.length;
-  }
-
   get width() {
     return this._width;
   }
-
   get height() {
     return this._height;
   }
-
-  get onTileAdded() {
-    return this._onTileAdded;
-  }
-
-  set onTileAdded(value) {
-    this._onTileAdded = value;
-    return this._onTileAdded;
+  get size() {
+    return this._vector.length;
   }
 }

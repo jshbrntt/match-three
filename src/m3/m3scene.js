@@ -1,12 +1,8 @@
 import Scene from './../core/scene';
-import Model from './../core/mvc/model';
-import GridModel from './models/grid-model';
-import TileModel from './models/tile-model';
-import CellModel from './models/cell-model';
+import BoardModel from './models/board-model';
 import TileView from './views/tile-view';
-import GridView from './views/grid-view';
-import GridController from './controllers/grid-controller';
-import ServiceLocator from './../core/service-locator';
+import BoardView from './views/board-view';
+import BoardController from './controllers/board-controller';
 
 export default class M3Scene extends Scene {
   constructor(game) {
@@ -14,20 +10,20 @@ export default class M3Scene extends Scene {
     this.setupModels();
   }
   setupModels() {
-    let gridModel = new GridModel(5, 7, 1);
-    let gridView = new GridView(gridModel);
-    let gridController = new GridController(gridModel, gridView);
-    gridModel.randomize();
+    let boardModel = new BoardModel(5, 7, 1.4);
+    let boardView = new BoardView(boardModel);
+    let boardController = new BoardController(boardModel, boardView);
+    boardModel.randomize();
     TileView
       .loadTextures()
-      .then(((textures) => {
+      .then((textures) => {
         TileView.createMaterials(textures);
-        gridView.createTileViews();
+        boardView.createTileViews();
         this._game._engine.resize();
-      }).bind(this));
-    this.add(gridView);
+      });
+    this.add(boardView);
     document.addEventListener('keydown', (event) => {
-      console.log(gridModel.toString());
+      console.log(boardModel.toString());
     });
   }
   update() {

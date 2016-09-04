@@ -1,53 +1,79 @@
 import Model from './../../core/mvc/model';
+import CellModel from './cell-model';
 
 export default class TileModel extends Model {
-  constructor(value, cell, gridModel) {
+  constructor(value, boardModel) {
     super();
 
     this._value         = value;
-    this._cell          = cell;
-    this._gridModel     = gridModel;
+    this._boardModel     = boardModel;
 
     this._highlight     = false;
     this._onMoved       = null;
     this._onRemoved     = null;
-    this._swapTile      = null;
     this._swapMovements = 0;
   }
 
   swap(tile) {
-    return new Promise((resolve, reject) => {
-      this._swapTile = tile;
-      var cell = this._cell;
+    return new Promise((resolve) => {
       Promise.all([
-        this.move(this._swapTile.cell),
-        this._swapTile.move(cell)
-      ]).then((moves) => {
-        resolve();
-      });
+        this.move(tile.cell.x, tile.cell.y),
+        tile.move(this.cell.x, this.cell.y)
+      ]).then(resolve);
     });
   }
 
-  move(cell) {
-    let promise = new Promise((resolve, reject) => {
-      var time = Math.sqrt((2 * this._cell.distance(cell)) / 64) * 1000;
+  move(x, y) {
+    return new Promise((resolve, reject) => {
+      let destination = new CellModel(x, y);
+      if (this.cell.equals(destination)) {
+        reject(new Error('Cannot move tile to the position it already occupies.'));
+      }
+      var time = Math.sqrt((2 * this.cell.distance(destination)) / 64) * 1000;
       if (this._onMoved) {
-        this._onMoved(cell, time, resolve);
+        this._onMoved(destination, time).then(() => {
+          this.boardModel.remove(this);
+          this.boardModel.set(x, y, this);
+          this.update();
+          resolve();
+        });
+      }
+      else {
+        this.boardModel.remove(this);
+        this.boardModel.set(x, y, this);
+        this.update();
+        resolve();
       }
     });
-    promise.then(() => {
-      this.cell = cell;
-      this.update();
-    });
-    return promise;
+  }
+
+  remove() {
+    let cell = this.cell;
+    this.boardModel.set(cell.x, cell.y, null);
+    this.update();
+  }
+
+  equals(tileModel) {
+    if (!tileModel) {
+      return false;
+    }
+    return this.value === tileModel.value;
   }
 
   get value() {
     return this._value;
   }
 
+  set cell(value) {
+    this.boardModel.set(value.x, value.y, this);
+  }
+
   get cell() {
-    return this._cell;
+    let position = this.boardModel.positionOf(this);
+    if (position) {
+      return new CellModel(position.x, position.y);
+    }
+    return null;
   }
 
   get onRemoved() {
@@ -62,12 +88,8 @@ export default class TileModel extends Model {
     return this._highlight;
   }
 
-  get gridModel() {
-    return this._gridModel;
-  }
-
-  set cell(value) {
-    this._cell = value;
+  get boardModel() {
+    return this._boardModel;
   }
 
   set highlight(value) {

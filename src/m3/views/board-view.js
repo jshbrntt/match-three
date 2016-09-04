@@ -4,7 +4,7 @@ import TileView from './tile-view';
 import ServiceLocator from './../../core/service-locator';
 import MouseEvent from './../../core/mouse-event';
 
-export default class GridView extends View {
+export default class BoardView extends View {
   constructor(model) {
     super(model);
     this._camera = ServiceLocator.get('Game').camera;
@@ -24,7 +24,7 @@ export default class GridView extends View {
     return dimensions;
   }
   update() {
-    super.update();
+    this.model.added = [];
   }
   resize(width, height) {
     this._dimensions = this.getWorldDimensions(width, height);
@@ -56,9 +56,7 @@ export default class GridView extends View {
   createTileViews() {
     this.children.length = 0;
     this._tileViews = [];
-    for (let i = 0; i < this._model.size; i++) {
-      let tileCell = this._model.transformIndexToCellModel(i);
-      let tileModel = this._model.getTileModel(tileCell);
+    for (let tileModel of this.model) {
       if (!tileModel) {
         this._tileViews.push(null);
         continue;

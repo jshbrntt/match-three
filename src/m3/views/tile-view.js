@@ -34,20 +34,12 @@ export default class TileView extends View {
     this.add(this._outline);
     this.add(this._plane);
 
-    // this._sprite.scale.set(
-    //   this._sprite.material.map.image.width,
-    //   this._sprite.material.map.image.height,
-    //   1
-    // );
-    //
-    // this._sprite.position.set(
-    //   this._model.cell.x * this._sprite.scale.x,
-    //   this._model.cell.y * this._sprite.scale.y,
-    //   1
-    // );
     this.renderCell();
   }
   renderCell() {
+    if (!this.model.cell) {
+      return;
+    }
     if (this._label) {
       this.remove(this._label);
     }
@@ -81,7 +73,7 @@ export default class TileView extends View {
         }
       }
       function onProgress(event) {
-        console.debug(`${((event.loaded/event.total)*100).toFixed()}% ${event.currentTarget.responseURL}`);
+        // console.debug(`${((event.loaded/event.total)*100).toFixed()}% ${event.currentTarget.responseURL}`);
       }
       for (let key in TileView.IMAGES) {
         let url = TileView.IMAGES[key];
@@ -106,35 +98,30 @@ export default class TileView extends View {
       }));
     }
   }
-  onMoved(cell, time, onFinished) {
-    let size = this.size;
-    let tween = new TWEEN.Tween(this.position).to({
-      x: cell.x * this.width,
-      y: cell.y * this.height
-    }, time);
-    tween.onComplete(this.onTweened.bind(this));
-    tween.easing(TWEEN.Easing.Quadratic.InOut);
-
-    if (this._tweenQueue.length > 0) {
-      this._tweenQueue[this._tweenQueue.length - 1].nextTween = tween;
-    }
-    else {
+  onMoved(cell, time) {
+    return new Promise((resolve) => {
+      let size = this.size;
+      let tween = new TWEEN.Tween(this.position).to({
+        x: cell.x * this.width,
+        y: cell.y * this.height
+      }, time);
+      tween.onComplete(resolve);
+      tween.easing(TWEEN.Easing.Quadratic.InOut);
       tween.start();
-    }
-
-    this._tweenQueue.push(tween);
-    this._callbackQueue.push(onFinished);
+    });
   }
   update() {
     // this._plane.rotation.x += Math.random() * .05;
     // let time    = new Date(Date.now()).getMilliseconds() / 1000;
     // let circle  = Math.PI * 2 * time;
-    // let offsetX = this.model.cell.x / this.model.gridModel.width * Math.PI * 1;
-    // let offsetY = this.model.cell.y / this.model.gridModel.height * Math.PI * 1;
+    // let offsetX = this.model.cell.x / this.model.BoardModel.width * Math.PI * 1;
+    // let offsetY = this.model.cell.y / this.model.BoardModel.height * Math.PI * 1;
     // this._plane.rotation.y = circle + offsetX + offsetY;
   }
   onRemoved() {
-    this.parent.remove(this);
+    if (this.parent) {
+      this.parent.remove(this);
+    }
   }
   onTweened() {
     this._tweenQueue.splice(0, 1);
@@ -146,6 +133,10 @@ export default class TileView extends View {
   }
   onUpdated() {
     super.onUpdated();
+    if (!this.model.cell && this.parent) {
+      this.parent.remove(this);
+      return;
+    }
     this.renderCell();
     this.highlight = this.model.highlight;
   }
