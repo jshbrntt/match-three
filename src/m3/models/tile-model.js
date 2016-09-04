@@ -53,6 +53,13 @@ export default class TileModel extends Model {
     this.update();
   }
 
+  distance(tileModel) {
+    if (this.cell && tileModel.cell) {
+      return this.cell.distance(tileModel.cell);
+    }
+    return null;
+  }
+
   equals(tileModel) {
     if (!tileModel) {
       return false;
