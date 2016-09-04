@@ -16,7 +16,6 @@ export default class Touch extends THREE.EventDispatcher {
       let touchEvent = event.targetTouches.item(0);
       this._position.x = (touchEvent.clientX / window.innerWidth) * 2 - 1;
       this._position.y = - (touchEvent.clientY / window.innerHeight) * 2 + 1;
-      console.debug('Touch', this._position);
     }
   }
   onStart(event) {
