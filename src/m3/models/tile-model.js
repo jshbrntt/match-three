@@ -1,5 +1,6 @@
 import Model from './../../core/mvc/model';
 import CellModel from './cell-model';
+import ServiceLocator from './../../core/service-locator';
 
 export default class TileModel extends Model {
   constructor(value, boardModel) {

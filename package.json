@@ -8,7 +8,8 @@
   "license": "WTFPL",
   "homepage": "https://github.com/synthecypher/match-three#readme",
   "scripts": {
-    "watch": "gulp watch",
+    "start": "gulp watch",
+    "server": "node ./server/server.js",
     "build:dev": "gulp build:dev",
     "build:production": "gulp build:production",
     "deploy": "gulp deploy"
@@ -22,6 +23,8 @@
   },
   "dependencies": {
     "modernizr": "^3.3.1",
+    "socket.io": "^1.4.8",
+    "socket.io-client": "^1.4.8",
     "stats.js": "^0.16.0",
     "three": "^0.79.0",
     "tween.js": "^16.3.4"

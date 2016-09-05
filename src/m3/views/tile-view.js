@@ -63,13 +63,16 @@ export default class TileView extends View {
     this.add(this._label);
   }
   static loadTextures() {
-    let loader = new THREE.TextureLoader();
-    let textures = [];
+    TileView.TEXTURES = [];
     return new Promise((resolve, reject) => {
+      if (TileView.TEXTURES.length === TileView.IMAGES.length) {
+        resolve(TileView.TEXTURES);
+      }
+      let loader = new THREE.TextureLoader();
       function onLoad(texture) {
-        textures.push(texture);
-        if (textures.length === Object.keys(TileView.IMAGES).length) {
-          resolve(textures);
+        TileView.TEXTURES.push(texture);
+        if (TileView.TEXTURES.length === Object.keys(TileView.IMAGES).length) {
+          resolve(TileView.TEXTURES);
         }
       }
       function onProgress(event) {
