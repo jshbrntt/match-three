@@ -1,6 +1,7 @@
-FROM node:6.4.0
-EXPOSE 80 8080 443
+FROM node:6.5.0
+EXPOSE 80 3000
 ADD . /match-three
 WORKDIR /match-three
 RUN npm install
-CMD npm run watch
+RUN npm run build
+CMD npm start

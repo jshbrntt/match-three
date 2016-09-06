@@ -21,7 +21,7 @@ export default class M3Scene extends Scene {
     }
   }
   setupModels() {
-    let boardModel = new BoardModel(5, 6, 1.4);
+    let boardModel = new BoardModel(12, 13, 1.4);
     let boardView = new BoardView(boardModel);
     let boardController = new BoardController(boardModel, boardView);
     boardModel.randomize();

@@ -34,7 +34,7 @@ export default class TileView extends View {
     this.add(this._outline);
     this.add(this._plane);
 
-    this.renderCell();
+    // this.renderCell();
   }
   renderCell() {
     if (!this.model.cell) {
@@ -140,7 +140,7 @@ export default class TileView extends View {
       this.parent.remove(this);
       return;
     }
-    this.renderCell();
+    // this.renderCell();
     this.highlight = this.model.highlight;
   }
   set highlight(value) {

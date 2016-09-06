@@ -1,15 +1,18 @@
 /* jshint node: true */
 'use strict';
+const cleanWebpackPlugin = require('clean-webpack-plugin');
+const express            = require('express');
+const ghPages            = require('gulp-gh-pages');
 const gulp               = require('gulp');
 const gutil              = require('gulp-util');
-const WebpackDevServer   = require('webpack-dev-server');
+const matchServer        = require('./server/server.js');
+const path               = require('path');
 const webpack            = require('webpack');
-const ghPages            = require('gulp-gh-pages');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const webpackDevServer   = require('webpack-dev-server');
 
 function build(config, callback) {
   config.plugins = [...config.plugins,
-    new CleanWebpackPlugin([config.output.path])
+    new cleanWebpackPlugin([config.output.path])
   ];
   webpack(config, (err, stats) => {
     if (err) throw new gutil.PluginError("webpack", err);
@@ -26,7 +29,7 @@ gulp.task('build:dev', (callback) => {
   return build(config, callback);
 });
 
-gulp.task('build:production', (callback) => {
+gulp.task('build', (callback) => {
   let config = require('./webpack.config');
   config.plugins = [...config.plugins,
     new webpack.DefinePlugin({
@@ -54,9 +57,16 @@ gulp.task('watch', (callback) => {
   let config = require('./webpack.config');
   config.devtool = 'source-map';
   config.entry.app.unshift(`webpack-dev-server/client?http://${config.devServer.host}:${config.devServer.port}/`);
-  new WebpackDevServer(new webpack(config), config.devServer)
+  new webpackDevServer(new webpack(config), config.devServer)
     .listen(config.devServer.port, config.devServer.host, (err) => {
       if (err) throw new gutil.PluginError('webpack-dev-server', err);
       gutil.log(gutil.colors.cyan(`http://${config.devServer.host}:${config.devServer.port}`));
     });
+});
+
+gulp.task('default', () => {
+  matchServer.startServer();
+  let app = express();
+  app.listen(80);
+  app.use(express.static(path.join(__dirname, 'dist')));
 });
