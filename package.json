@@ -9,6 +9,7 @@
   "homepage": "https://github.com/synthecypher/match-three#readme",
   "scripts": {
     "start": "gulp",
+    "test": "gulp watch",
     "build": "gulp build",
     "deploy": "gulp deploy"
   },

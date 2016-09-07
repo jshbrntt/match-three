@@ -54,6 +54,7 @@ gulp.task('deploy', ['build:production'], () => {
 });
 
 gulp.task('watch', (callback) => {
+  matchServer.startServer();
   let config = require('./webpack.config');
   config.devtool = 'source-map';
   config.entry.app.unshift(`webpack-dev-server/client?http://${config.devServer.host}:${config.devServer.port}/`);
