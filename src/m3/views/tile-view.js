@@ -63,25 +63,20 @@ export default class TileView extends View {
     this.add(this._label);
   }
   static loadTextures() {
-    TileView.TEXTURES = [];
-    return new Promise((resolve, reject) => {
-      if (TileView.TEXTURES.length === TileView.IMAGES.length) {
-        resolve(TileView.TEXTURES);
-      }
-      let loader = new THREE.TextureLoader();
-      function onLoad(texture) {
-        TileView.TEXTURES.push(texture);
-        if (TileView.TEXTURES.length === Object.keys(TileView.IMAGES).length) {
-          resolve(TileView.TEXTURES);
-        }
-      }
-      function onProgress(event) {
-        // console.debug(`${((event.loaded/event.total)*100).toFixed()}% ${event.currentTarget.responseURL}`);
-      }
-      for (let key in TileView.IMAGES) {
-        let url = TileView.IMAGES[key];
-        loader.load(url, onLoad, onProgress, reject);
-      }
+    function onProgress(event) {
+      // console.debug(`${((event.loaded/event.total)*100).toFixed()}% ${event.currentTarget.responseURL}`);
+    }
+    let loader = new THREE.TextureLoader();
+    return Promise.all(
+      Object.keys(TileView.IMAGES).map(name => {
+        let url = TileView.IMAGES[name];
+        return new Promise((resolve, reject) => {
+          loader.load(url, resolve, onProgress, reject);
+        });
+      })
+    ).then(textures => {
+      TileView.TEXTURES = textures;
+      return TileView.TEXTURES;
     });
   }
   static createOutline() {
