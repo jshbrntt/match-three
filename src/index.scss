@@ -1,0 +1,38 @@
+$transparent: rgba(0, 0, 0, 0);
+$white:       #fff;
+
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: $transparent;
+  text-size-adjust: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+canvas {
+  cursor: default;
+}
+
+.players {
+  background: $white;
+  bottom: 0;
+  display: flex;
+  height: 4rem;
+  justify-content: space-around;
+  left: 0;
+  padding: .5rem;
+  position: absolute;
+  right: 0;
+
+  .profile-image {
+    border-radius: 50%;
+    height: 100%;
+  }
+}
