@@ -1,6 +1,6 @@
 {
   "name": "match-three",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "description": "A simple match three game with particle effects.",
   "main": "dist/index.html",
   "private": true,
