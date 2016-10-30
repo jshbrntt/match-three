@@ -40,7 +40,7 @@
     "stats.js": "^0.16.0",
     "three": "^0.79.0",
     "tween.js": "^16.3.4",
-    "url-loader": "^0.5.7", 
+    "url-loader": "^0.5.7",
     "gulp": "^3.9.1"
   },
   "devDependencies": {
