@@ -1,4 +1,3 @@
-/* jshint node: true */
 'use strict';
 const webpack = require('webpack');
 const path = require('path');
