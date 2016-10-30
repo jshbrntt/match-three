@@ -51,13 +51,34 @@ config.module = {
     use: 'file-loader'
   }, {
     test: /\.scss$/,
-    use: [{
-      loader: 'style-loader'
-    }, {
-      loader: 'css-loader'
-    }, {
-      loader: 'sass-loader'
-    }]
+    loaders: ['style', 'css', 'postcss', 'sass']
+  }, {
+    test: /\.less$/,
+    loaders: ['style', 'css', 'less']
+  }, {
+    test: /\.woff$/,
+    loader: "url-loader?limit=10000&mimetype=application/font-woff&name=[path][name].[ext]"
+  }, {
+    test: /\.woff2$/,
+    loader: "url-loader?limit=10000&mimetype=application/font-woff2&name=[path][name].[ext]"
+  }, {
+    test: /\.(eot|ttf)$/,
+    loader: "file-loader"
+  }, {
+    test: /\.(jpe?g|png|gif|svg)$/i,
+    loaders: [
+      'file?hash=sha512&digest=hex&name=[hash].[ext]',
+      'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+    ]
+  }, {
+    test: /\.modernizrrc$/,
+    loader: "modernizr"
+  }, {
+    test: /manifest.json$/,
+    loader: 'file-loader?name=manifest.json!web-app-manifest-loader'
+  }, {
+    test: /\.json$/,
+    loader: "json-loader"
   }]
 }
 
