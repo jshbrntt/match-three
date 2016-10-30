@@ -61,6 +61,9 @@ config.module = {
   }, {
     test: /manifest.json$/,
     loader: 'file-loader?name=manifest.json!web-app-manifest-loader'
+  }, {
+    test: /\.json$/,
+    loader: "json-loader"
   }]
 };
 
