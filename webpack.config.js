@@ -1,11 +1,11 @@
-const autoprefixer = require('autoprefixer');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const Package = require('./package')
-const path = require('path');
-const process = require('process')
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-const webpack = require('webpack');
+const autoprefixer       = require('autoprefixer')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+const HtmlWebpackPlugin  = require('html-webpack-plugin')
+const Package            = require('./package')
+const path               = require('path')
+const process            = require('process')
+const UglifyJSPlugin     = require('uglifyjs-webpack-plugin')
+const webpack            = require('webpack')
 
 let config = {}
 
