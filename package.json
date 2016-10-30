@@ -25,6 +25,7 @@
     "bootstrap": "^3.3.7",
     "express": "^4.15.3",
     "file-loader": "^0.11.2",
+    "config": "^1.21.0",
     "jquery": "^3.1.1",
     "less": "^2.7.1",
     "less-loader": "^4.0.5",
@@ -39,7 +40,8 @@
     "stats.js": "^0.17.0",
     "three": "^0.86.0",
     "tween.js": "^16.3.4",
-    "url-loader": "^0.5.9"
+    "url-loader": "^0.5.7", 
+    "gulp": "^3.9.1"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -48,19 +50,21 @@
     "babel-preset-react": "^6.11.1",
     "clean-webpack-plugin": "^0.1.10",
     "css-loader": "^0.28.4",
-    "gulp": "^3.9.1",
     "gulp-gh-pages": "^0.5.4",
     "gulp-util": "^3.0.7",
+    "gulp": "^3.9.1",
     "html-webpack-plugin": "^2.29.0",
     "image-webpack-loader": "^3.3.1",
+    "json-loader": "^0.5.4",
     "modernizr-loader": "^1.0.1",
     "node-sass": "^4.5.3",
     "nodemon": "^1.11.0",
+    "postcss-loader": "^0.13.0",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "web-app-manifest-loader": "^0.1.1",
-    "webpack": "^2.6.1",
-    "webpack-dev-server": "^2.6.1"
+    "webpack-dev-server": "^2.6.1", 
+    "webpack": "^2.6.1"
   }
 }
