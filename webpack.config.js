@@ -1,10 +1,8 @@
-/* jshint node: true */
-'use strict';
-const webpack = require('webpack');
-const path = require('path');
+const webpack            = require('webpack');
+const path               = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const autoprefixer = require('autoprefixer');
+const HtmlWebpackPlugin  = require('html-webpack-plugin');
+const autoprefixer       = require('autoprefixer');
 
 let config = {};
 
@@ -63,6 +61,9 @@ config.module = {
   }, {
     test: /manifest.json$/,
     loader: 'file-loader?name=manifest.json!web-app-manifest-loader'
+  }, {
+    test: /\.json$/,
+    loader: "json-loader"
   }]
 };
 
