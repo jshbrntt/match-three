@@ -1,6 +1,6 @@
 import ServiceLocator from '../service-locator'
 import io from 'socket.io-client'
-ServiceLocator.provide('Socket', io(`${location.hostname}:3000`))
+// ServiceLocator.provide('Socket', io(`${location.hostname}:3000`))
 export default class GoogleSignIn {
   static onSignIn (googleUser) {
     let basic = googleUser.getBasicProfile()
@@ -10,7 +10,7 @@ export default class GoogleSignIn {
       imageUrl: basic.getImageUrl()
     }
     GoogleSignIn.addProfile(profile)
-    GoogleSignIn.socket.emit('signin', profile)
+    // GoogleSignIn.socket.emit('signin', profile)
   }
   static addProfile (profile) {
     let profileImage = document.querySelector(`.players [id='${profile.id}']`)
@@ -29,10 +29,10 @@ export default class GoogleSignIn {
     profileImage.parentNode.removeChild(profileImage)
   }
 }
-GoogleSignIn.socket = ServiceLocator.get('Socket')
-GoogleSignIn.socket.on('signin', data => {
-  GoogleSignIn.addProfile(data)
-})
-GoogleSignIn.socket.on('signout', data => {
-  GoogleSignIn.removeProfile(data)
-})
+// GoogleSignIn.socket = ServiceLocator.get('Socket')
+// GoogleSignIn.socket.on('signin', data => {
+//   GoogleSignIn.addProfile(data)
+// })
+// GoogleSignIn.socket.on('signout', data => {
+//   GoogleSignIn.removeProfile(data)
+// })

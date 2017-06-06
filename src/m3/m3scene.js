@@ -9,11 +9,11 @@ export default class M3Scene extends Scene {
   constructor (game) {
     super(game)
     this.setupModels()
-    this._socket = ServiceLocator.get('Socket')
-    this._socket.on('connected', sockets => {
-      this.cleanUp()
-      this.setupModels()
-    })
+    // this._socket = ServiceLocator.get('Socket')
+    // this._socket.on('connected', sockets => {
+    //   this.cleanUp()
+    //   this.setupModels()
+    // })
   }
   cleanUp () {
     for (let child of this.children) {
