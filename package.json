@@ -9,7 +9,7 @@
   "homepage": "https://github.com/synthecypher/match-three#readme",
   "scripts": {
     "start": "gulp",
-    "test": "gulp watch",
+    "dev": "nodemon --watch webpack.config.js ./node_modules/.bin/webpack-dev-server",
     "build": "gulp build",
     "deploy": "gulp deploy"
   },
