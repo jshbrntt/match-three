@@ -1,16 +1,16 @@
 export default class Model {
-  constructor() {
-    this._onUpdated = null;
+  constructor () {
+    this._onUpdated = null
   }
-  set onUpdated(value) {
-    this._onUpdated = value;
+  set onUpdated (value) {
+    this._onUpdated = value
   }
-  get onUpdated() {
-    return this._onUpdated;
+  get onUpdated () {
+    return this._onUpdated
   }
-  update() {
+  update () {
     if (this._onUpdated) {
-      this._onUpdated();
+      this._onUpdated()
     }
   }
 }
