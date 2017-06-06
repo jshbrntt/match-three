@@ -1,11 +1,11 @@
 import THREE from 'three';
-import Modernizr from 'modernizr';
 import Controller from './../../core/mvc/controller';
 import ServiceLocator from './../../core/service-locator';
 import TouchEvent from './../../core/touch-event';
 import MouseEvent from './../../core/mouse-event';
 import TileModel from './../models/tile-model';
 import TileView from './../views/tile-view';
+// import Modernizr from 'modernizr'
 
 export default class BoardController extends Controller {
   constructor(model, view) {
@@ -23,12 +23,12 @@ export default class BoardController extends Controller {
     this._input.Mouse.addEventListener(MouseEvent.MOVE, this.onInputMove.bind(this));
     this._input.Mouse.addEventListener(MouseEvent.UP, this.onInputUp.bind(this));
 
-    if (Modernizr.touchevents) {
-      this._input.Touch = ServiceLocator.get('Touch');
-      this._input.Touch.addEventListener(TouchEvent.START, this.onInputDown.bind(this));
-      this._input.Touch.addEventListener(TouchEvent.MOVE, this.onInputMove.bind(this));
-      this._input.Touch.addEventListener(TouchEvent.END, this.onInputUp.bind(this));
-    }
+    // if (Modernizr.touchevents) {
+    //   this._input.Touch = ServiceLocator.get('Touch')
+    //   this._input.Touch.addEventListener(TouchEvent.START, this.onInputDown.bind(this))
+    //   this._input.Touch.addEventListener(TouchEvent.MOVE, this.onInputMove.bind(this))
+    //   this._input.Touch.addEventListener(TouchEvent.END, this.onInputUp.bind(this))
+    // }
 
     this._socket.on('swap', data => {
       console.log(`${data} Swapped`);
