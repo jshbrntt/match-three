@@ -8,4 +8,4 @@ services:
       - .:/usr/src/match-three
       - /usr/src/match-three/node_modules
     ports:
-      - "8443:443"
+      - "8443:8443"
