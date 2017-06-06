@@ -1,0 +1,11 @@
+version: '3'
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    volumes:
+      - .:/usr/src/match-three
+      - /usr/src/match-three/node_modules
+    ports:
+      - "8443:443"
