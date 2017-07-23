@@ -1,25 +1,25 @@
-import THREE from 'three';
+import { Scene as ThreeScene } from 'three'
 
-export default class Scene extends THREE.Scene {
-  constructor(game) {
-    super();
-    this._game = game;
+export default class Scene extends ThreeScene {
+  constructor (game) {
+    super()
+    this._game = game
   }
-  resize(width = this._game.renderer.domElement.width, height = this._game.renderer.domElement.height) {
+  resize (width = this._game.renderer.domElement.width , height = this._game.renderer.domElement.height) {
     for (let child of this.children) {
       if ('resize' in child) {
-        child.resize(width, height);
+        child.resize(width, height)
       }
     }
   }
-  update() {
+  update () {
     for (let child of this.children) {
       if ('update' in child) {
-        child.update();
+        child.update()
       }
     }
   }
-  get game() {
-    return this._game;
+  get game () {
+    return this._game
   }
 }
