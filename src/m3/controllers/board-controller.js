@@ -74,12 +74,11 @@ export default class BoardController extends Controller {
       if (!this._selected.length) {
         model.highlight = true
         this._selected.push(model)
-      }
-      else if (this._selected[0].distance(model) === 1) {
+      } else if (this._selected[0].distance(model) === 1) {
         model.highlight = true
         this._selected.push(model)
       // Otherwise check the last tile is next to the new tile.
-      }else {
+      } else {
         this.clearSwap()
       }
     }

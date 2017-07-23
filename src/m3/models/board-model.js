@@ -35,7 +35,7 @@ export default class BoardModel extends GridModel {
         .then(() => {
           if (this.getMatches().length) {
             return this.simulate()
-          }else {
+          } else {
             return tile1.swap(tile2)
           }
         })
@@ -47,7 +47,7 @@ export default class BoardModel extends GridModel {
   }
 
   simulate () {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       return Promise.all([
         this.removeAll(this.getMatches()),
         this.fill(),
@@ -63,16 +63,16 @@ export default class BoardModel extends GridModel {
   }
 
   removeAll (matches) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       for (let match of matches) {
         match.remove()
       }
-      resolve(matches.length ? true : false)
+      resolve(Boolean(matches.length))
     })
   }
 
   fill () {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       let added = []
       let y = this.height - 1
       for (var x = 0; x < this.width; x++) {
@@ -85,12 +85,12 @@ export default class BoardModel extends GridModel {
           }
         }
       }
-      resolve(added.length ? true : false)
+      resolve(Boolean(added.length))
     })
   }
 
   gravity () {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       let movements = []
       for (let i = 0; i < this._width; i++) {
         let drop = 0

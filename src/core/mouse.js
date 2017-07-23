@@ -13,7 +13,7 @@ export default class Mouse extends EventDispatcher {
   }
   update (event) {
     this._position.x = (event.clientX / window.innerWidth) * 2 - 1
-    this._position.y = - (event.clientY / window.innerHeight) * 2 + 1
+    this._position.y = -(event.clientY / window.innerHeight) * 2 + 1
   }
   onClick (event) {
     this.update(event)

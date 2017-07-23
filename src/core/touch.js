@@ -15,7 +15,7 @@ export default class Touch extends EventDispatcher {
     if (event.targetTouches.length > 0) {
       let touchEvent = event.targetTouches.item(0)
       this._position.x = (touchEvent.clientX / window.innerWidth) * 2 - 1
-      this._position.y = - (touchEvent.clientY / window.innerHeight) * 2 + 1
+      this._position.y = -(touchEvent.clientY / window.innerHeight) * 2 + 1
     }
   }
   onStart (event) {
