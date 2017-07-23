@@ -26,14 +26,14 @@ export default class GridModel extends Model {
   handle2D (x, y) {
     let n = this.transform2D(x, y)
     if (n === null) {
-      // console.debug(`(${x},${y}) is outside of grid (${this._width},${this._height}).`)
+      console.debug(`(${x},${y}) is outside of grid (${this._width},${this._height}).`)
     }
     return n
   }
   set (x, y, value) {
     let n = this.handle2D(x, y)
     if (this._vector[n]) {
-      // console.debug(`Overwritting existing value at position (${x},${y}).`)
+      console.debug(`Overwritting existing value at position (${x},${y}).`)
     }
     this._vector[this.handle2D(x, y)] = value
   }
