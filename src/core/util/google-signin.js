@@ -1,3 +1,4 @@
+import Image from 'image'
 import ServiceLocator from '../service-locator'
 import io from 'socket.io-client'
 // ServiceLocator.provide('Socket', io(`${location.hostname}:3000`))

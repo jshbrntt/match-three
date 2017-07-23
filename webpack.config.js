@@ -30,7 +30,8 @@ config.resolve = {
 config.externals = {
   document: 'document',
   window: 'window',
-  promise: 'Promise'
+  promise: 'Promise',
+  image: 'Image'
 }
 
 config.module = {
