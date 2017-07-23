@@ -98,7 +98,6 @@ export default class TileView extends View {
   }
   onMoved (cell, time) {
     return new Promise((resolve) => {
-      let size = this.size
       let tween = new TWEEN.Tween(this.position).to({
         x: cell.x * this.width,
         y: cell.y * this.height

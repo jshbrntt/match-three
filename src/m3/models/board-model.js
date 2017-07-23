@@ -1,4 +1,3 @@
-import Model from './../../core/mvc/model'
 import GridModel from './grid-model'
 import CellModel from './cell-model'
 import TileModel from './tile-model'
