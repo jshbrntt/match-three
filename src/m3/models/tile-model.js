@@ -37,7 +37,7 @@ export default class TileModel extends Model {
           this.update()
           resolve()
         })
-      }else {
+      } else {
         this.boardModel.remove(this)
         this.boardModel.set(x, y, this)
         this.update()

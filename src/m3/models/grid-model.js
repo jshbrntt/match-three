@@ -53,11 +53,11 @@ export default class GridModel extends Model {
     }
     return this.transform1D(n)
   }
-  [ Symbol.iterator ]() {
+  [ Symbol.iterator ] () {
     let i = -1
     let vector = this._vector
     return {
-      next() {
+      next () {
         i++
         return {
           done: i === vector.length - 1,

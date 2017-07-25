@@ -4,25 +4,25 @@ export default class TextSprite extends Sprite {
   constructor (message, parameters) {
     if (parameters === undefined) parameters = {}
 
-    let fontface = parameters.hasOwnProperty('fontface') ?
-      parameters.fontface : 'Arial'
+    let fontface = parameters.hasOwnProperty('fontface')
+      ? parameters.fontface : 'Arial'
 
-    let fontsize = parameters.hasOwnProperty('fontsize') ?
-      parameters.fontsize : 18
+    let fontsize = parameters.hasOwnProperty('fontsize')
+      ? parameters.fontsize : 18
 
-    let borderThickness = parameters.hasOwnProperty('borderThickness') ?
-      parameters.borderThickness : 4
+    let borderThickness = parameters.hasOwnProperty('borderThickness')
+      ? parameters.borderThickness : 4
 
-    let borderColor = parameters.hasOwnProperty('borderColor') ?
-      parameters.borderColor : {
+    let borderColor = parameters.hasOwnProperty('borderColor')
+      ? parameters.borderColor : {
         r: 0,
         g: 0,
         b: 0,
         a: 1.0
       }
 
-    let backgroundColor = parameters.hasOwnProperty('backgroundColor') ?
-      parameters.backgroundColor : {
+    let backgroundColor = parameters.hasOwnProperty('backgroundColor')
+      ? parameters.backgroundColor : {
         r: 255,
         g: 255,
         b: 255,
