@@ -36,6 +36,11 @@ config.externals = {
 
 config.module = {
   rules: [{
+    enforce: 'pre',
+    test: /\.js$/,
+    loader: 'standard-loader',
+    exclude: /(node_modules|bower_components)/
+  }, {
     test: /\.js$/,
     include: [
       path.resolve(__dirname, 'src')
