@@ -4,6 +4,8 @@ import ServiceLocator from './services/service-locator'
 export default class Engine {
   constructor (gameClass) {
     this._gameClass = gameClass
+  }
+  init () {
     this._renderer = new WebGLRenderer()
     this.isStarted = false
     this._width = window.innerWidth
