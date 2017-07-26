@@ -98,6 +98,9 @@ config.devServer = {
   stats: {
     colors: true,
     chunks: false
+  },
+  proxy: {
+    '/socket.io': `http://localhost:3000`
   }
 }
 
