@@ -30,7 +30,7 @@ export default class View extends Object3D {
     return this._model
   }
   get size () {
-    return new Box3().setFromObject(this).size()
+    return new Box3().setFromObject(this).getSize()
   }
   get screen () {
     // return {
