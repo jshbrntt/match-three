@@ -16,14 +16,6 @@ export default class BoardModel extends GridModel {
         let position = this.transform1D(i)
         tileModel = this.createRandomTileModel()
         this.set(position.x, position.y, tileModel)
-      // console.debug(
-      //   '=:'+tileModel.value,
-      //   'x:'+position.x,
-      //   'y:'+position.y,
-      //   'v:'+this.getVerticalMatches(tileModel).length,
-      //   'h:'+this.getHorizontalMatches(tileModel).length,
-      //   '\n'+this.toString()
-      // )
       } while (this.getVerticalMatches(tileModel).length > 2 || this.getHorizontalMatches(tileModel).length > 2)
     }
   }
@@ -122,7 +114,7 @@ export default class BoardModel extends GridModel {
           resolve()
         }, reject)
       } else {
-        reject()
+        reject(new Error('Tile is moving'))
       }
     })
   }

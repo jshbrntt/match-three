@@ -64,7 +64,7 @@ export default class TileView extends View {
   }
   static loadTextures () {
     function onProgress (event) {
-      console.debug(`${((event.loaded/event.total)*100).toFixed()}% ${event.currentTarget.responseURL}`)
+      console.debug(`${((event.loaded / event.total) * 100).toFixed()}% ${event.currentTarget.responseURL}`)
     }
     let loader = new TextureLoader()
     return Promise.all(

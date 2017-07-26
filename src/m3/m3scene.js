@@ -21,18 +21,18 @@ export default class M3Scene extends Scene {
     }
   }
   setupModels () {
-    let boardModel = new BoardModel(12, 13, 1.4)
-    let boardView = new BoardView(boardModel)
-    let boardController = new BoardController(boardModel, boardView)
-    boardModel.randomize()
+    this.boardModel = new BoardModel(12, 13, 1.4)
+    this.boardView = new BoardView(this.boardModel)
+    this.boardController = new BoardController(this.boardModel, this.boardView)
+    this.boardModel.randomize()
     TileView
       .loadTextures()
       .then((textures) => {
         TileView.createMaterials(textures)
-        boardView.createTileViews()
+        this.boardView.createTileViews()
         this._game._engine.resize()
       })
-    this.add(boardView)
+    this.add(this.boardView)
   }
   update () {
     super.update()
