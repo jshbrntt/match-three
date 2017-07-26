@@ -23,7 +23,8 @@ config.output = {
 
 config.resolve = {
   alias: {
-    assets: path.resolve('./src/assets')
+    core: path.resolve('src', 'core'),
+    assets: path.resolve('src', 'assets')
   }
 }
 

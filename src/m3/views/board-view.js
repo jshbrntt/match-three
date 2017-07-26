@@ -1,7 +1,7 @@
 import { Vector2 } from 'three'
-import View from './../../core/mvc/view'
+import View from 'core/mvc/view'
 import TileView from './tile-view'
-import ServiceLocator from './../../core/service-locator'
+import ServiceLocator from 'core/services/service-locator'
 
 export default class BoardView extends View {
   constructor (model) {

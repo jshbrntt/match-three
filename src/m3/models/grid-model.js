@@ -1,4 +1,4 @@
-import Model from './../../core/mvc/model'
+import Model from 'core/mvc/model'
 
 export default class GridModel extends Model {
   constructor (width, height) {

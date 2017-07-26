@@ -5,7 +5,7 @@ export default class Scene extends ThreeScene {
     super()
     this._game = game
   }
-  resize (width = this._game.renderer.domElement.width , height = this._game.renderer.domElement.height) {
+  resize (width = this._game.renderer.domElement.width, height = this._game.renderer.domElement.height) {
     for (let child of this.children) {
       if ('resize' in child) {
         child.resize(width, height)

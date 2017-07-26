@@ -1,4 +1,4 @@
-import Model from './../../core/mvc/model'
+import Model from 'core/mvc/model'
 import CellModel from './cell-model'
 
 export default class TileModel extends Model {

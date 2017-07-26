@@ -1,6 +1,6 @@
 import { PerspectiveCamera } from 'three'
 import Stats from 'stats.js'
-import ServiceLocator from './service-locator'
+import ServiceLocator from './services/service-locator'
 
 export default class Game {
   constructor (engine, width, height, color = 0x0099ff) {

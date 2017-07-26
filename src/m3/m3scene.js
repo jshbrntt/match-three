@@ -1,9 +1,9 @@
-import Scene from './../core/scene'
+import Scene from 'core/views/scene'
 import BoardModel from './models/board-model'
 import TileView from './views/tile-view'
 import BoardView from './views/board-view'
 import BoardController from './controllers/board-controller'
-import ServiceLocator from './../core/service-locator'
+import ServiceLocator from 'core/services/service-locator'
 
 export default class M3Scene extends Scene {
   constructor (game) {

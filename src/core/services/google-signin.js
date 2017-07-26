@@ -1,7 +1,7 @@
 import Image from 'image'
-import ServiceLocator from '../service-locator'
-import io from 'socket.io-client'
-// ServiceLocator.provide('Socket', io(`${location.hostname}:3000`))
+import IcosaEvent from './../../../icosa/icosa-event'
+import ServiceLocator from './service-locator'
+
 export default class GoogleSignIn {
   static onSignIn (googleUser) {
     let basic = googleUser.getBasicProfile()
@@ -11,7 +11,7 @@ export default class GoogleSignIn {
       imageUrl: basic.getImageUrl()
     }
     GoogleSignIn.addProfile(profile)
-    // GoogleSignIn.socket.emit('signin', profile)
+    GoogleSignIn.socket.emit(IcosaEvent.SIGN_IN, profile)
   }
   static addProfile (profile) {
     let profileImage = document.querySelector(`.players [id='${profile.id}']`)
@@ -30,10 +30,10 @@ export default class GoogleSignIn {
     profileImage.parentNode.removeChild(profileImage)
   }
 }
-// GoogleSignIn.socket = ServiceLocator.get('Socket')
-// GoogleSignIn.socket.on('signin', data => {
-//   GoogleSignIn.addProfile(data)
-// })
-// GoogleSignIn.socket.on('signout', data => {
-//   GoogleSignIn.removeProfile(data)
-// })
+GoogleSignIn.socket = ServiceLocator.get('Socket')
+GoogleSignIn.socket.on(IcosaEvent.SIGN_IN, data => {
+  GoogleSignIn.addProfile(data)
+})
+GoogleSignIn.socket.on(IcosaEvent.SIGN_OUT, data => {
+  GoogleSignIn.removeProfile(data)
+})

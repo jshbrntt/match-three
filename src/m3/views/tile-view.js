@@ -1,7 +1,7 @@
 import { DoubleSide, Mesh, MeshBasicMaterial, TextureLoader, FrontSide, BackSide, PlaneGeometry } from 'three'
 import * as TWEEN from 'tween.js'
-import View from './../../core/mvc/view'
-import TextSprite from './../../core/util/text-sprite'
+import View from 'core/mvc/view'
+import TextSprite from 'core/views/text-sprite'
 
 export default class TileView extends View {
   constructor (model) {

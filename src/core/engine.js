@@ -1,5 +1,5 @@
 import { WebGLRenderer } from 'three'
-import ServiceLocator from './service-locator'
+import ServiceLocator from './services/service-locator'
 
 export default class Engine {
   constructor (gameClass) {

@@ -1,9 +1,9 @@
-import Game from './../core/game'
-import Mouse from './../core/mouse'
-import Touch from './../core/touch'
+import Game from 'core/game'
+import Mouse from 'core/services/mouse'
+import Touch from 'core/services/touch'
 import M3Scene from './m3scene'
 import TWEEN from 'tween.js'
-import ServiceLocator from './../core/service-locator'
+import ServiceLocator from 'core/services/service-locator'
 
 export default class M3Game extends Game {
   constructor (renderer) {

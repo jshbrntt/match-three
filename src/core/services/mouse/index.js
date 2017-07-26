@@ -6,10 +6,10 @@ export default class Mouse extends EventDispatcher {
     super()
     this._position = new Vector2(x, y)
     this._held = false
-    window.addEventListener('click'    , this.onClick.bind(this)    , false)
+    window.addEventListener('click', this.onClick.bind(this), false)
     window.addEventListener('mousedown', this.onMouseDown.bind(this), false)
     window.addEventListener('mousemove', this.onMouseMove.bind(this), false)
-    window.addEventListener('mouseup'  , this.onMouseUp.bind(this)  , false)
+    window.addEventListener('mouseup', this.onMouseUp.bind(this), false)
   }
   update (event) {
     this._position.x = (event.clientX / window.innerWidth) * 2 - 1

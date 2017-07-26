@@ -1,8 +1,8 @@
 import { Vector2, Vector3 } from 'three'
 // import Modernizr from 'modernizr'
-import Controller from './../../core/mvc/controller'
-import ServiceLocator from './../../core/service-locator'
-import MouseEvent from './../../core/mouse-event'
+import Controller from 'core/mvc/controller'
+import ServiceLocator from 'core/services/service-locator'
+import MouseEvent from 'core/services/mouse/mouse-event'
 import TileView from './../views/tile-view'
 
 export default class BoardController extends Controller {
