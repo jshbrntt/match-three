@@ -4,12 +4,13 @@ import Controller from 'core/mvc/controller'
 import ServiceLocator from 'core/services/service-locator'
 import MouseEvent from 'core/services/mouse/mouse-event'
 import TileView from './../views/tile-view'
+import IcosaEvent from './../../../icosa/icosa-event'
 
 export default class BoardController extends Controller {
   constructor (model, view) {
     super(model, view)
     this._camera = ServiceLocator.get('Game').camera
-    // this._socket = ServiceLocator.get('Socket')
+    this._socket = ServiceLocator.get('Socket')
     this._selected = []
     this.addInputEventListeners()
   }
@@ -28,10 +29,10 @@ export default class BoardController extends Controller {
     //   this._input.Touch.addEventListener(TouchEvent.END, this.onInputUp.bind(this))
     // }
 
-    // this._socket.on('swap', data => {
-    //   console.log(`${data} Swapped`)
-    //   this.model.swapTiles(this.model.get(data[0], data[1]), this.model.get(data[2], data[3]))
-    // })
+    this._socket.on(IcosaEvent.SWAP, data => {
+      console.log(`${data} Swapped`)
+      this.model.swapTiles(this.model.get(data[0], data[1]), this.model.get(data[2], data[3]))
+    })
   }
   getInput (event) {
     let match = /\.(.+)Event/g.exec(event.type)
@@ -85,12 +86,12 @@ export default class BoardController extends Controller {
   }
   swapSelectedTiles () {
     this.model.swapTiles(this._selected[0], this._selected[1])
-    // this._socket.emit('swap', [
-    //   this._selected[0].cell.x,
-    //   this._selected[0].cell.y,
-    //   this._selected[1].cell.x,
-    //   this._selected[1].cell.y
-    // ])
+    this._socket.emit(IcosaEvent.SWAP, [
+      this._selected[0].cell.x,
+      this._selected[0].cell.y,
+      this._selected[1].cell.x,
+      this._selected[1].cell.y
+    ])
     this.clearSwap()
   }
   onInputDown (event) {

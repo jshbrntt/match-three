@@ -4,16 +4,17 @@ import TileView from './views/tile-view'
 import BoardView from './views/board-view'
 import BoardController from './controllers/board-controller'
 import ServiceLocator from 'core/services/service-locator'
+import IcosaEvent from './../../icosa/icosa-event'
 
 export default class M3Scene extends Scene {
   constructor (game) {
     super(game)
     this.setupModels()
-    // this._socket = ServiceLocator.get('Socket')
-    // this._socket.on('connected', sockets => {
-    //   this.cleanUp()
-    //   this.setupModels()
-    // })
+    this._socket = ServiceLocator.get('Socket')
+    this._socket.on(IcosaEvent.CONNECT, id => {
+      this.cleanUp()
+      this.setupModels()
+    })
   }
   cleanUp () {
     for (let child of this.children) {
