@@ -12,7 +12,7 @@ let config = {}
 config.context = path.join(__dirname, 'src')
 
 config.entry = {
-  app: './index.js'
+  tetra: './tetra'
 }
 
 config.output = {
@@ -23,8 +23,9 @@ config.output = {
 
 config.resolve = {
   alias: {
-    core: path.resolve('src', 'core'),
-    assets: path.resolve('src', 'assets')
+    assets: path.resolve('src', 'tetra', 'assets'),
+    tetra: path.resolve('src', 'tetra', 'tetra'),
+    icosa: path.resolve('src', 'icosa')
   }
 }
 
@@ -109,7 +110,7 @@ config.devServer = {
 config.plugins = [
   new HtmlWebpackPlugin({
     title: Package.name.split(' ').map(word => word.charAt(0) + word.slice(1)).join(' '),
-    template: './index.ejs'
+    template: './tetra/index.ejs'
   }),
   new CleanWebpackPlugin([
     'dist'

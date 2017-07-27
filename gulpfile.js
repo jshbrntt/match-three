@@ -4,7 +4,7 @@ const gulp = require('gulp')
 const gutil = require('gulp-util')
 const Webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
-const { IcosaServer } = require('./icosa')
+const { IcosaServer } = require('./src/icosa')
 
 function build (config, callback) {
   config.plugins = [...config.plugins,
