@@ -5,40 +5,69 @@ export default class TileMapModel extends Model {
     super()
     this._width = width
     this._height = height
-    this._vector = []
-    this._vector.length = this._width * this._height
+    this._vector = TileMapModel.createVector(this._width, this._height)
+  }
+  static transform2D (x, y, width) {
+    return x + y * width
   }
   transform2D (x, y) {
-    if (x < 0 || x > (this._width - 1) || y < 0 || y > (this._height - 1)) {
-      return null
+    return TileMapModel.transform2D(x, y, this._width)
+  }
+  static transform1D (n, width) {
+    return {
+      x: n % width,
+      y: Math.floor(n / width)
     }
-    return x + y * this._width
   }
   transform1D (n) {
-    if (n < 0 || n > (this._vector.length - 1)) {
-      return null
-    }
-    return {
-      x: n % this._width,
-      y: Math.floor(n / this._width)
-    }
+    return TileMapModel.transform1D(n, this._width)
   }
-  handle2D (x, y) {
+  static isOutOfRange (x, y, width, height) {
+    return (x > width - 1 || y > height - 1 || x < 0 || y < 0)
+  }
+  isOutOfRange (x, y) {
+    return TileMapModel.isOutOfRange(x, y, this._width, this._height)
+  }
+  static resizeVector (oldVector, oldWidth, oldHeight, newWidth, newHeight) {
+    let newVector = []
+    newVector.length = newWidth * newHeight
+    if (this._vector) {
+      for (let y = 0; y < this._height; y++) {
+        for (let x = 0; x < this._width; x++) {
+          newVector[TileMapModel.transform2D(x, y, newWidth)] = oldVector[TileMapModel.transform2D(x, y, oldWidth)]
+        }
+      }
+    }
+    return newVector
+  }
+  static createVector (width, height) {
+    let vector = []
+    vector.length = width * height
+    return vector
+  }
+  resize (width, height) {
+    return TileMapModel.resizeVector(
+      this._vector,
+      this._width,
+      this._height,
+      width,
+      height
+    )
+  }
+  set (x, y, value, force = false) {
+    if (this.isOutOfRange(x, y)) {
+      let newWidth = Math.max(this._width, x + 1)
+      let newHeight = Math.max(this._height, y + 2)
+      this.resize(newWidth, newHeight)
+    }
     let n = this.transform2D(x, y)
-    if (n === null) {
-      console.debug(`(${x},${y}) is outside of grid (${this._width},${this._height}).`)
+    if (!force && this._vector[n]) {
+      throw new Error(`Cannot overwrite existing value at position [${x},${y}], unless forced.`)
     }
-    return n
-  }
-  set (x, y, value) {
-    let n = this.handle2D(x, y)
-    if (this._vector[n]) {
-      console.debug(`Overwritting existing value at position (${x},${y}).`)
-    }
-    this._vector[this.handle2D(x, y)] = value
+    this._vector[n] = value
   }
   get (x, y) {
-    return this._vector[this.handle2D(x, y)]
+    return this._vector[this.transform2D(x, y)]
   }
   remove (value) {
     let position = this.positionOf(value)
@@ -49,7 +78,7 @@ export default class TileMapModel extends Model {
   positionOf (value) {
     let n = this._vector.indexOf(value)
     if (n === -1) {
-      return null
+      return undefined
     }
     return this.transform1D(n)
   }

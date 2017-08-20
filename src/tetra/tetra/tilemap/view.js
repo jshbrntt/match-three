@@ -3,7 +3,7 @@ import { View } from 'tetra/base/mvc'
 import { TileView } from 'tetra/tile'
 import { ServiceLocator } from 'tetra/base/services'
 
-export default class GridView extends View {
+export default class TileMapView extends View {
   constructor (model) {
     super(model)
     this._camera = ServiceLocator.get('Game').camera
