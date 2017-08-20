@@ -3,18 +3,24 @@ import document from 'document'
 export default class KeywordBinder {
   constructor (bindings) {
     this.bindings = bindings
+    this.enabled = false
     this.buffer = ''
     this.listener = null
     this.maxLength = 0
     for (let binding in this.bindings) {
       this.maxLength = Math.max(this.maxLength, binding.length)
     }
+    this.enable()
   }
   enable () {
-    document.on('keydown', this.handleKeyDown.bind(this))
+    if (!this.enabled) {
+      document.addEventListener('keydown', this.handleKeyDown.bind(this))
+    }
   }
   disable () {
-    document.off('keydown', this.handleKeyDown.bind(this))
+    if (this.enabled) {
+      document.removeEventListener('keydown', this.handleKeyDown.bind(this))
+    }
   }
   checkBuffer () {
     if (!this.buffer.length) return
