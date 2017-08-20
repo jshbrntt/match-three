@@ -43,7 +43,7 @@ export default class TileMapModel extends Model {
   remove (value) {
     let position = this.positionOf(value)
     if (position) {
-      this.set(position.x, position.y, null)
+      this.set(position.x, position.y, null, true)
     }
   }
   positionOf (value) {

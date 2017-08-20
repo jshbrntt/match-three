@@ -14,7 +14,7 @@ export default class BoardModel extends TileMapModel {
       do {
         let position = this.transform1D(i)
         tileModel = this.createRandomTileModel()
-        this.set(position.x, position.y, tileModel)
+        this.set(position.x, position.y, tileModel, true)
       } while (this.getVerticalMatches(tileModel).length > 2 || this.getHorizontalMatches(tileModel).length > 2)
     }
   }

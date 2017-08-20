@@ -33,7 +33,7 @@ export default class TileModel extends Model {
       if (this._onMoved) {
         this._onMoved(destination, time).then(() => {
           this.boardModel.remove(this)
-          this.boardModel.set(x, y, this)
+          this.boardModel.set(x, y, this, true)
           this.update()
           resolve()
         })
@@ -48,7 +48,7 @@ export default class TileModel extends Model {
 
   remove () {
     let cell = this.cell
-    this.boardModel.set(cell.x, cell.y, null)
+    this.boardModel.set(cell.x, cell.y, null, true)
     this.update()
   }
 
