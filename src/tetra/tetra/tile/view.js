@@ -42,7 +42,7 @@ export default class TileView extends View {
     this.add(this._outline)
     this.add(this._plane)
 
-  // this.renderCell()
+    // this.renderCell()
   }
   renderCell () {
     if (!this.model.cell || !this.model.boardModel) {
