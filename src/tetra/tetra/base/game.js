@@ -48,6 +48,9 @@ export default class Game {
   }
   start () {}
   set scene (value) {
+    if (this._scene) {
+      this._scene.destroy()
+    }
     this._scene = value
   }
   get scene () {
