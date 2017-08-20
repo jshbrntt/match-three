@@ -39,22 +39,20 @@ export default class BoardController extends Controller {
     return match.length ? this._input[match[1]] : null
   }
   getTileModelAtPosition (position) {
-    // Screen space to world space transform.
     let vector = new Vector3(position.x, position.y, 0.5)
     vector.unproject(this._camera)
     let dimensions = new Vector2(
       TileView.GEOMETRY.parameters.width * this.model.width * this.view.scale.x,
       TileView.GEOMETRY.parameters.height * (this.model.height - 1) * this.view.scale.y
     )
-    let projectionDirection = vector.sub(this._camera.position).normalize()
-    let projectionDistance = this._camera.position.z / projectionDirection.z
-    let projectedPosition = this._camera.position.clone().add(projectionDirection.multiplyScalar(projectionDistance))
     // Position relative to the view, then quantized to the grid space.
-    let gridPosition = projectedPosition.clone()
-      .sub(this.view.position)
-      .sub(dimensions)
-      .divide(new Vector2(-dimensions.x / this.model.width, -dimensions.y / (this.model.height - 1)))
-      .floor()
+    let gridPosition = new Vector2(this.model.width - 1, this.model.height - 2)
+      .sub(vector.clone()
+        .sub(this.view.position)
+        .sub(dimensions)
+        .divide(new Vector2(-dimensions.x / this.model.width, -dimensions.y / (this.model.height - 1)))
+        .floor()
+      )
     // Getting the tile from that position in the grid.
     try {
       return this.model.get(gridPosition.x, gridPosition.y)
