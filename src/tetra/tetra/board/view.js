@@ -1,12 +1,12 @@
 import { Vector2 } from 'three'
 import { View } from 'tetra/base/mvc'
-import TileView from './view'
+import { TileView } from 'tetra/tile'
 import { ServiceLocator } from 'tetra/base/services'
 
 export default class BoardView extends View {
   constructor (model) {
     super(model)
-    this._camera = ServiceLocator.get('Game').camera
+    this._game = ServiceLocator.get('Game')
     this._dimensions = new Vector2()
 
     this._model.onTileAdded = this.onTileAdded.bind(this)
@@ -14,19 +14,11 @@ export default class BoardView extends View {
   onTileAdded (tileModel) {
     this.createTileView(tileModel)
   }
-  getWorldDimensions (width, height) {
-    let dimensions = new Vector2()
-    let vFOV = this._camera.fov * Math.PI / 180
-    dimensions.y = 2 * Math.tan(vFOV / 2) * this._camera.position.z
-    let aspect = width / height
-    dimensions.x = dimensions.y * aspect
-    return dimensions
-  }
   update () {
     this.model.added = []
   }
   resize (width, height) {
-    this._dimensions = this.getWorldDimensions(width, height)
+    this._dimensions = this._game.getWorldDimensions()
     let size = this.size
     let scale = 1
 
