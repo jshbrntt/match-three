@@ -35,7 +35,7 @@ export default class BoardController extends Controller {
     })
   }
   getInput (event) {
-    let match = /\.(.+)Event/g.exec(event.type)
+    let match = /(Mouse|Touch)Event/g.exec(event.type)
     return match.length ? this._input[match[1]] : null
   }
   getTileModelAtPosition (position) {
