@@ -65,11 +65,32 @@ export default class Game {
   resize (width, height) {
     this._width = width
     this._height = height
-    this._camera.aspect = this._width / this._height
+    if (this._camera instanceof PerspectiveCamera) {
+      this._camera.aspect = this._width / this._height
+    } else if (this._camera instanceof OrthographicCamera) {
+      this._camera.left = this._width / -2
+      this._camera.right = this._width / 2
+      this._camera.top = this._height / 2
+      this._camera.bottom = this._height / -2
+    }
     this._camera.updateProjectionMatrix()
+    this._engine.renderer.setSize(this._width, this._height)
     if (this._scene) {
       this._scene.resize(width, height)
     }
+  }
+  getWorldDimensions () {
+    let dimensions = new Vector2()
+    if (this._camera instanceof PerspectiveCamera) {
+      let vFOV = this._camera.fov * Math.PI / 180
+      dimensions.y = 2 * Math.tan(vFOV / 2) * this._camera.position.z
+      let aspect = this._width / this._height
+      dimensions.x = dimensions.y * aspect
+    } else if (this._camera instanceof OrthographicCamera) {
+      dimensions.x = window.innerWidth
+      dimensions.y = window.innerHeight
+    }
+    return dimensions
   }
   _animate () {
     this._stats.begin()
@@ -89,3 +110,8 @@ export default class Game {
     this._engine.renderer.render(this._scene, this._camera)
   }
 }
+Game.CAMERA_TYPE = PerspectiveCamera
+Game.CAMERA_FOV = 75
+Game.CAMERA_NEAR = 1
+Game.CAMERA_FAR = 1000
+Game.CLEAR_COLOR = 0x0099ff
