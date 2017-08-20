@@ -75,11 +75,14 @@ export default class TileModel extends Model {
   }
 
   get cell () {
-    let position = this.boardModel.positionOf(this)
-    if (position) {
-      return new CellModel(position.x, position.y)
+    if (!this.boardModel) {
+      return undefined
     }
-    return null
+    let position = this.boardModel.positionOf(this)
+    if (!position) {
+      return undefined
+    }
+    return new CellModel(position.x, position.y)
   }
 
   get onRemoved () {
