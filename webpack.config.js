@@ -102,6 +102,7 @@ config.devServer = {
     colors: true,
     chunks: false
   },
+  inline: true,
   proxy: {
     '/socket.io': `http://localhost:3000`
   }
@@ -110,7 +111,8 @@ config.devServer = {
 config.plugins = [
   new HtmlWebpackPlugin({
     title: Package.name.split(' ').map(word => word.charAt(0) + word.slice(1)).join(' '),
-    template: './tetra/index.ejs'
+    template: './tetra/index.ejs',
+    inline: config.devServer.inline
   }),
   new CleanWebpackPlugin([
     'dist'
