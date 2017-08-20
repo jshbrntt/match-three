@@ -5,7 +5,8 @@ import MouseEvent from './event'
 export default class Mouse extends EventDispatcher {
   constructor (x, y) {
     super()
-    this._position = new Vector2(x, y)
+    this._client = new Vector2(0, 0)
+    this._position = new Vector2(0, 0)
     this._held = false
     window.addEventListener('click', this.onClick.bind(this), false)
     window.addEventListener('mousedown', this.onMouseDown.bind(this), false)
@@ -14,8 +15,10 @@ export default class Mouse extends EventDispatcher {
     window.addEventListener('mousewheel', this.onMouseWheel.bind(this), { passive: true })
   }
   update (event) {
-    this._position.x = (event.clientX / window.innerWidth) * 2 - 1
-    this._position.y = -(event.clientY / window.innerHeight) * 2 + 1
+    this._client.x = event.clientX
+    this._client.y = event.clientY
+    this._position.x = (this._client.x / window.innerWidth) * 2 - 1
+    this._position.y = -(this._client.y / window.innerHeight) * 2 + 1
   }
   onClick (event) {
     this.update(event)
@@ -44,6 +47,9 @@ export default class Mouse extends EventDispatcher {
   }
   get y () {
     return this._position.y
+  }
+  get client () {
+    return this._client
   }
   get position () {
     return this._position
