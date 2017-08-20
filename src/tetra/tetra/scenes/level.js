@@ -1,7 +1,7 @@
 import { Scene } from 'tetra/base'
 import { TileView } from 'tetra/tile'
 import { BoardModel, BoardView, BoardController } from 'tetra/board'
-import { ServiceLocator } from 'tetra/base/services'
+import { KeyBinder, ServiceLocator } from 'tetra/base/services'
 import IcosaEvent from 'icosa/event'
 
 export default class LevelScene extends Scene {
@@ -20,7 +20,7 @@ export default class LevelScene extends Scene {
     }
   }
   setupModels () {
-    this.boardModel = new BoardModel(12, 13, 1.4)
+    this.boardModel = new BoardModel(10, 11, 1.4)
     this.boardView = new BoardView(this.boardModel)
     this.boardController = new BoardController(this.boardModel, this.boardView)
     this.boardModel.randomize()
@@ -29,11 +29,13 @@ export default class LevelScene extends Scene {
       .then((textures) => {
         TileView.createMaterials(textures)
         this.boardView.createTileViews()
+        this.add(this.boardView)
         this._game._engine.resize()
       })
-    this.add(this.boardView)
-  }
-  update () {
-    super.update()
+    this.binder = new KeyBinder({
+      'P': () => {
+        console.log(this.boardModel.toString())
+      }
+    })
   }
 }
