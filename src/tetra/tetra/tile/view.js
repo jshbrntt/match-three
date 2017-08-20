@@ -45,7 +45,7 @@ export default class TileView extends View {
   // this.renderCell()
   }
   renderCell () {
-    if (!this.model.cell) {
+    if (!this.model.cell || !this.model.boardModel) {
       return
     }
     if (this._label) {
