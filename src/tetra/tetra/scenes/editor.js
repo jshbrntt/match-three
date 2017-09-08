@@ -35,7 +35,6 @@ export default class EditorScene extends Scene {
     this.input.Mouse.addEventListener(MouseEvent.WHEEL, this.onInputScroll.bind(this))
   }
   onInputDown (event) {
-    if (Keyboard)
     this._startMousePosition = this.input.Mouse.client.clone()
     this._startViewPosition = this.container.position.clone()
   }
