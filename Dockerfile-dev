@@ -1,6 +1,4 @@
 FROM node:8
-ENV PORT 8443
-EXPOSE 8443
 COPY package.json /usr/src/match-three/
 COPY yarn.lock /usr/src/match-three/
 WORKDIR /usr/src/match-three

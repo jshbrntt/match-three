@@ -1,6 +1,6 @@
 version: '3'
 services:
-  dev:
+  server:
     build:
       context: .
       dockerfile: Dockerfile-dev
@@ -8,4 +8,4 @@ services:
       - .:/usr/src/match-three
       - /usr/src/match-three/node_modules
     ports:
-      - "8443:8443"
+      - "${PORT}:${PORT}"
