@@ -67,9 +67,6 @@ export default class BoardModel extends TileMapModel {
       let y = this.height - 1
       for (let x = 0; x < this.width; x++) {
         if (!this.get(x, y - 1)) {
-          do {
-            y--
-          } while (!this.get(x, y - 1))
           let tileModel = this.createRandomTileModel()
           this.set(x, y, tileModel)
           added.push(tileModel)
