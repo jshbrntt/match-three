@@ -1,5 +1,6 @@
 const autoprefixer       = require('autoprefixer')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const ExtractTextPlugin  = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin  = require('html-webpack-plugin')
 const Package            = require('./package')
 const path               = require('path')
@@ -17,8 +18,8 @@ config.entry = {
 
 config.output = {
   path: path.join(__dirname, 'dist'),
-  filename: 'bundle.js',
-  sourceMapFilename: 'bundle.js.map'
+  filename: `[name].bundle.js`,
+  sourceMapFilename: `[name].bundle.js.map`
 }
 
 config.resolve = {
@@ -60,7 +61,10 @@ config.module = {
     use: 'file-loader'
   }, {
     test: /\.scss$/,
-    loaders: ['style', 'css', 'postcss', 'sass']
+    use: ExtractTextPlugin.extract({
+      fallback: 'style-loader',
+      use: ['css-loader', 'postcss-loader', 'sass-loader']
+    })
   }, {
     test: /\.less$/,
     loaders: ['style', 'css', 'less']
@@ -103,11 +107,17 @@ config.devServer = {
   },
   inline: true,
   proxy: {
-    '/socket.io': `http://localhost:3000`
+    '/socket.io': 'http://localhost:3000'
   }
 }
 
 config.plugins = [
+  new ExtractTextPlugin({
+    filename: getPath => {
+      return getPath('css/[name].css').replace('css/js', 'css')
+    },
+    allChunks: true
+  }),
   new HtmlWebpackPlugin({
     title: Package.name.split(' ').map(word => word.charAt(0) + word.slice(1)).join(' '),
     template: './tetra/index.ejs',
