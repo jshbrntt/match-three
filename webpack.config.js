@@ -94,7 +94,6 @@ config.module = {
 config.devtool = 'source-map'
 
 config.devServer = {
-  https: true,
   contentBase: './dist',
   host: '0.0.0.0',
   port: process.env.PORT || 443,
