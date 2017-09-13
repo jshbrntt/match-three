@@ -7,7 +7,7 @@
   <meta name="google-signin-client_id" content="444911180696-i5r48dl4oumea199tetra-r6nikjd4k9sd07.apps.googleusercontent.com">
   <link rel="manifest" href="manifest.json">
   <script src="https://apis.google.com/js/platform.js" async defer></script>
-  <script src="/webpack-dev-server.js"></script>
+  <% if ('inline' in htmlWebpackPlugin.options && htmlWebpackPlugin.options.inline) %><script src="/webpack-dev-server.js"></script><% ; %>
   <title>Match Three</title>
 </head>
 <body>
