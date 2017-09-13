@@ -31,6 +31,8 @@ export default class TileView extends View {
     this._model._onRemoved = this.onRemoved.bind(this)
     this._model._onUpdated = this.onUpdated.bind(this)
 
+    this._value = this._model.value
+
     this._highlight = false
 
     this._outlineMaterial = new MeshBasicMaterial({color: 0xffffff, side: FrontSide})
@@ -103,6 +105,7 @@ export default class TileView extends View {
         depthTest: false
       }))
     }
+    return TileView.MATERIALS
   }
   onMoved (cell, time) {
     return new Promise((resolve) => {
@@ -138,9 +141,13 @@ export default class TileView extends View {
   }
   onUpdated () {
     super.onUpdated()
-    if (!this.model.cell && this.parent) {
+    if (this.model.value === null && this.parent) {
       this.parent.remove(this)
       return
+    }
+    if (this._value !== this._model.value) {
+      this._plane.material = TileView.MATERIALS[this._model.value]
+      this._value = this._model.value
     }
     // this.renderCell()
     this.highlight = this.model.highlight
