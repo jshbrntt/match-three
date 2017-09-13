@@ -1,12 +1,15 @@
 import window from 'window'
-import { EventDispatcher, Vector2 } from 'three'
+import { EventDispatcher, Vector3 } from 'three'
+import ServiceLocator from '../service-locator'
 import MouseEvent from './event'
 
 export default class Mouse extends EventDispatcher {
   constructor (x, y) {
     super()
-    this._client = new Vector2(0, 0)
-    this._position = new Vector2(0, 0)
+    this._client = new Vector3()
+    this._vector = new Vector3()
+    this._position = new Vector3()
+    this._game = ServiceLocator.get('Game')
     this._held = false
     window.addEventListener('click', this.onClick.bind(this), false)
     window.addEventListener('mousedown', this.onMouseDown.bind(this), false)
@@ -15,10 +18,23 @@ export default class Mouse extends EventDispatcher {
     window.addEventListener('mousewheel', this.onMouseWheel.bind(this), { passive: true })
   }
   update (event) {
-    this._client.x = event.clientX
-    this._client.y = event.clientY
-    this._position.x = (this._client.x / window.innerWidth) * 2 - 1
-    this._position.y = -(this._client.y / window.innerHeight) * 2 + 1
+    this._client.set(
+      event.clientX,
+      event.clientY,
+      0
+    )
+    this._vector.set(
+      (this._client.x / window.innerWidth) * 2 - 1,
+      -(this._client.y / window.innerHeight) * 2 + 1,
+      0.5
+    )
+
+    let direction = this._vector.clone()
+      .unproject(this._game.camera)
+      .sub(this._game.camera.position)
+      .normalize()
+    let distance = -this._game.camera.position.z / direction.z
+    this._position = this._game.camera.position.clone().add(direction.multiplyScalar(distance))
   }
   onClick (event) {
     this.update(event)
@@ -53,6 +69,9 @@ export default class Mouse extends EventDispatcher {
   }
   get position () {
     return this._position
+  }
+  get vector () {
+    return this._vector
   }
   get held () {
     return this._held
