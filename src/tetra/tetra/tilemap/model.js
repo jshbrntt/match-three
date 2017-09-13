@@ -65,6 +65,7 @@ export default class TileMapModel extends Model {
       throw new Error(`Cannot overwrite existing value at position [${x},${y}], unless forced.`)
     }
     this._vector[n] = value
+    this.update()
   }
   get (x, y) {
     return this._vector[this.transform2D(x, y)]

@@ -8,6 +8,7 @@ export default class TileMapView extends View {
     super(model)
     this._camera = ServiceLocator.get('Game').camera
     this._dimensions = new Vector2()
+    this._model._onUpdated = this.onUpdated.bind(this)
   }
   onTileAdded (tileModel) {
     this.createTileView(tileModel)
@@ -19,6 +20,10 @@ export default class TileMapView extends View {
     let aspect = width / height
     dimensions.x = dimensions.y * aspect
     return dimensions
+  }
+  onUpdated () {
+    super.onUpdated()
+    this.redraw()
   }
   update () {
     this.model.added = []
@@ -53,7 +58,7 @@ export default class TileMapView extends View {
   redraw () {
     this.children.length = 0
     this._tileViews = []
-    for (let tileModel of this.model) {
+    for (let tileModel of this.model._vector) {
       if (!tileModel) {
         this._tileViews.push(null)
         continue
