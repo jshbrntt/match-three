@@ -8,7 +8,8 @@
   "license": "WTFPL",
   "homepage": "https://github.com/synthecypher/match-three#readme",
   "scripts": {
-    "start": "gulp",
+    "up": "/Applications/Google\\ Chrome\\ Canary.app/Contents/MacOS/Google\\ Chrome\\ Canary --remote-debugging-port=9222 https://localhost:8443 & docker-compose up &",
+    "down": "docker-compose down",
     "dev": "nodemon --watch package.json --watch gulpfile.js --watch webpack.config.js ./node_modules/.bin/gulp dev",
     "build": "gulp build",
     "deploy": "gulp deploy"
