@@ -49,7 +49,7 @@ export default class TileModel extends Model {
   remove () {
     let cell = this.cell
     this.boardModel.set(cell.x, cell.y, null, true)
-    this.update()
+    this.value = null
   }
 
   distance (tileModel) {
@@ -66,17 +66,28 @@ export default class TileModel extends Model {
     return this.value === tileModel.value
   }
 
+  set value (value) {
+    if (value !== this._value) {
+      this._value = value
+      this.update()
+    }
+  }
+
   get value () {
     return this._value
   }
 
   set cell (value) {
-    this.boardModel.set(value.x, value.y, this)
+    if (this.boardModel) {
+      this.boardModel.set(value.x, value.y, this)
+    } else {
+      this._cell = value
+    }
   }
 
   get cell () {
     if (!this.boardModel) {
-      return undefined
+      return this._cell
     }
     let position = this.boardModel.positionOf(this)
     if (!position) {
