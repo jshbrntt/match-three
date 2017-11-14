@@ -25,7 +25,7 @@ export default class TetraGame extends Game {
   }
   start () {
     super.start()
-    this.scene = new EditorScene(this)
+    this.scene = new LevelScene(this)
   }
   _update () {
     super._update()

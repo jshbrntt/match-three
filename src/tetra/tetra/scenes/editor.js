@@ -1,5 +1,5 @@
 import { Object3D, Vector3 } from 'three'
-import { GUI } from 'dat.gui/build/dat.gui'
+// import { GUI } from 'dat.gui/build/dat.gui'
 import { Scene } from 'tetra/base'
 import { GridView, GridModel } from 'tetra/grid'
 import { KeyBinder, ServiceLocator } from 'tetra/base/services'
@@ -94,7 +94,7 @@ export default class EditorScene extends Scene {
     this._startViewPosition = null
 
     let worldDimensions = this._game.getWorldDimensions()
-    
+
     let insertTileModel = new TileModel(this.cursorModel.value)
     insertTileModel.cell = new CellModel(
       Math.round((this.input.Mouse.client.x - (worldDimensions.width / 2) - (this.container.position.x) - ((this.cursorView.width / 2) * this.cursorView.scale.x)) / (this.gridModel.size / this.gridModel.division)),
@@ -129,9 +129,9 @@ export default class EditorScene extends Scene {
     this.container.add(this.gridView)
   }
   setupUI () {
-    this.gui = new GUI()
-    this.gui.add(this.gridModel, 'division')
-    this.gui.add(this.gridModel, 'size')
+    // this.gui = new GUI()
+    // this.gui.add(this.gridModel, 'division')
+    // this.gui.add(this.gridModel, 'size')
   }
   setupKeyBindings () {
     this.binder = new KeyBinder({
@@ -153,6 +153,6 @@ export default class EditorScene extends Scene {
     })
   }
   destroy () {
-    this.gui.destroy()
+    // this.gui.destroy()
   }
 }

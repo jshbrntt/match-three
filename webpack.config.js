@@ -1,12 +1,12 @@
-const autoprefixer       = require('autoprefixer')
+const autoprefixer = require('autoprefixer')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const ExtractTextPlugin  = require('extract-text-webpack-plugin')
-const HtmlWebpackPlugin  = require('html-webpack-plugin')
-const Package            = require('./package')
-const path               = require('path')
-const process            = require('process')
-const UglifyJSPlugin     = require('uglifyjs-webpack-plugin')
-const webpack            = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const Package = require('./package')
+const path = require('path')
+const process = require('process')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+const webpack = require('webpack')
 
 let config = {}
 
@@ -26,7 +26,8 @@ config.resolve = {
   alias: {
     assets: path.resolve('src', 'tetra', 'assets'),
     tetra: path.resolve('src', 'tetra', 'tetra'),
-    icosa: path.resolve('src', 'icosa')
+    icosa: path.resolve('src', 'icosa'),
+    wasm: path.resolve('src', 'wasm')
   }
 }
 
@@ -38,61 +39,80 @@ config.externals = {
   window: 'window'
 }
 
+const extractStyles = new ExtractTextPlugin({
+  filename: '[name].[contenthash].css',
+  disable: process.env.NODE_ENV === 'development'
+})
+
 config.module = {
-  rules: [{
-    enforce: 'pre',
-    test: /\.js$/,
-    loader: 'standard-loader',
-    exclude: /(node_modules|bower_components)/
-  }, {
-    test: /\.js$/,
-    include: [
-      path.resolve(__dirname, 'src')
-    ],
-    loader: 'babel-loader',
-    query: {
-      compact: true,
-      presets: [
-        ['es2015', {modules: false}]
+  rules: [
+    {
+      enforce: 'pre',
+      test: /\.js$/,
+      loader: 'standard-loader',
+      exclude: /(node_modules|bower_components)/
+    },
+    {
+      test: /\.js$/,
+      include: [
+        path.resolve(__dirname, 'src')
+      ],
+      loader: 'babel-loader',
+      query: {
+        compact: true,
+        presets: [
+          ['es2015', {modules: false}]
+        ]
+      }
+    },
+    {
+      test: /\.scss$/,
+      use: extractStyles.extract({
+        use: [{
+          loader: 'css-loader'
+        }, {
+          loader: 'sass-loader'
+        }],
+        fallback: 'style-loader'
+      })
+    },
+    {
+      test: /\.css$/,
+      use: extractStyles.extract({
+        use: [{
+          loader: 'css-loader'
+        }],
+        fallback: 'style-loader'
+      })
+    },
+    {
+      test: /\.(png|svg|jpg|gif)$/,
+      use: [
+        'file-loader'
       ]
+    },
+    {
+      test: /\.modernizrrc$/,
+      loader: 'modernizr'
+    },
+    {
+      test: /manifest.json$/,
+      loader: 'file-loader?name=manifest.json!web-app-manifest-loader'
+    },
+    {
+      test: /\.json$/,
+      loader: 'json-loader'
+    },
+    {
+      test: /\.rs$/,
+      use: {
+        loader: 'rust-wasm-loader',
+        options: {
+          path: 'build'
+        }
+      }
     }
-  }, {
-    test: /\.png$/,
-    use: 'file-loader'
-  }, {
-    test: /\.scss$/,
-    use: ExtractTextPlugin.extract({
-      fallback: 'style-loader',
-      use: ['css-loader', 'postcss-loader', 'sass-loader']
-    })
-  }, {
-    test: /\.less$/,
-    loaders: ['style', 'css', 'less']
-  }, {
-    test: /\.woff$/,
-    loader: "url-loader?limit=10000&mimetype=application/font-woff&name=[path][name].[ext]"
-  }, {
-    test: /\.woff2$/,
-    loader: "url-loader?limit=10000&mimetype=application/font-woff2&name=[path][name].[ext]"
-  }, {
-    test: /\.(eot|ttf)$/,
-    loader: "file-loader"
-  }, {
-    test: /\.(jpe?g|png|gif|svg)$/i,
-    loaders: [
-      'file?hash=sha512&digest=hex&name=[hash].[ext]',
-      'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
-    ]
-  }, {
-    test: /\.modernizrrc$/,
-    loader: "modernizr"
-  }, {
-    test: /manifest.json$/,
-    loader: 'file-loader?name=manifest.json!web-app-manifest-loader'
-  }, {
-    test: /\.json$/,
-    loader: "json-loader"
-  }]
+  ]
 }
 
 config.devtool = 'source-map'
@@ -112,17 +132,8 @@ config.devServer = {
 }
 
 config.plugins = [
-  new ExtractTextPlugin({
-    filename: getPath => {
-      return getPath('css/[name].css').replace('css/js', 'css')
-    },
-    allChunks: true
-  }),
-  new HtmlWebpackPlugin({
-    title: Package.name.split(' ').map(word => word.charAt(0) + word.slice(1)).join(' '),
-    template: './tetra/index.ejs',
-    inline: config.devServer.inline
-  }),
+  extractStyles,
+  new HtmlWebpackPlugin(),
   new CleanWebpackPlugin([
     'dist'
   ])
