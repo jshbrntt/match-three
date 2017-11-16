@@ -36,7 +36,9 @@ config.externals = {
   image: 'Image',
   location: 'location',
   promise: 'Promise',
-  window: 'window'
+  window: 'window',
+  fs: true,
+  path: true
 }
 
 const extractStyles = new ExtractTextPlugin({
@@ -108,7 +110,7 @@ config.module = {
       use: {
         loader: 'rust-wasm-loader',
         options: {
-          path: 'build'
+          path: ''
         }
       }
     }
@@ -125,10 +127,7 @@ config.devServer = {
     colors: true,
     chunks: false
   },
-  inline: true,
-  proxy: {
-    '/socket.io': 'http://localhost:3000'
-  }
+  inline: true
 }
 
 config.plugins = [
