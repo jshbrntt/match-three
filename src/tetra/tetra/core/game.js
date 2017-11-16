@@ -13,7 +13,7 @@ export default class TetraGame extends Game {
     super(engine, width, height, OrthographicCamera)
     ServiceLocator.provide('Mouse', new Mouse())
     ServiceLocator.provide('Touch', new Touch())
-    ServiceLocator.provide('Socket', io())
+    ServiceLocator.provide('Socket', io('http://localhost:9000'))
     this.binder = new KeywordBinder({
       'level': () => {
         this.scene = new LevelScene(this)

@@ -9,9 +9,11 @@ const SocketIOEvent = {
 }
 
 class IcosaServer {
-  constructor (port) {
+  constructor () {
     this.sockets = new Map()
     this.server = io()
+  }
+  listen (port) {
     this.server.on(SocketIOEvent.CONNECT, this.handleConnect.bind(this))
     this.server.listen(port)
   }

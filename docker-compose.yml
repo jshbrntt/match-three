@@ -8,3 +8,4 @@ services:
       - /usr/src/match-three/node_modules
     ports:
       - "${PORT}:${PORT}"
+      - "9000:9000"
